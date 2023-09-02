@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,23 +15,53 @@ namespace MVVMDatabinding
     {
         public int SourceId = -1;
         public string SourceName = string.Empty;
-        public List<DataRecordItem> DataItems = null;
+        public bool ExtraDataRequiredAtRuntime = false;
 
-        internal void PopulateRecord(int sourceId, string sourceName, List<DataItem> itemList)
+        [SerializeField]
+        private List<DataRecordItem> dataItems = null;
+
+        private Dictionary<int, DataRecordItem> itemLookup = null;
+
+        public int ItemCount => dataItems.Count;
+
+        internal void PopulateRecord(int sourceId, string sourceName, bool idModifiedAtRuntime, List<IDataItem> itemList)
         {
             SourceId = sourceId;
             SourceName = sourceName;
+            ExtraDataRequiredAtRuntime = idModifiedAtRuntime;
 
-            if (DataItems == null)
+            if (dataItems == null)
             {
-                DataItems = new List<DataRecordItem>(itemList.Count);
+                dataItems = new List<DataRecordItem>(itemList.Count);
             }
 
-            DataItems.Clear();
+            dataItems.Clear();
 
-            foreach (DataItem item in itemList)
+            foreach (IDataItem item in itemList)
             {
-                DataItems.Add(new DataRecordItem() { Id = item.Id, Name = item.Name });
+                dataItems.Add(new DataRecordItem() { Id = item.Id, Name = item.Name });
+            }
+
+            if (itemLookup != null)
+            {
+                itemLookup.Clear();
+            }
+        }
+
+        public void Initialize()
+        {
+            // initialize a lookup so we can quickly look up items by ID at runtime
+            if (itemLookup == null)
+            {
+                itemLookup = new Dictionary<int, DataRecordItem>(dataItems.Count);                
+            }
+            
+            if (itemLookup.Count != dataItems.Count)
+            {
+                foreach (DataRecordItem item in dataItems)
+                {
+                    itemLookup[item.Id] = item;
+                }
             }
         }
     }

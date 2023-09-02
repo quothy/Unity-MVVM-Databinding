@@ -17,11 +17,16 @@ namespace MVVMDatabinding
         private int nameHash = 0;
         public int Id => nameHash;
 
-        public void Initialize(string sourceName)
+        private bool idModifiedAtRuntime = false;
+        public bool IdModifiedAtRuntime => idModifiedAtRuntime;
+
+        public void Initialize(string sourceName, bool idModifiedAtRuntime)
         {
             name = sourceName;
             nameHash = name.GetHashCode();
             // TODO: how to differentiate different instances of the same source type? instance ID?
+            // -- We'll at least start by tracking whether or not the name/ID gets modified at runtime or not
+            this.idModifiedAtRuntime = idModifiedAtRuntime;
         }
 
         public void GenerateRecord(string recordDirPath, List<IDataItem> dataItems)
@@ -53,7 +58,7 @@ namespace MVVMDatabinding
 
             if (record != null)
             {
-                record.PopulateRecord(Id, Name, dataItems);
+                record.PopulateRecord(Id, Name, IdModifiedAtRuntime, dataItems);
             }
 
             EditorUtility.SetDirty(record);
