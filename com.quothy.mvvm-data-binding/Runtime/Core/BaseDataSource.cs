@@ -8,7 +8,7 @@ namespace MVVMDatabinding
 {
     public abstract class BaseDataSource : IDataSource
     {
-        private Dictionary<int, DataItem> dataItemLookup = null;
+        private Dictionary<int, IDataItem> dataItemLookup = null;
         private Dictionary<int, List<DataItemUpdate>> subscriberLookup = null;
 
         private string name = string.Empty;
@@ -24,7 +24,7 @@ namespace MVVMDatabinding
             // TODO: how to differentiate different instances of the same source type? instance ID?
         }
 
-        public void GenerateRecord(string recordDirPath, List<DataItem> dataItems)
+        public void GenerateRecord(string recordDirPath, List<IDataItem> dataItems)
         {
 #if UNITY_EDITOR
             // ensure directory exists
@@ -63,15 +63,15 @@ namespace MVVMDatabinding
 
         public virtual void LoadDataRecord(DataRecord record)
         {
-            dataItemLookup = new Dictionary<int, DataItem>(record.DataItems.Count);
-            subscriberLookup = new Dictionary<int, List<DataItemUpdate>>(record.DataItems.Count);
+            dataItemLookup = new Dictionary<int, IDataItem>(record.ItemCount);
+            subscriberLookup = new Dictionary<int, List<DataItemUpdate>>(record.ItemCount);
 
             // TODO: load in 
         }
 
-        public void AddItem(DataItem item)
+        public void AddItem(IDataItem item)
         {
-            if (!dataItemLookup.TryGetValue(item.Id, out DataItem existing))
+            if (!dataItemLookup.TryGetValue(item.Id, out IDataItem existing))
             {
                 dataItemLookup[item.Id] = item;
             }

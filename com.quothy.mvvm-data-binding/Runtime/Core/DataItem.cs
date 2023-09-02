@@ -5,14 +5,32 @@ using UnityEngine;
 
 namespace MVVMDatabinding
 {
-    [Serializable]
-    public abstract class DataItem
+    public interface IDataItem
     {
-        public int Id { get; internal set; }
+        int Id { get; }
+        string Name { get; }
 
-        public string Name { get; internal set; }
+        Type DataType { get; }
+
+        void Initialize(int id, string name);
+    }
+
+    [Serializable]
+    public abstract class DataItem : IDataItem
+    {
+        public int Id { get; protected set; }
+
+        public string Name { get; protected set; }
+
+        public abstract Type DataType { get; }
 
         public event Action ValueChanged = null;
+
+        public void Initialize(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
 
         protected void RaiseValueChanged()
         {
@@ -22,6 +40,8 @@ namespace MVVMDatabinding
 
     public abstract class DataItem<T> : DataItem
     {
+        public override Type DataType => typeof(T);
+
         private T value;
         public T Value
         {
@@ -39,7 +59,17 @@ namespace MVVMDatabinding
                 }
             }
         }
-
-
     }
+
+    /// <summary>
+    /// In order for DataItem<T> types to be serialized as SerializeReferences in the 
+    /// prefab YAML, they must have a concrete type. Below is a list of common concrete types
+    /// that are available by default.
+    /// 
+    /// Any built in types that get added here must also be added to <see cref="DataItemTypeCache.RegisterBuiltInTypes"/>.
+    /// </summary>
+    public class DataItemInt : DataItem<int> { }
+    public class DataItemFloat : DataItem<float> { }
+    public class DataItemBool : DataItem<bool> { }
+    public class DataItemString : DataItem<string> { }
 }

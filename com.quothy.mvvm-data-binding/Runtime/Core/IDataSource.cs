@@ -14,10 +14,11 @@ namespace MVVMDatabinding
         void Initialize(string name);
 
         void GenerateRecord(string recordPath, List<DataItem> dataItems);
+        void GenerateRecord(string recordPath, List<IDataItem> dataItems);
 
         void LoadDataRecord(DataRecord record);
 
-        void AddItem(DataItem item);
+        void AddItem(IDataItem item);
 
         void SubscribeToItem(int id, DataItemUpdate onUpdate);
 
