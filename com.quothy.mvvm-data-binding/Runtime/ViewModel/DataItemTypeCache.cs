@@ -11,11 +11,7 @@ namespace MVVMDatabinding
 
         public static void RegisterDataItemType(Type underlyingDataType, Type dataItemType)
         {
-            if (dataItemTypeCache == null)
-            {
-                dataItemTypeCache = new Dictionary<Type, Type>();
-                RegisterBuiltInTypes();
-            }
+            EnsureCacheInitialized();
 
             // make sure dataItemType implements IDataItem before adding to the cache
             if (!dataItemType.IsAssignableFrom(typeof(IDataItem)))
@@ -32,8 +28,18 @@ namespace MVVMDatabinding
 
         public static bool TryGetDataItemType(Type underlyingDataType, out Type dataItemType)
         {
+            EnsureCacheInitialized();
             dataItemType = null;
             return dataItemTypeCache.TryGetValue(underlyingDataType, out dataItemType);
+        }
+
+        private static void EnsureCacheInitialized()
+        {
+            if (dataItemTypeCache == null)
+            {
+                dataItemTypeCache = new Dictionary<Type, Type>();
+                RegisterBuiltInTypes();
+            }
         }
 
         private static void RegisterBuiltInTypes()

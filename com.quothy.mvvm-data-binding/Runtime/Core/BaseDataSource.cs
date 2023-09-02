@@ -36,7 +36,7 @@ namespace MVVMDatabinding
             try { Directory.CreateDirectory(recordDirPath); } catch { } 
 
             // TODO: implement DataRecord scriptable object creation/population/saving here
-            string recordPath = Path.Combine(recordDirPath, name + "_DataRecord.asset");
+            string recordPath = $"{recordDirPath}/{name}_DataRecord.asset";
 
             DataRecord record = null;
             try
@@ -44,7 +44,7 @@ namespace MVVMDatabinding
                 if (!File.Exists(recordPath))
                 {
                     record = ScriptableObject.CreateInstance<DataRecord>();
-                    AssetDatabase.CreateAsset(record, recordPath);
+                    AssetDatabase.CreateAsset(record, recordPath.Trim());
                 }
                 else
                 {

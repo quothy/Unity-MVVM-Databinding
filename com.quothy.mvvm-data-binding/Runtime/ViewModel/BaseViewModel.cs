@@ -15,17 +15,12 @@ namespace MVVMDatabinding
         [SerializeReference]
         private List<IDataItem> dataItemList = null;
 
-        private string recordPath = string.Empty;
         private string recordDir = "DataRecord";
         protected virtual string RecordPath
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(recordPath))
-                {
-                    recordPath = Path.Combine(Application.dataPath, recordPath);
-                }
-                return recordPath;
+                return "Assets/" + recordDir;
             }
         }
 
@@ -39,6 +34,10 @@ namespace MVVMDatabinding
         public void UpdateRecord()
         {
 #if UNITY_EDITOR
+            if (dataItemList == null)
+            {
+                dataItemList = new List<IDataItem>();
+            }
 
             List<int> updatedIds = new List<int>();
 
