@@ -1,0 +1,18 @@
+{
+    "name": "MVVM Databinding Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0af86272b6eaa4440ba7042e9388e25a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
