@@ -8,7 +8,7 @@ namespace MVVMDatabinding
 {
     public abstract class BaseDataSource : IDataSource
     {
-        private Dictionary<int, IDataItem> dataItemLookup = null;
+        protected Dictionary<int, IDataItem> dataItemLookup = null;
         private Dictionary<int, List<DataItemUpdate>> subscriberLookup = null;
 
         private string name = string.Empty;
@@ -83,6 +83,17 @@ namespace MVVMDatabinding
             else
             {
                 Debug.LogError($"[BaseDataSource] An item with the ID {item.Id} already exists in data source {Name}");
+            }
+        }
+
+        public void OnItemChangedInSource(int id)
+        {
+            if (subscriberLookup.TryGetValue(id, out List<DataItemUpdate> subscribers))
+            {
+                foreach (DataItemUpdate item in subscribers)
+                {
+                    item?.Invoke(this, id);
+                }
             }
         }
 

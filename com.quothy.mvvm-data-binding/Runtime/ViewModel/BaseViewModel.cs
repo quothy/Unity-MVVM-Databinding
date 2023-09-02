@@ -16,6 +16,8 @@ namespace MVVMDatabinding
         [SerializeReference]
         private List<IDataItem> dataItemList = null;
 
+        private ViewModelDataSource dataSource = null;
+
         private string recordDir = "DataRecord";
         protected virtual string RecordPath
         {
@@ -31,7 +33,22 @@ namespace MVVMDatabinding
         /// </summary>
         public virtual bool IsGlobalSource => false;
 
+        protected virtual void Awake()
+        {
+            InitializeData();
+        }
 
+        public void InitializeData()
+        {
+            dataSource = new ViewModelDataSource();
+            dataSource.InitializeFromViewModel(this);
+            dataSource.LoadDataItems(dataItemList);
+        }
+
+        protected void OnPropertyChanged([CallerMemberName]string name = "")
+        {
+            dataSource.OnPropertyChanged(name);
+        }
 
         [ContextMenu("Update Record")]
         public void UpdateRecord()

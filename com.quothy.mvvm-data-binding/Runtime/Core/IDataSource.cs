@@ -21,6 +21,8 @@ namespace MVVMDatabinding
 
         void AddItem(IDataItem item);
 
+        void OnItemChangedInSource(int id);
+
         void SubscribeToItem(int id, DataItemUpdate onUpdate);
 
         void UnsubscribeFromItem(int id, DataItemUpdate onUpdate);
