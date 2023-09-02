@@ -8,9 +8,16 @@ namespace MVVMDatabinding
 
     public interface IDataSource
     {
-        void GenerateRecord();
+        string Name { get; }
+        int Id { get; }
+
+        void Initialize(string name);
+
+        void GenerateRecord(string recordPath, List<DataItem> dataItems);
 
         void LoadDataRecord(DataRecord record);
+
+        void AddItem(DataItem item);
 
         void SubscribeToItem(int id, DataItemUpdate onUpdate);
 

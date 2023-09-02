@@ -14,7 +14,7 @@ namespace MVVMDatabinding
 
         public event Action ValueChanged = null;
 
-        public void RaiseValueChanged()
+        protected void RaiseValueChanged()
         {
             ValueChanged?.Invoke();
         }
@@ -39,9 +39,6 @@ namespace MVVMDatabinding
                 }
             }
         }
-
-
-
 
 
     }
