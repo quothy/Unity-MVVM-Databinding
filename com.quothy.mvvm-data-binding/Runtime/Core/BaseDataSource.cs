@@ -20,7 +20,7 @@ namespace MVVMDatabinding
         private bool idModifiedAtRuntime = false;
         public bool IdModifiedAtRuntime => idModifiedAtRuntime;
 
-        public void Initialize(string sourceName, bool idModifiedAtRuntime)
+        public virtual void Initialize(string sourceName, bool idModifiedAtRuntime)
         {
             name = sourceName;
             nameHash = name.GetHashCode();
@@ -130,6 +130,11 @@ namespace MVVMDatabinding
             }
 
             return success;
+        }
+
+        public static string ResolveNameWithRuntimeId(string sourceName, int runtimeId)
+        {
+            return $"{sourceName}:{runtimeId}";
         }
     }
 }

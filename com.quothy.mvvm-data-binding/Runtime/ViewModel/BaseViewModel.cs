@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using System.IO;
+using UnityEditor;
 #if UNITY_EDITOR
 using System.Reflection;
 #endif
@@ -28,7 +29,9 @@ namespace MVVMDatabinding
         /// A ViewModel is considered to be a global/singleton source if there
         /// is only ever expected to be one of them in existence at a time.
         /// </summary>
-        protected virtual bool IsGlobalSource => false;
+        public virtual bool IsGlobalSource => false;
+
+
 
         [ContextMenu("Update Record")]
         public void UpdateRecord()
@@ -72,7 +75,6 @@ namespace MVVMDatabinding
 
             // TODO: do the same thing with methods, but for the BindableAction attribute
 
-
             ViewModelDataSource dataSource = new ViewModelDataSource();
             // Relying on the ViewModel type name to generate the DataRecord is going to be 
             // problematic if we change the class name. 
@@ -83,6 +85,11 @@ namespace MVVMDatabinding
             // And alternative would be to serialize a ref to the DataRecord itself, which might be even better
             dataSource.Initialize(this.GetType().ToString(), !IsGlobalSource);
             dataSource.GenerateRecord(RecordPath, dataItemList);
+
+            AssetDatabase.SaveAssetIfDirty(this);
+
+            // TODO: polish: generate a mini report of how many items were added/modified/removed/left untouched
+            Debug.Log($"[{this.GetType().ToString()}] Finished updating DataRecord");
 #endif
         }
 
@@ -101,8 +108,12 @@ namespace MVVMDatabinding
                     // now check the type
                     if (info.PropertyType == item.DataType)
                     {
-                        // call Initialize to refresh the name in case the variable was renamed.
-                        item.Initialize(id, info.Name);
+                        if (item.Name != info.Name)
+                        {
+                            // call Initialize to refresh the name in case the variable was renamed.
+                            item.Initialize(id, info.Name);
+                            EditorUtility.SetDirty(this);
+                        }
                         addNewItem = false;
                     }
                     else
@@ -131,6 +142,7 @@ namespace MVVMDatabinding
                     item.Initialize(id, info.Name);
 
                     dataItemList.Add(item);
+                    EditorUtility.SetDirty(this);
                 }
             }
         }

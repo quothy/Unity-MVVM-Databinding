@@ -6,6 +6,6 @@ namespace MVVMDatabinding
 {
     public class BaseGlobalViewModel : BaseViewModel
     {
-        protected override bool IsGlobalSource => true;
+        public override bool IsGlobalSource => true;
     }
 }

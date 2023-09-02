@@ -20,6 +20,33 @@ public class MainViewModel : BaseGlobalViewModel
         }
     }
 
+    private int exampleInt = 0;
+    [BindableData(1)]
+    public int ExampleInt
+    {
+        get => exampleInt;
+        set
+        {
+            if (exampleInt != value)
+            {
+                exampleInt = value;
+            }
+        }
+    }
+
+    private float exampleFloat = 0;
+    [BindableData(2)]
+    public float ExampleFloat
+    {
+        get => exampleFloat;
+        set
+        {
+            if (exampleFloat != value)
+            {
+                exampleFloat = value;
+            }
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
