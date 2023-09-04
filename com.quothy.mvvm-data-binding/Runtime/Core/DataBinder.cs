@@ -26,5 +26,13 @@ namespace MVVMDatabinding
             }
         }
 
+        public void AddBinder(IBinder binder)
+        {
+            if (binders == null)
+            {
+                binders = new List<IBinder>();
+            }
+            binders.Add(binder);
+        }
     }
 }

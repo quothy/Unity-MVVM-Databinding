@@ -29,9 +29,23 @@ namespace MVVMDatabinding
     [Serializable]
     public abstract class DataItem : IDataItem
     {
-        public int Id { get; protected set; }
+        [SerializeField]
+        protected int id = -1;
 
-        public string Name { get; protected set; }
+        public int Id
+        {
+            get => id;
+            protected set => id = value;
+        }
+
+        [SerializeField]
+        protected string name = string.Empty;
+
+        public string Name
+        {
+            get => name;
+            protected set => name = value;
+        }
 
         public abstract Type DataType { get; }
 
@@ -64,6 +78,7 @@ namespace MVVMDatabinding
         {
             get
             {
+                value = valueGetter.Invoke();
                 return value;
             }
             set

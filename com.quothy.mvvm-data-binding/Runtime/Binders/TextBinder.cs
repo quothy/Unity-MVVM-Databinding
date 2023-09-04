@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using System;
+using UnityEngine.UIElements;
 
-public class TextBinder : MonoBehaviour
+namespace MVVMDatabinding
 {
-    // Start is called before the first frame update
-    void Start()
+    [Serializable]
+    public class TextBinder : BaseBinder<string>
     {
-        
-    }
+        protected string name = "Text Binder";
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        [SerializeField]
+        private TextMeshProUGUI text = null;
+
+        public override string Name { get => name; }
+
+        protected override void OnDataUpdated(string dataValue)
+        {
+            if (text != null)
+            {
+                text.text = dataValue;
+            }
+        }
     }
 }

@@ -14,6 +14,9 @@ namespace MVVMDatabinding
 
     public interface IBinder
     {
+        string Name { get; }
+        bool DataRecordValid { get; }
+
         void Subscribe();
         void Unsubscribe();
 

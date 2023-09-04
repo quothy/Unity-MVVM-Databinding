@@ -21,6 +21,7 @@ namespace MVVMDatabinding
         private List<DataRecordItem> dataItems = null;
 
         private Dictionary<int, DataRecordItem> itemLookup = null;
+        private Dictionary<string, int> itemNameToIdMap = null;
 
         public int ItemCount => dataItems.Count;
 
@@ -63,6 +64,42 @@ namespace MVVMDatabinding
                     itemLookup[item.Id] = item;
                 }
             }
+        }
+
+        public void PopulateItemNameList(List<string> itemNames)
+        {
+            foreach (DataRecordItem item in dataItems)
+            {
+                itemNames.Add(item.Name);
+            }
+        }
+
+        public bool TryGetIdForName(string name, out int id)
+        {
+            id = int.MinValue;
+            foreach (DataRecordItem item in dataItems)
+            {
+                if (name == item.Name)
+                {
+                    id = item.Id;
+                    break;
+                }
+            }
+            return id != int.MinValue;
+        }
+
+        public bool TryGetNameForId(int id, out string name)
+        {
+            name = string.Empty;
+            foreach (DataRecordItem item in dataItems)
+            {
+                if (id == item.Id)
+                {
+                    name = item.Name;
+                    break;
+                }
+            }
+            return !string.IsNullOrWhiteSpace(name);
         }
     }
 }
