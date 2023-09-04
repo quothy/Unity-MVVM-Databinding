@@ -27,6 +27,13 @@ namespace MVVMDatabinding
             // TODO: how to differentiate different instances of the same source type? instance ID?
             // -- We'll at least start by tracking whether or not the name/ID gets modified at runtime or not
             this.idModifiedAtRuntime = idModifiedAtRuntime;
+
+            DataSourceManager.RegisterDataSource(this);
+        }
+
+        public void Destroy()
+        {
+            DataSourceManager.UnregisterDataSource(this);
         }
 
         public void GenerateRecord(string recordDirPath, List<IDataItem> dataItems)
@@ -76,6 +83,11 @@ namespace MVVMDatabinding
 
         public void AddItem(IDataItem item)
         {
+            if (dataItemLookup == null)
+            {
+                dataItemLookup = new Dictionary<int, IDataItem>();
+            }
+
             if (!dataItemLookup.TryGetValue(item.Id, out IDataItem existing))
             {
                 dataItemLookup[item.Id] = item;
@@ -99,6 +111,11 @@ namespace MVVMDatabinding
 
         public void SubscribeToItem(int id, DataItemUpdate onUpdate)
         {
+            if (subscriberLookup == null)
+            {
+                subscriberLookup = new Dictionary<int, List<DataItemUpdate>>();
+            }
+
             if (!subscriberLookup.TryGetValue(id, out List<DataItemUpdate> list))
             {
                 subscriberLookup[id] = new List<DataItemUpdate>(20);

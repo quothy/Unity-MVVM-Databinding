@@ -22,3 +22,5 @@ MonoBehaviour:
     Name: ExampleInt
   - Id: 2
     Name: ExampleFloat
+  - Id: 3
+    Name: CounterString

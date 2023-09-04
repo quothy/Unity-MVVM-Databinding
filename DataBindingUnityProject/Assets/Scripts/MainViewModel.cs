@@ -48,15 +48,47 @@ public class MainViewModel : BaseGlobalViewModel
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private string exampleString = string.Empty;
+    [BindableData(3)]
+    public string CounterString
     {
-        
+        get => exampleString;
+        set
+        {
+            if (exampleString != value)
+            {
+                exampleString = value;
+                OnPropertyChanged();
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField]
+    private bool testCheckbox = false;
+
+    [SerializeField]
+    private bool testEnable = false;
+
+    [ConditionalVisibility(nameof(testCheckbox), ConditionalVisibilityAttribute.ConditionalVisibilityType.ShowIfTrue)]
+    [ConditionalEnable(nameof(testEnable), ConditionalEnableAttribute.ConditionalEnableType.EnableIfTrue)]
+    [SerializeField]
+    private string text = "test";
+
+    private void Start()
     {
-        
+        CounterString = $"{ExampleInt}";
+    }
+
+
+    [ContextMenu("Increment counter")]
+    public void IncrementCounter()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        ExampleInt++;
+        CounterString = $"{ExampleInt}";
     }
 }
