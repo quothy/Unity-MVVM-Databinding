@@ -5,23 +5,43 @@ using UnityEngine;
 
 namespace MVVMDatabinding
 {
+    public enum ConditionComparisonType
+    {
+        Bool,
+        Enum,
+    }
+
+    public enum ConditionResultType
+    {
+        ShowIfEquals,
+        ShowIfNotEquals,
+        Never,
+    }
+
+
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public class ConditionalVisibilityAttribute : PropertyAttribute
     {
-        public enum ConditionalVisibilityType
-        {
-            ShowIfTrue,
-            HideIfTrue,
-            Never
-        }
+        public ConditionComparisonType ComparisonType { get; set; }
 
         public string ConditionPropertyName { get; private set; }
-        public ConditionalVisibilityType Condition { get; private set; }
+        public ConditionResultType Condition { get; private set; }
 
-        public ConditionalVisibilityAttribute(string conditionPropertyName, ConditionalVisibilityType conditionType)
+        public int TargetIntValue { get; private set; }
+
+        public ConditionalVisibilityAttribute(string conditionPropertyName, ConditionResultType conditionType)
         {
+            ComparisonType = ConditionComparisonType.Bool;
             ConditionPropertyName = conditionPropertyName;
             Condition = conditionType;
+        }
+
+        public ConditionalVisibilityAttribute(string conditionPropertyName, ConditionResultType conditionType, int targetEnumValue)
+        {
+            ComparisonType = ConditionComparisonType.Enum;
+            ConditionPropertyName = conditionPropertyName;
+            Condition = conditionType;
+            TargetIntValue = targetEnumValue;
         }
     }
 }
