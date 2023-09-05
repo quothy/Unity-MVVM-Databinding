@@ -18,20 +18,18 @@ namespace MVVMDatabinding
         [SerializeField]
         private DataRecord dataRecord = null;
 
-        [ConditionalVisibility(nameof(editor_RecordRequiresExtraData), ConditionalVisibilityAttribute.ConditionalVisibilityType.ShowIfTrue)]
+        [ConditionalVisibility(nameof(editor_RecordRequiresExtraData), ConditionResultType.ShowIfEquals)]
         [SerializeField]
         private DataSourceIdResolutionType resolutionType = DataSourceIdResolutionType.None;
 
-        [ConditionalVisibility(nameof(editor_SourceInstanceNeedsSet), ConditionalVisibilityAttribute.ConditionalVisibilityType.ShowIfTrue)]
+        [ConditionalVisibility(nameof(editor_SourceInstanceNeedsSet), ConditionResultType.ShowIfEquals)]
         [SerializeField]
         private GameObject dataSourceInstance = null;
 
-        [ConditionalVisibility(nameof(DataRecordValid), ConditionalVisibilityAttribute.ConditionalVisibilityType.ShowIfTrue)]
+        [ConditionalVisibility(nameof(DataRecordValid), ConditionResultType.ShowIfEquals)]
         [DropdownSelection(nameof(ItemNameOptions), nameof(SelectedItemName))]
         [SerializeField]
-        private int itemId = -1;
-
-
+        protected int itemId = -1;
 
         public abstract string Name { get; }
 
@@ -81,21 +79,38 @@ namespace MVVMDatabinding
         private List<string> availableItemNames = null;
         public string ItemName { get; private set; }
 
-        public void Subscribe()
+        public virtual void Bind()
         {
+            Subscribe();
+        }
+
+        public virtual void Unbind()
+        {
+            Unsubscribe();
+        }
+
+        protected void Subscribe()
+        {
+            // TODO: handle more complex resolution of SourceId for local VMs
             DataSourceManager.SubscribeToItem(dataRecord.SourceId, itemId, OnDataItemUpdate);
         }
 
-        public void Unsubscribe()
+        protected void Unsubscribe()
         {
             DataSourceManager.UnsubscribeFromItem(dataRecord.SourceId, itemId, OnDataItemUpdate);
         }
+
         public virtual void OnDataItemUpdate(IDataSource dataSource, int itemId)
         {
             if (dataSource.TryGetItem<T>(itemId, out T itemValue))
             {
                 OnDataUpdated(itemValue);
             }
+        }
+
+        protected bool TryGetDataSource(out IDataSource dataSource)
+        {
+            return DataSourceManager.TryGetDataSource(dataRecord.SourceId, out dataSource);
         }
 
         protected abstract void OnDataUpdated(T dataValue);
@@ -114,6 +129,11 @@ namespace MVVMDatabinding
             if (dataRecord.TryGetNameForId(itemId, out string name))
             {
                 SelectedItemName = name;
+            }
+            else
+            {
+                // insert an empty string at the beginning of the list if no valid option has been selected
+                availableItemNames.Insert(0, string.Empty);
             }
         }
     }

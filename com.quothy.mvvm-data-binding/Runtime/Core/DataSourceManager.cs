@@ -79,6 +79,11 @@ namespace MVVMDatabinding
             }
         }
 
+        public static bool TryGetDataSource(int sourceId, out IDataSource dataSource)
+        {
+            return dataSourceLookup.TryGetValue(sourceId, out dataSource);
+        }
+
         private void Start()
         {
             _instance = this;

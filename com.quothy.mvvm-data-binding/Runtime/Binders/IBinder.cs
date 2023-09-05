@@ -11,14 +11,13 @@ namespace MVVMDatabinding
         TwoWay,
     }
 
-
     public interface IBinder
     {
         string Name { get; }
         bool DataRecordValid { get; }
 
-        void Subscribe();
-        void Unsubscribe();
+        void Bind();
+        void Unbind();
 
         void OnDataItemUpdate(IDataSource dataSource, int itemId);
     }

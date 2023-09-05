@@ -48,6 +48,7 @@ namespace MVVMDatabinding
             dataItemTypeCache[typeof(float)] = typeof(DataItemFloat);
             dataItemTypeCache[typeof(bool)] = typeof(DataItemBool);
             dataItemTypeCache[typeof(string)] = typeof(DataItemString);
+            dataItemTypeCache[typeof(Action)] = typeof(DataItemAction);
         }
     }
 }

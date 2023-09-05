@@ -13,6 +13,10 @@ namespace MVVMDatabinding
         protected string name = "Text Binder";
 
         [SerializeField]
+        private BindDirection bindDirection = BindDirection.OneWay;
+
+        [ConditionalVisibility(nameof(bindDirection), ConditionResultType.ShowIfEquals, (int)BindDirection.OneWay)]
+        [SerializeField]
         private TextMeshProUGUI text = null;
 
         public override string Name { get => name; }

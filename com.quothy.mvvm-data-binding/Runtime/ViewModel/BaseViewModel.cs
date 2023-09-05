@@ -38,6 +38,7 @@ namespace MVVMDatabinding
             InitializeData();
         }
 
+
         public void InitializeData()
         {
             dataSource = new ViewModelDataSource();
@@ -91,6 +92,31 @@ namespace MVVMDatabinding
             }
 
             // TODO: do the same thing with methods, but for the BindableAction attribute
+            MethodInfo[] methodInfoList = vmType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            attributes.Clear();
+
+            foreach (MethodInfo info in methodInfoList)
+            {
+                attributes.AddRange(info.GetCustomAttributes());
+                foreach (Attribute attribute in attributes)
+                {
+                    if (attribute is BindableActionAttribute bindableAttribute)
+                    {
+                        // found a data item! add it to the list so we can serialize it
+                        if (updatedIds.Contains(bindableAttribute.DataItemId))
+                        {
+                            Debug.LogError($"[BaseViewModel] DataItem {info.Name} cannot use id {bindableAttribute.DataItemId} because another item is using it! Skipping until fixed");
+                            continue;
+                        }
+
+                        AddOrUpdateDataItemFromMethodInfo(info, bindableAttribute.DataItemId);
+                        updatedIds.Add(bindableAttribute.DataItemId);
+                        break;
+                    }
+                }
+
+                attributes.Clear();
+            }
 
             ViewModelDataSource dataSource = new ViewModelDataSource();
             // Relying on the ViewModel type name to generate the DataRecord is going to be 
@@ -153,6 +179,58 @@ namespace MVVMDatabinding
                 // first, retrieve the cocnrete implementation of DataItem<T> that
                 // is associated with the property type
                 if (DataItemTypeCache.TryGetDataItemType(info.PropertyType, out Type dataItemType))
+                {
+                    // create a new instance of the type
+                    IDataItem item = Activator.CreateInstance(dataItemType) as IDataItem;
+                    item.Initialize(id, info.Name);
+
+                    dataItemList.Add(item);
+                    EditorUtility.SetDirty(this);
+                }
+            }
+        }
+
+        private void AddOrUpdateDataItemFromMethodInfo(MethodInfo info, int id)
+        {
+            // We want to avoid re-serializing the same refs over and over again, so first
+            // check if we already have an IDataItem object for this ID & type
+            bool addNewItem = true;
+            IDataItem toRemove = null;
+            foreach (IDataItem item in dataItemList)
+            {
+                if (item.Id == id)
+                {
+                    // now check the type
+                    if (typeof(Action) == item.DataType)
+                    {
+                        if (item.Name != info.Name)
+                        {
+                            // call Initialize to refresh the name in case the variable was renamed.
+                            item.Initialize(id, info.Name);
+                            EditorUtility.SetDirty(this);
+                        }
+                        addNewItem = false;
+                    }
+                    else
+                    {
+                        // the type changed, we need to remove this item from the list and add a new one
+                        toRemove = item;
+                    }
+                    break;
+                }
+            }
+
+            if (addNewItem)
+            {
+                if (toRemove != null)
+                {
+                    dataItemList.Remove(toRemove);
+                }
+
+                // now we get to add a new data item to the list
+                // first, retrieve the cocnrete implementation of DataItem<T> that
+                // is associated with the property type
+                if (DataItemTypeCache.TryGetDataItemType(typeof(Action), out Type dataItemType))
                 {
                     // create a new instance of the type
                     IDataItem item = Activator.CreateInstance(dataItemType) as IDataItem;

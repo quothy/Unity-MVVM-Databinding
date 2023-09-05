@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Xml.Schema;
 using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.Events;
@@ -94,8 +95,8 @@ namespace MVVMDatabinding
             }
         }
 
-        private DataItemGetter<T> valueGetter = null;
-        private DataItemSetter<T> valueSetter = null;
+        protected DataItemGetter<T> valueGetter = null;
+        protected DataItemSetter<T> valueSetter = null;
 
         //private UnityAction<T> setUnderlyingValue = null;
 
@@ -154,4 +155,22 @@ namespace MVVMDatabinding
     public class DataItemFloat : DataItem<float> { }
     public class DataItemBool : DataItem<bool> { }
     public class DataItemString : DataItem<string> { }
+    public class DataItemAction : DataItem<Action> 
+    {
+        private Action dataAction = null;
+        public override void RuntimeInit(UnityEngine.Object dataSourceOwner)
+        {
+            if (Application.isPlaying)
+            {
+                MethodInfo methodInfo = dataSourceOwner.GetType().GetMethod(Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                dataAction = methodInfo.CreateDelegate(typeof(Action), dataSourceOwner) as Action;
+                valueGetter = GetAction;
+            }
+        }
+
+        private Action GetAction()
+        {
+            return dataAction;
+        }
+    }
 }
