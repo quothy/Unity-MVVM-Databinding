@@ -31,7 +31,10 @@ namespace MVVMDatabinding
         [SerializeField]
         protected int itemId = -1;
 
-        public abstract string Name { get; }
+        [ConditionalVisibility("", ConditionResultType.Never)]
+        public string name = string.Empty;
+
+        public string Name => name;
 
         public bool DataRecordValid
         {
@@ -46,6 +49,7 @@ namespace MVVMDatabinding
                 if (dataRecord != null)
                 {
                     dataRecord.TryGetNameForId(itemId, out selected);
+                    name = selected;
                 }
                 return selected;
             }
@@ -54,6 +58,7 @@ namespace MVVMDatabinding
                 if (dataRecord && dataRecord.TryGetIdForName(value, out int id))
                 {
                     itemId = id;
+                    name = value;
                 }
             }
         }

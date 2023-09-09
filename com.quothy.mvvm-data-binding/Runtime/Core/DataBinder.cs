@@ -43,5 +43,11 @@ namespace MVVMDatabinding
             }
             binders.Add(binder);
         }
+
+        public void ReplaceBinderAtIndex(IBinder binder, int index)
+        {
+            IBinder toReplace = binders[index];
+            binders[index] = binder;
+        }
     }
 }

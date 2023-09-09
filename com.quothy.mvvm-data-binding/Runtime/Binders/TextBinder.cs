@@ -10,7 +10,7 @@ namespace MVVMDatabinding
     [Serializable]
     public class TextBinder : BaseBinder<string>
     {
-        protected string name = "Text Binder";
+        //protected string name = "Text Binder";
 
         [SerializeField]
         private BindDirection bindDirection = BindDirection.OneWay;
@@ -19,7 +19,7 @@ namespace MVVMDatabinding
         [SerializeField]
         private TextMeshProUGUI text = null;
 
-        public override string Name { get => name; }
+        //public override string Name { get => name; }
 
         protected override void OnDataUpdated(string dataValue)
         {

@@ -8,7 +8,7 @@ namespace MVVMDatabinding
 {
     public class ButtonActionBinder : BaseBinder<Action>
     {
-        protected string name = "Button Action Binder";
+        //protected string name = "Button Action Binder";
 
         [ConditionalVisibility(nameof(DataRecordValid), ConditionResultType.ShowIfEquals)]
         [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
@@ -18,7 +18,7 @@ namespace MVVMDatabinding
         [SerializeField]
         private Button button = null;
 
-        public override string Name { get => name; }
+        //public override string Name { get => name; }
 
         public override void Bind()
         {
