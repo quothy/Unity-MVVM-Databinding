@@ -69,7 +69,7 @@ public class MainViewModel : BaseGlobalViewModel
     [SerializeField]
     private bool testEnable = false;
 
-    [ConditionalVisibility(nameof(testCheckbox), ConditionalVisibilityAttribute.ConditionalVisibilityType.ShowIfTrue)]
+    [ConditionalVisibility(nameof(testCheckbox), ConditionResultType.ShowIfEquals)]
     [ConditionalEnable(nameof(testEnable), ConditionalEnableAttribute.ConditionalEnableType.EnableIfTrue)]
     [SerializeField]
     private string text = "test";
@@ -80,8 +80,16 @@ public class MainViewModel : BaseGlobalViewModel
     }
 
 
+    [BindableAction(10)]
+    private void IncrementCounter()
+    {
+        ExampleInt++;
+        CounterString = $"{ExampleInt}";
+    }
+
+
     [ContextMenu("Increment counter")]
-    public void IncrementCounter()
+    public void Editor_IncrementCounter()
     {
         if (!Application.isPlaying)
         {

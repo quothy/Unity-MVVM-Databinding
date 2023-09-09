@@ -24,3 +24,5 @@ MonoBehaviour:
     Name: ExampleFloat
   - Id: 3
     Name: CounterString
+  - Id: 10
+    Name: IncrementCounter
