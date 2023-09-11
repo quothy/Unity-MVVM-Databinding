@@ -10,24 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aaa9a5eecdc0be44885ae5d879903cad, type: 3}
-  m_Name: MainViewModel_DataRecord
+  m_Name: OptionViewModel_DataRecord
   m_EditorClassIdentifier: 
-  SourceId: 1940290777
-  SourceName: MainViewModel
-  SourceType: MainViewModel
-  ExtraDataRequiredAtRuntime: 0
+  SourceId: -1320654493
+  SourceName: OptionViewModel
+  SourceType: OptionViewModel
+  ExtraDataRequiredAtRuntime: 1
   dataItems:
   - Id: 0
-    Name: ExampleBool
+    Name: OptionLocked
   - Id: 1
-    Name: ExampleInt
-  - Id: 2
-    Name: ExampleFloat
-  - Id: 3
-    Name: CounterString
-  - Id: 10
-    Name: IncrementCounter
-  - Id: 4
-    Name: OptionsLocked
-  - Id: 11
-    Name: ToggleOptionsLock
+    Name: OptionName

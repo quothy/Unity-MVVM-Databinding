@@ -63,6 +63,21 @@ public class MainViewModel : BaseGlobalViewModel
         }
     }
 
+    private bool optionsLocked = false;
+    [BindableData(4)]
+    public bool OptionsLocked
+    {
+        get => optionsLocked;
+        set
+        {
+            if (optionsLocked != value)
+            {
+                optionsLocked = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     [SerializeField]
     private bool testCheckbox = false;
 
@@ -85,6 +100,12 @@ public class MainViewModel : BaseGlobalViewModel
     {
         ExampleInt++;
         CounterString = $"{ExampleInt}";
+    }
+
+    [BindableAction(11)]
+    private void ToggleOptionsLock()
+    {
+        OptionsLocked = !OptionsLocked;
     }
 
 
