@@ -35,6 +35,7 @@ namespace MVVMDatabinding
 
         protected virtual void Awake()
         {
+            ViewModelTypeCache.RegisterViewModelType(this.GetType().ToString(), this.GetType());
             InitializeData();
         }
 

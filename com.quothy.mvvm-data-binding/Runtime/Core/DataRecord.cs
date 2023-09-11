@@ -15,6 +15,7 @@ namespace MVVMDatabinding
     {
         public int SourceId = -1;
         public string SourceName = string.Empty;
+        public string SourceType = string.Empty;
         public bool ExtraDataRequiredAtRuntime = false;
 
         [SerializeField]
@@ -29,6 +30,7 @@ namespace MVVMDatabinding
         {
             SourceId = sourceId;
             SourceName = sourceName;
+            SourceType = sourceName;
             ExtraDataRequiredAtRuntime = idModifiedAtRuntime;
 
             if (dataItems == null)

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +33,19 @@ namespace MVVMDatabinding
         [ConditionalVisibility("", ConditionResultType.Never)]
         public string name = string.Empty;
 
+        protected string binderTypeName = string.Empty;
+        private string BinderTypeName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(binderTypeName))
+                {
+                    binderTypeName = string.Format(" ({0})", GetType().Name);
+                }
+                return binderTypeName;
+            }
+        }
+
         public string Name => name;
 
         public bool DataRecordValid
@@ -49,7 +61,7 @@ namespace MVVMDatabinding
                 if (dataRecord != null)
                 {
                     dataRecord.TryGetNameForId(itemId, out selected);
-                    name = selected;
+                    name = selected + BinderTypeName;
                 }
                 return selected;
             }
@@ -58,7 +70,7 @@ namespace MVVMDatabinding
                 if (dataRecord && dataRecord.TryGetIdForName(value, out int id))
                 {
                     itemId = id;
-                    name = value;
+                    name = value + BinderTypeName;
                 }
             }
         }
@@ -75,6 +87,10 @@ namespace MVVMDatabinding
             }
         }
 
+        private int fullSourceId = int.MinValue;
+        private GameObject bindingObject = null;
+
+
         private bool editor_RecordRequiresExtraData => dataRecord != null && dataRecord.ExtraDataRequiredAtRuntime;
         private bool editor_SourceInstanceNeedsSet => editor_RecordRequiresExtraData && resolutionType == DataSourceIdResolutionType.ManuallySetInstance;
 
@@ -82,10 +98,23 @@ namespace MVVMDatabinding
         /// We're going to want to display strings for the items on the Inspector UI
         /// </summary>
         private List<string> availableItemNames = null;
+        protected int SourceId
+        {
+            get
+            {
+                if (fullSourceId == int.MinValue && TryResolveDataSourceId(out int sourceId))
+                {
+                    fullSourceId = sourceId;
+                }
+                return fullSourceId;
+            }
+        }
+
         public string ItemName { get; private set; }
 
-        public virtual void Bind()
+        public virtual void Bind(GameObject bindingObject)
         {
+            this.bindingObject = bindingObject;
             Subscribe();
         }
 
@@ -97,12 +126,12 @@ namespace MVVMDatabinding
         protected void Subscribe()
         {
             // TODO: handle more complex resolution of SourceId for local VMs
-            DataSourceManager.SubscribeToItem(dataRecord.SourceId, itemId, OnDataItemUpdate);
+            DataSourceManager.SubscribeToItem(SourceId, itemId, OnDataItemUpdate);
         }
 
         protected void Unsubscribe()
         {
-            DataSourceManager.UnsubscribeFromItem(dataRecord.SourceId, itemId, OnDataItemUpdate);
+            DataSourceManager.UnsubscribeFromItem(SourceId, itemId, OnDataItemUpdate);
         }
 
         public virtual void OnDataItemUpdate(IDataSource dataSource, int itemId)
@@ -119,6 +148,52 @@ namespace MVVMDatabinding
         }
 
         protected abstract void OnDataUpdated(T dataValue);
+
+        private bool TryResolveDataSourceId(out int sourceId)
+        {
+            if (!dataRecord.ExtraDataRequiredAtRuntime)
+            {
+                sourceId = dataRecord.SourceId;
+                return true;
+            }
+
+            if (resolutionType == DataSourceIdResolutionType.ManuallySetInstance)
+            {
+                if (dataSourceInstance != null)
+                {
+                    int id = dataSourceInstance.GetInstanceID();
+                    string fullName = BaseDataSource.ResolveNameWithRuntimeId(dataRecord.SourceName, id);
+                    sourceId = Animator.StringToHash(fullName);
+                    return true;
+                }
+            }
+            else if (resolutionType == DataSourceIdResolutionType.GetComponentInParent)
+            {
+                if (bindingObject != null && ViewModelTypeCache.TryGetViewModelType(dataRecord.SourceType, out Type viewModelType))
+                {
+                    var source = bindingObject.GetComponentInParent(viewModelType);
+                    if (source != null)
+                    {
+                        int id = source.gameObject.GetInstanceID();
+                        string fullName = BaseDataSource.ResolveNameWithRuntimeId(dataRecord.SourceName, id);
+                        sourceId = Animator.StringToHash(fullName);
+                        Debug.Log($"[BaseBinder] Resolved data source: name = {fullName}  id = {sourceId}");
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.LogErrorFormat("[BaseBinder] Failed to find ViewModel of type {0} in parent of {1}", viewModelType, bindingObject.name);
+                    }
+                }
+                else
+                {
+                    Debug.LogErrorFormat("[BaseBinder] Failed to retrieve ViewModel type from cache for data record (source name: {0}, source type: {1})", dataRecord.SourceName, dataRecord.SourceType);
+                }
+            }
+
+            sourceId = int.MinValue;
+            return false;
+        }
 
         private void TryPopulateItemNames()
         {

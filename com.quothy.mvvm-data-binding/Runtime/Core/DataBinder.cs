@@ -23,7 +23,7 @@ namespace MVVMDatabinding
         {
             foreach (IBinder binder in binders)
             {
-                binder.Bind();
+                binder.Bind(gameObject);
             }
         }
 

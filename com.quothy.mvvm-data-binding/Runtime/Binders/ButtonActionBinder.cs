@@ -20,14 +20,14 @@ namespace MVVMDatabinding
 
         //public override string Name { get => name; }
 
-        public override void Bind()
+        public override void Bind(GameObject bindingObject)
         {
             if (button != null)
             {
                 button.onClick.AddListener(OnButtonClick);
             }
 
-            base.Bind();
+            base.Bind(bindingObject);
         }
 
         public override void Unbind()

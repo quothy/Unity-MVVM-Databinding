@@ -36,6 +36,8 @@ namespace MVVMDatabinding
 
                     pendingSubscriptons.Remove(dataSource.Id);
                 }
+
+                Debug.Log($"[DataSourceManager] Registered source {dataSource.Name} to id {dataSource.Id}");
             }
             else
             {

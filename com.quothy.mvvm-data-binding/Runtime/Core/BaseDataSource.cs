@@ -23,10 +23,15 @@ namespace MVVMDatabinding
         public virtual void Initialize(string sourceName, bool idModifiedAtRuntime)
         {
             name = sourceName;
-            nameHash = name.GetHashCode();
+            nameHash = Animator.StringToHash(name);
             // TODO: how to differentiate different instances of the same source type? instance ID?
             // -- We'll at least start by tracking whether or not the name/ID gets modified at runtime or not
             this.idModifiedAtRuntime = idModifiedAtRuntime;
+
+            if (idModifiedAtRuntime)
+            {
+                Debug.Log($"[BaseDataSource] Registering {sourceName} to id {nameHash}");
+            }
 
             DataSourceManager.RegisterDataSource(this);
         }
@@ -91,6 +96,14 @@ namespace MVVMDatabinding
             if (!dataItemLookup.TryGetValue(item.Id, out IDataItem existing))
             {
                 dataItemLookup[item.Id] = item;
+
+                if (subscriberLookup != null && subscriberLookup.TryGetValue(item.Id, out List<DataItemUpdate> subscribers))
+                {
+                    foreach (DataItemUpdate itemUpdate in subscribers)
+                    {
+                        itemUpdate?.Invoke(this, item.Id);
+                    }
+                }
             }
             else
             {
@@ -100,7 +113,7 @@ namespace MVVMDatabinding
 
         public void OnItemChangedInSource(int id)
         {
-            if (subscriberLookup.TryGetValue(id, out List<DataItemUpdate> subscribers))
+            if (subscriberLookup != null && subscriberLookup.TryGetValue(id, out List<DataItemUpdate> subscribers))
             {
                 foreach (DataItemUpdate item in subscribers)
                 {
@@ -122,6 +135,11 @@ namespace MVVMDatabinding
             }
 
             subscriberLookup[id].Add(onUpdate);
+
+            if (dataItemLookup != null && dataItemLookup.TryGetValue(id, out IDataItem item))
+            {
+                onUpdate?.Invoke(this, id);
+            }
         }
 
         public void UnsubscribeFromItem(int id, DataItemUpdate onUpdate)

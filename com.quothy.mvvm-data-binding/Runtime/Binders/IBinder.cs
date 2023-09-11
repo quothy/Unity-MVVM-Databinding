@@ -16,7 +16,7 @@ namespace MVVMDatabinding
         string Name { get; }
         bool DataRecordValid { get; }
 
-        void Bind();
+        void Bind(GameObject bindingObject);
         void Unbind();
 
         void OnDataItemUpdate(IDataSource dataSource, int itemId);

@@ -21,7 +21,7 @@ namespace MVVMDatabinding
             string viewModelName = viewModel.GetType().ToString();
             if (isIdModifiedAtRuntime)
             {
-                viewModelName = ResolveNameWithRuntimeId(viewModelName, viewModel.GetInstanceID());
+                viewModelName = ResolveNameWithRuntimeId(viewModelName, viewModel.gameObject.GetInstanceID());
             }
 
             Initialize(viewModelName, isIdModifiedAtRuntime);
