@@ -20,6 +20,7 @@ namespace MVVMDatabinding
             EditorGUI.BeginChangeCheck();
             List<string> options = GetOptions(property);
             string selectedOption = GetSelectedOption(property);
+
             int idx = int.MinValue;
             int counter = 0;
             foreach (string option in options)
@@ -107,6 +108,13 @@ namespace MVVMDatabinding
                             options = getter();
                         }
                     }
+                    else
+                    {
+                        if (ReflectionUtils.TryFindPropertyGetterInChild<List<string>>(dropdownAttribute.OptionsSourcePropertyName, parent.name, parent.serializedObject.targetObject.GetType(), parent.serializedObject.targetObject, out Func<List<string>> getter))
+                        {
+                            options = getter();
+                        }
+                    }
                 }
                 else
                 {
@@ -152,6 +160,13 @@ namespace MVVMDatabinding
                             selected = getter();
                         }
                     }
+                    else
+                    {
+                        if (ReflectionUtils.TryFindPropertyGetterInChild<string>(dropdownAttribute.SelectedOptionPropertyName, parent.name, parent.serializedObject.targetObject.GetType(), parent.serializedObject.targetObject, out Func<string> getter))
+                        {
+                            selected = getter();
+                        }
+                    }
                 }
                 else
                 {
@@ -188,6 +203,10 @@ namespace MVVMDatabinding
                         var managedRef = parent.managedReferenceValue;
                         Type refType = managedRef.GetType();
                         ReflectionUtils.TrySetPropertyValue<string>(dropdownAttribute.SelectedOptionPropertyName, refType, managedRef, option);
+                    }
+                    else
+                    {
+                        ReflectionUtils.TrySetPropertyInChild<string>(dropdownAttribute.SelectedOptionPropertyName, parent.name, parent.serializedObject.targetObject.GetType(), parent.serializedObject.targetObject, option);
                     }
                 }
                 else

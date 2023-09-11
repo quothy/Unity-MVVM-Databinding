@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using NUnit.Framework.Internal;
 
 namespace MVVMDatabinding
 {
@@ -47,7 +48,27 @@ namespace MVVMDatabinding
             return targetProperty != null;
         }
 
-        public static bool TryFindPropertyGetter<FieldType>(string propertyName, Type targetType, object targetObject, out Func<FieldType> getterFunc)
+        public static bool TryGetValue<FieldType>(string name, Type targetType, object targetObject, out FieldType value)
+        {
+            // first try properties
+            if (TryFindPropertyGetter<FieldType>(name, targetType, targetObject, out Func<FieldType> getterFunc))
+            {
+                value = getterFunc();
+                return true;
+            }
+
+            // then try fields 
+            if (TryGetField<FieldType>(name, targetType, targetObject, out value))
+            {
+                return true;
+            }
+
+
+            value = default;
+            return false;
+        }
+
+        public static bool TryFindPropertyGetter<FieldType>(string propertyName, Type targetType, object targetObject, out Func<FieldType> getterFunc, bool checkChildFields = false)
         {
             getterFunc = null;
 
@@ -60,7 +81,7 @@ namespace MVVMDatabinding
                 {
                     var owner = info.GetGetMethod(true).IsStatic ? null : targetObject;
                     getterFunc = () => { return (FieldType)info.GetValue(targetObject); };
-                    break;
+                    return getterFunc != null;
                 }
                 else if (typeToCheck.BaseType != null)
                 {
@@ -74,6 +95,21 @@ namespace MVVMDatabinding
 
             return getterFunc != null;
         }
+
+        public static bool TryFindPropertyGetterInChild<FieldType>(string propertyName, string childName, Type targetType, object targetObject, out Func<FieldType> getterFunc)
+        {
+            FieldInfo childField = targetType.GetField(childName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            if (childField != null)
+            {
+                var childObject = childField.GetValue(targetObject);
+                return TryFindPropertyGetter<FieldType>(propertyName, childField.FieldType, childObject, out getterFunc);
+            }
+
+            getterFunc = null;
+            return false;
+        }
+
         public static bool TrySetPropertyValue<FieldType>(string propertyName, Type targetType, object targetObject, FieldType valueToSet)
         {
             bool success = false;
@@ -101,6 +137,46 @@ namespace MVVMDatabinding
             }
 
             return success;
+        }
+
+
+        public static bool TrySetPropertyInChild<FieldType>(string propertyName, string childName, Type targetType, object targetObject, FieldType valueToSet)
+        {
+            FieldInfo childField = targetType.GetField(childName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            if (childField != null)
+            {
+                var childObject = childField.GetValue(targetObject);
+                return TrySetPropertyValue<FieldType>(propertyName, childField.FieldType, childObject, valueToSet);
+            }
+
+            return false;
+        }
+
+        public static bool TryGetField<FieldType>(string fieldName, Type targetType, object targetObject, out FieldType value)
+        {
+            Type typeToCheck = targetType;
+
+            while (typeToCheck != null)
+            {
+                FieldInfo field = typeToCheck.GetField(fieldName, BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+                if (field != null)
+                {
+                    value =  (FieldType)field.GetValue(targetObject);
+                    return true;
+                }
+                else if (typeToCheck.BaseType != null)
+                {
+                    typeToCheck = typeToCheck.BaseType;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            value = default;
+            return false;
         }
     }
 }
