@@ -20,7 +20,8 @@ MonoBehaviour:
   - Id: 0
     Name: ExampleBool
     Type: System.Boolean
-    Comment: 
+    Comment: This is a example boolean that you can bind to, but it's not hooked
+      up to anything
   - Id: 1
     Name: ExampleInt
     Type: System.Int32

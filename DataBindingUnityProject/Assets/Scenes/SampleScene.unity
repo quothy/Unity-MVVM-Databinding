@@ -480,10 +480,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2711463433116703197, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: lockStateData.dataRecord
+      value: 
+      objectReference: {fileID: 11400000, guid: dcbd76ca2ce00764a968d3e9e9b804e2,
+        type: 2}
     - target: {fileID: 4869112576716521064, guid: 2a0c9e724e3172342af028ccdac5d0a3,
         type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869112576716521067, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207211627872272].name
+      value: ExampleInt (ButtonActionBinder)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869112576716521067, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207211627872272].itemId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869112576716521067, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207211627872272].comment
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4869112576716521071, guid: 2a0c9e724e3172342af028ccdac5d0a3,
         type: 3}
@@ -589,6 +610,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869112577306776477, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207211627872322].name
+      value: OptionsLocked (StringSwapBinder)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869112577306776477, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207211627872322].itemId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869112577306776477, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207211627872322].comment
+      value: Whether or not all options should be considered locked
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}

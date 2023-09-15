@@ -6,7 +6,7 @@ using UnityEngine;
 public class MainViewModel : BaseGlobalViewModel
 {
     private bool exampleBool = false;
-    [BindableData(0)]
+    [BindableData(0, "This is a example boolean that you can bind to, but it's not hooked up to anything")]
     public bool ExampleBool
     {
         get => exampleBool;
