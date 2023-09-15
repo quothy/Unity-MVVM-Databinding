@@ -35,12 +35,18 @@ namespace MVVMDatabinding
                 Debug.Log($"[BaseDataSource] Registering {sourceName} to id {nameHash}");
             }
 
-            DataSourceManager.RegisterDataSource(this);
+            if (Application.isPlaying)
+            {
+                DataSourceManager.RegisterDataSource(this);
+            }
         }
 
         public void Destroy()
         {
-            DataSourceManager.UnregisterDataSource(this);
+            if (Application.isPlaying)
+            {
+                DataSourceManager.UnregisterDataSource(this);
+            }
         }
 
         public void GenerateRecord(string recordDirPath, List<IDataItem> dataItems)
