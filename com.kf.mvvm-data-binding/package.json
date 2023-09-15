@@ -1,0 +1,11 @@
+{
+    "name" : "com.kf.unity-mvvm-databinding",
+    "version" : "0.0.1",
+    "displayName": "MVVM Databinding",
+    "description" : "MVVM-inspired data binding and theming package for Unity",
+    "unity" : "2021.3",
+    "author": {
+      "name": "Katie Fremont",
+      "url": "https://github.com/quothy"
+    }
+}
