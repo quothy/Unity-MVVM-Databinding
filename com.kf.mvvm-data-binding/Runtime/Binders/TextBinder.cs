@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using UnityEngine.UIElements;
+using TMPro;
+using UnityEngine;
 
 namespace MVVMDatabinding
 {

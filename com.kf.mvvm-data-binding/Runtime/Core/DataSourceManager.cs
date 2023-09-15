@@ -1,5 +1,6 @@
-using System;
-using System.Collections;
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System.Collections.Generic;
 using UnityEngine;
 

@@ -1,9 +1,9 @@
-using PlasticGui.Help;
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace MVVMDatabinding
 {

@@ -1,13 +1,12 @@
-using Codice.Client.BaseCommands.BranchExplorer;
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditorInternal;
 using UnityEngine;
-using static UnityEditor.GenericMenu;
 
 namespace MVVMDatabinding
 {

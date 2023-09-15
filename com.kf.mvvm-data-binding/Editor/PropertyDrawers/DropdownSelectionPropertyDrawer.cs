@@ -1,9 +1,10 @@
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static Codice.Client.BaseCommands.Import.Commit;
 
 
 namespace MVVMDatabinding

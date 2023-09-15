@@ -1,9 +1,10 @@
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using System.IO;
 using UnityEditor;
 #if UNITY_EDITOR
 using System.Reflection;

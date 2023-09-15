@@ -1,9 +1,8 @@
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Xml.Schema;
-using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.Events;
 
