@@ -19,15 +19,29 @@ MonoBehaviour:
   dataItems:
   - Id: 0
     Name: ExampleBool
+    Type: System.Boolean
+    Comment: 
   - Id: 1
     Name: ExampleInt
+    Type: System.Int32
+    Comment: 
   - Id: 2
     Name: ExampleFloat
+    Type: System.Single
+    Comment: 
   - Id: 3
     Name: CounterString
+    Type: System.String
+    Comment: 
   - Id: 10
     Name: IncrementCounter
+    Type: System.Action
+    Comment: 
   - Id: 4
     Name: OptionsLocked
+    Type: System.Boolean
+    Comment: Whether or not all options should be considered locked
   - Id: 11
     Name: ToggleOptionsLock
+    Type: System.Action
+    Comment: 

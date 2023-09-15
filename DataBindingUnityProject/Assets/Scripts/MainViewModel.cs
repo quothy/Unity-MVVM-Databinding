@@ -64,7 +64,7 @@ public class MainViewModel : BaseGlobalViewModel
     }
 
     private bool optionsLocked = false;
-    [BindableData(4)]
+    [BindableData(4, comment: "Whether or not all options should be considered locked")]
     public bool OptionsLocked
     {
         get => optionsLocked;
