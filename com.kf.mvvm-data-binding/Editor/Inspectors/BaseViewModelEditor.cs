@@ -25,10 +25,7 @@ namespace MVVMDatabinding
             // add a button (contents depend on situation)
             if (IsPrefabInstance())
             {
-                Color prevColor = GUI.color;
-                GUI.color = Color.yellow;
-                GUILayout.Box("Please open prefab to update data record");
-                GUI.color = prevColor;
+                EditorGUILayout.HelpBox("Please open prefab to update data record", MessageType.Warning);
 
                 if (GUILayout.Button("Open Prefab", GUILayout.Height(30)))
                 {

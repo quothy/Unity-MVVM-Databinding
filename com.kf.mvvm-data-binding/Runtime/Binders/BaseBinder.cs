@@ -36,9 +36,7 @@ namespace MVVMDatabinding
         [ConditionalVisibility("", ConditionResultType.Never)]
         public string name = string.Empty;
 
-        // TODO: add label attribute to show the comment as a multiline label
-        [ConditionalVisibility(nameof(editor_IsCommentEmpty), ConditionResultType.ShowIfNotEquals)]
-        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
+        [ConditionalShowAsMessage(nameof(editor_IsCommentEmpty), ConditionResultType.ShowIfNotEquals, ConditionalShowAsMessageAttribute.MessageType.Info)]
         [SerializeField]
         private string comment = string.Empty;
         private bool editor_IsCommentEmpty => string.IsNullOrWhiteSpace(comment);
