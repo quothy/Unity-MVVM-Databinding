@@ -50,6 +50,7 @@ namespace MVVMDatabinding
             dataItemTypeCache[typeof(string)] = typeof(DataItemString);
             dataItemTypeCache[typeof(Color)] = typeof(DataItemColor);
             dataItemTypeCache[typeof(Material)] = typeof(DataItemMaterial);
+            dataItemTypeCache[typeof(Sprite)] = typeof(DataItemSprite);
             dataItemTypeCache[typeof(Texture)] = typeof(DataItemTexture);
             dataItemTypeCache[typeof(Vector2)] = typeof(DataItemVector2);
             dataItemTypeCache[typeof(Vector3)] = typeof(DataItemVector3);
