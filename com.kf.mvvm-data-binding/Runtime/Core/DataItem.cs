@@ -155,6 +155,19 @@ namespace MVVMDatabinding
     public class DataItemFloat : DataItem<float> { }
     public class DataItemBool : DataItem<bool> { }
     public class DataItemString : DataItem<string> { }
+
+    public class DataItemColor : DataItem<Color> { }
+    public class DataItemMaterial : DataItem<Material> { }
+
+    public class DataItemTexture : DataItem<Texture> { }
+
+    public class DataItemVector2 : DataItem<Vector2> { }
+    public class DataItemVector3 : DataItem<Vector3> { }
+
+    public class DataItemVector4 : DataItem<Vector4> { }
+
+
+
     public class DataItemAction : DataItem<Action> 
     {
         private Action dataAction = null;
