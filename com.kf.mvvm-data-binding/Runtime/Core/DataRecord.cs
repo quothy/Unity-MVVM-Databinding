@@ -12,6 +12,8 @@ namespace MVVMDatabinding
     {
         public int Id = -1;
         public string Name = string.Empty;
+        public string Type = string.Empty;
+        public string Comment = string.Empty;
     }
 
     public class DataRecord : ScriptableObject
@@ -45,7 +47,7 @@ namespace MVVMDatabinding
 
             foreach (IDataItem item in itemList)
             {
-                dataItems.Add(new DataRecordItem() { Id = item.Id, Name = item.Name });
+                dataItems.Add(new DataRecordItem() { Id = item.Id, Name = item.Name, Type = item.DataType.ToString(), Comment = item.Comment });
             }
 
             if (itemLookup != null)
@@ -105,6 +107,20 @@ namespace MVVMDatabinding
                 }
             }
             return !string.IsNullOrWhiteSpace(name);
+        }
+
+        public bool TryGetCommentForId(int id, out string comment)
+        {
+            comment = string.Empty;
+            foreach (DataRecordItem item in dataItems)
+            {
+                if (id == item.Id)
+                {
+                    comment = item.Comment;
+                    break;
+                }
+            }
+            return !string.IsNullOrWhiteSpace(comment);
         }
     }
 }

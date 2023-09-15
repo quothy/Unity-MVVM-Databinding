@@ -12,10 +12,12 @@ namespace MVVMDatabinding
     public class BindableDataAttribute : Attribute
     {
         public int DataItemId = -1;
+        public string Comment = string.Empty;
 
-        public BindableDataAttribute(int dataItemId)
+        public BindableDataAttribute(int dataItemId, string comment = "")
         {
             DataItemId = dataItemId;
+            Comment = comment;
         }
     }
 }

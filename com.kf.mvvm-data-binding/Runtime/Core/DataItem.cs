@@ -15,7 +15,9 @@ namespace MVVMDatabinding
 
         Type DataType { get; }
 
-        void Initialize(int id, string name);
+        string Comment { get; }
+
+        void Initialize(int id, string name, string comment = "");
 
         UnityEvent ValueChanged { get; }
 
@@ -49,12 +51,15 @@ namespace MVVMDatabinding
 
         public abstract Type DataType { get; }
 
+        public string Comment { get; private set; }
+
         public UnityEvent ValueChanged { get; protected set; } = null;
 
-        public void Initialize(int id, string name)
+        public void Initialize(int id, string name, string comment = "")
         {
             Id = id;
             Name = name;
+            Comment = comment;
         }
 
         public void RaiseValueChanged()
@@ -154,10 +159,9 @@ namespace MVVMDatabinding
     public class DataItemFloat : DataItem<float> { }
     public class DataItemBool : DataItem<bool> { }
     public class DataItemString : DataItem<string> { }
-
     public class DataItemColor : DataItem<Color> { }
     public class DataItemMaterial : DataItem<Material> { }
-
+    public class DataItemSprite : DataItem<Sprite> { }
     public class DataItemTexture : DataItem<Texture> { }
 
     public class DataItemVector2 : DataItem<Vector2> { }

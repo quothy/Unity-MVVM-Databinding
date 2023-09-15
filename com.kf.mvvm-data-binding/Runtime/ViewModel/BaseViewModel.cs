@@ -14,6 +14,7 @@ namespace MVVMDatabinding
 {
     public abstract class BaseViewModel : MonoBehaviour
     {
+        [HideInInspector]
         [SerializeReference]
         private List<IDataItem> dataItemList = null;
 
@@ -84,7 +85,7 @@ namespace MVVMDatabinding
                             continue;
                         }
 
-                        AddOrUpdateDataItemFromPropertyInfo(info, bindableAttribute.DataItemId);
+                        AddOrUpdateDataItemFromPropertyInfo(info, bindableAttribute.DataItemId, bindableAttribute.Comment);
                         updatedIds.Add(bindableAttribute.DataItemId);
                         break;
                     }
@@ -111,7 +112,7 @@ namespace MVVMDatabinding
                             continue;
                         }
 
-                        AddOrUpdateDataItemFromMethodInfo(info, bindableAttribute.DataItemId);
+                        AddOrUpdateDataItemFromMethodInfo(info, bindableAttribute.DataItemId, bindableAttribute.Comment);
                         updatedIds.Add(bindableAttribute.DataItemId);
                         break;
                     }
@@ -140,7 +141,7 @@ namespace MVVMDatabinding
 
 
 #if UNITY_EDITOR
-        private void AddOrUpdateDataItemFromPropertyInfo(PropertyInfo info, int id)
+        private void AddOrUpdateDataItemFromPropertyInfo(PropertyInfo info, int id, string comment = "")
         {
             // We want to avoid re-serializing the same refs over and over again, so first
             // check if we already have an IDataItem object for this ID & type
@@ -153,10 +154,10 @@ namespace MVVMDatabinding
                     // now check the type
                     if (info.PropertyType == item.DataType)
                     {
-                        if (item.Name != info.Name)
+                        if (item.Name != info.Name || item.Comment != comment)
                         {
                             // call Initialize to refresh the name in case the variable was renamed.
-                            item.Initialize(id, info.Name);
+                            item.Initialize(id, info.Name, comment);
                             EditorUtility.SetDirty(this);
                         }
                         addNewItem = false;
@@ -184,7 +185,7 @@ namespace MVVMDatabinding
                 {
                     // create a new instance of the type
                     IDataItem item = Activator.CreateInstance(dataItemType) as IDataItem;
-                    item.Initialize(id, info.Name);
+                    item.Initialize(id, info.Name, comment);
 
                     dataItemList.Add(item);
                     EditorUtility.SetDirty(this);
@@ -192,7 +193,7 @@ namespace MVVMDatabinding
             }
         }
 
-        private void AddOrUpdateDataItemFromMethodInfo(MethodInfo info, int id)
+        private void AddOrUpdateDataItemFromMethodInfo(MethodInfo info, int id, string comment = "")
         {
             // We want to avoid re-serializing the same refs over and over again, so first
             // check if we already have an IDataItem object for this ID & type
@@ -208,7 +209,7 @@ namespace MVVMDatabinding
                         if (item.Name != info.Name)
                         {
                             // call Initialize to refresh the name in case the variable was renamed.
-                            item.Initialize(id, info.Name);
+                            item.Initialize(id, info.Name, comment);
                             EditorUtility.SetDirty(this);
                         }
                         addNewItem = false;
@@ -236,7 +237,7 @@ namespace MVVMDatabinding
                 {
                     // create a new instance of the type
                     IDataItem item = Activator.CreateInstance(dataItemType) as IDataItem;
-                    item.Initialize(id, info.Name);
+                    item.Initialize(id, info.Name, comment);
 
                     dataItemList.Add(item);
                     EditorUtility.SetDirty(this);

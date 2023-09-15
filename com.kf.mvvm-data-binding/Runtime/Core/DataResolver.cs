@@ -2,7 +2,6 @@
 // Licensed under the MIT license
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,13 +21,21 @@ namespace MVVMDatabinding
         [SerializeField]
         protected GameObject dataSourceInstance = null;
 
-        //[ConditionalVisibility(nameof(DataRecordValid), ConditionResultType.ShowIfEquals)]
+       // [ConditionalVisibility(nameof(DataRecordValid), ConditionResultType.ShowIfEquals)]
         [DropdownSelection(nameof(ItemNameOptions), nameof(SelectedItemName))]
         [SerializeField]
         protected int itemId = -1;
 
         [ConditionalVisibility("", ConditionResultType.Never)]
         public string name = string.Empty;
+
+        // TODO: add label attribute to show the comment as a multiline label
+        [ConditionalVisibility(nameof(editor_IsCommentEmpty), ConditionResultType.ShowIfNotEquals)]
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
+        [SerializeField]
+        private string comment = string.Empty;
+
+        private bool editor_IsCommentEmpty => string.IsNullOrWhiteSpace(comment);
 
         /// <summary>
         /// We're going to want to display strings for the items on the Inspector UI
@@ -50,6 +57,7 @@ namespace MVVMDatabinding
                 if (dataRecord != null)
                 {
                     dataRecord.TryGetNameForId(itemId, out selected);
+                    dataRecord.TryGetCommentForId(itemId, out comment);
                     name = selected;
                 }
                 return selected;
@@ -60,6 +68,7 @@ namespace MVVMDatabinding
                 {
                     itemId = id;
                     name = value;
+                    dataRecord.TryGetCommentForId(id, out comment);
                 }
             }
         }
@@ -103,7 +112,6 @@ namespace MVVMDatabinding
 
         public void Subscribe()
         {
-            // TODO: handle more complex resolution of SourceId for local VMs
             DataSourceManager.SubscribeToItem(dataRecord.SourceId, itemId, OnDataItemUpdate);
         }
 
