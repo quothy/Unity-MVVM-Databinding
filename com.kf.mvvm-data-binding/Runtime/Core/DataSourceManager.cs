@@ -37,7 +37,7 @@ namespace MVVMDatabinding
                     pendingSubscriptons.Remove(dataSource.Id);
                 }
 
-                Debug.Log($"[DataSourceManager] Registered source {dataSource.Name} to id {dataSource.Id}");
+                //Debug.Log($"[DataSourceManager] Registered source {dataSource.Name} to id {dataSource.Id}");
             }
             else
             {
@@ -61,8 +61,7 @@ namespace MVVMDatabinding
             }
             else
             {
-                // TODO: Figure out how to handle this case
-                Debug.LogWarning($"[DataSourceManager] Cannot subscribe to item {itemId} because data source {sourceId} is not registered yet!");
+                //Debug.LogWarning($"[DataSourceManager] Cannot subscribe to item {itemId} because data source {sourceId} is not registered yet!");
 
                 if (!pendingSubscriptons.TryGetValue(sourceId, out List<PendingSubscription> subscriptions))
                 {
