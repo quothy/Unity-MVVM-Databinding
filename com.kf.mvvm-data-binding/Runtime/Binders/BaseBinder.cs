@@ -36,6 +36,13 @@ namespace MVVMDatabinding
         [ConditionalVisibility("", ConditionResultType.Never)]
         public string name = string.Empty;
 
+        // TODO: add label attribute to show the comment as a multiline label
+        [ConditionalVisibility(nameof(editor_IsCommentEmpty), ConditionResultType.ShowIfNotEquals)]
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
+        [SerializeField]
+        private string comment = string.Empty;
+        private bool editor_IsCommentEmpty => string.IsNullOrWhiteSpace(comment);
+
         protected string binderTypeName = string.Empty;
         private string BinderTypeName
         {
@@ -65,6 +72,7 @@ namespace MVVMDatabinding
                 {
                     dataRecord.TryGetNameForId(itemId, out selected);
                     name = selected + BinderTypeName;
+                    dataRecord.TryGetCommentForId(itemId, out comment);
                 }
                 return selected;
             }
@@ -74,6 +82,7 @@ namespace MVVMDatabinding
                 {
                     itemId = id;
                     name = value + BinderTypeName;
+                    dataRecord.TryGetCommentForId(id, out comment);
                 }
             }
         }
