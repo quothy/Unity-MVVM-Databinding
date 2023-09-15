@@ -17,6 +17,8 @@ namespace MVVMDatabinding
     [Serializable]
     public abstract class BaseBinder<T> : IBinder
     {
+        private const string noDataItemsOfTypeAvailableMessage = "<No items of type {0} to bind to>";
+
         [SerializeField]
         private DataRecord dataRecord = null;
 
@@ -40,6 +42,8 @@ namespace MVVMDatabinding
         [SerializeField]
         private string comment = string.Empty;
         private bool editor_IsCommentEmpty => string.IsNullOrWhiteSpace(comment);
+
+        private string editor_notAvailableMessage => string.Format(noDataItemsOfTypeAvailableMessage, typeof(T).ToString());
 
         protected string binderTypeName = string.Empty;
         private string BinderTypeName
@@ -68,9 +72,18 @@ namespace MVVMDatabinding
                 string selected = string.Empty;
                 if (dataRecord != null)
                 {
-                    dataRecord.TryGetNameForId(itemId, out selected);
-                    name = selected + BinderTypeName;
-                    dataRecord.TryGetCommentForId(itemId, out comment);
+                    if (availableItemNames.Count == 0 || (availableItemNames.Count == 1 && availableItemNames[0] == editor_notAvailableMessage))
+                    {
+                        name = BinderTypeName;
+                        selected = editor_notAvailableMessage;
+                        comment = string.Empty;
+                    }
+                    else if (dataRecord.TryGetNameForId(itemId, out selected))
+                    {
+                        name = selected + BinderTypeName;
+                        dataRecord.TryGetCommentForId(itemId, out comment);
+                    }
+                    
                 }
                 return selected;
             }
@@ -135,7 +148,6 @@ namespace MVVMDatabinding
 
         protected void Subscribe()
         {
-            // TODO: handle more complex resolution of SourceId for local VMs
             DataSourceManager.SubscribeToItem(SourceId, itemId, OnDataItemUpdate);
         }
 
@@ -214,16 +226,23 @@ namespace MVVMDatabinding
 
             availableItemNames.Clear();
 
-            dataRecord.PopulateItemNameList(availableItemNames);
+            dataRecord.PopulateItemNameListForType(availableItemNames, typeof(T).ToString());
 
-            if (dataRecord.TryGetNameForId(itemId, out string name))
+            if (availableItemNames.Count > 0)
             {
-                SelectedItemName = name;
+                if (dataRecord.TryGetNameForId(itemId, out string name))
+                {
+                    SelectedItemName = name;
+                }
+                else
+                {
+                    availableItemNames.Insert(0, string.Empty);
+                }
             }
             else
             {
-                // insert an empty string at the beginning of the list if no valid option has been selected
-                availableItemNames.Insert(0, string.Empty);
+                // insert an empty string at the beginning of the list if no valid option has been selected                
+                availableItemNames.Insert(0, string.Format(noDataItemsOfTypeAvailableMessage, typeof(T).ToString()));
             }
         }
     }

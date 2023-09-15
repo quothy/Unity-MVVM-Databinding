@@ -81,6 +81,17 @@ namespace MVVMDatabinding
             }
         }
 
+        public void PopulateItemNameListForType(List<string> itemNames, string typeString)
+        {
+            foreach (DataRecordItem item in dataItems)
+            {
+                if (item.Type == typeString)
+                {
+                    itemNames.Add(item.Name);
+                }
+            }
+        }
+
         public bool TryGetIdForName(string name, out int id)
         {
             id = int.MinValue;
