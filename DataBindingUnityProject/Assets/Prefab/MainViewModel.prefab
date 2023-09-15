@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5687866778487118611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5687866778487118613}
+  - component: {fileID: 5687866778487118610}
+  m_Layer: 0
+  m_Name: MainViewModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5687866778487118613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687866778487118611}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5687866778487118610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687866778487118611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e3d5615a52aa54b80464785d326414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataItemList:
+  - rid: 4598207211627872264
+  - rid: 4598207211627872265
+  - rid: 4598207211627872266
+  - rid: 4598207211627872267
+  - rid: 4598207211627872268
+  - rid: 4598207211627872314
+  - rid: 4598207211627872316
+  testCheckbox: 1
+  testEnable: 1
+  text: test
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207211627872264
+      type: {class: DataItemBool, ns: MVVMDatabinding, asm: MVVM-Databinding}
+      data:
+        id: 0
+        name: ExampleBool
+    - rid: 4598207211627872265
+      type: {class: DataItemInt, ns: MVVMDatabinding, asm: MVVM-Databinding}
+      data:
+        id: 1
+        name: ExampleInt
+    - rid: 4598207211627872266
+      type: {class: DataItemFloat, ns: MVVMDatabinding, asm: MVVM-Databinding}
+      data:
+        id: 2
+        name: ExampleFloat
+    - rid: 4598207211627872267
+      type: {class: DataItemString, ns: MVVMDatabinding, asm: MVVM-Databinding}
+      data:
+        id: 3
+        name: CounterString
+    - rid: 4598207211627872268
+      type: {class: DataItemAction, ns: MVVMDatabinding, asm: MVVM-Databinding}
+      data:
+        id: 10
+        name: IncrementCounter
+    - rid: 4598207211627872314
+      type: {class: DataItemBool, ns: MVVMDatabinding, asm: MVVM-Databinding}
+      data:
+        id: 4
+        name: OptionsLocked
+    - rid: 4598207211627872316
+      type: {class: DataItemAction, ns: MVVMDatabinding, asm: MVVM-Databinding}
+      data:
+        id: 11
+        name: ToggleOptionsLock
