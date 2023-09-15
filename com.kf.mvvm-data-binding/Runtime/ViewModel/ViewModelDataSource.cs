@@ -45,6 +45,7 @@ namespace MVVMDatabinding
         {
             if (itemNameToIdLookup.TryGetValue(propertyName, out int id))
             {
+                dataItemLookup[id].SyncItemWithSource();
                 OnItemChangedInSource(id);
             }
         }

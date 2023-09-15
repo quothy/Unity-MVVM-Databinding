@@ -169,7 +169,6 @@ namespace MVVMDatabinding
         public bool TrySetItem<T>(int id, T item)
         {
             bool success = false;
-            item = default(T);
 
             if (dataItemLookup.TryGetValue(id, out var dataItem) && dataItem is DataItem<T> typedItem)
             {

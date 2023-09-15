@@ -6,6 +6,10 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 
+#if UNITY_EDITOR
+using UnityEditor.Events;
+#endif
+
 namespace MVVMDatabinding
 {
     public interface IDataItem
@@ -21,6 +25,7 @@ namespace MVVMDatabinding
 
         UnityEvent ValueChanged { get; }
 
+        void EditorInit(UnityEngine.Object dataSourceOwner, PropertyInfo propertyInfo);
         void RuntimeInit(UnityEngine.Object dataSourceOwner);
 
         void RaiseValueChanged();
@@ -67,6 +72,7 @@ namespace MVVMDatabinding
             ValueChanged?.Invoke();
         }
 
+        public abstract void EditorInit(UnityEngine.Object dataSourceOwner, PropertyInfo propertyInfo);
         public abstract void RuntimeInit(UnityEngine.Object dataSourceOwner);
         public abstract void SyncItemWithSource();
     }
@@ -83,16 +89,19 @@ namespace MVVMDatabinding
         {
             get
             {
-                value = valueGetter.Invoke();
+                if (value == null && valueGetter != null)
+                {
+                    value = valueGetter.Invoke();
+                }
                 return value;
             }
             set
             {
-                //setUnderlyingValue?.Invoke(value);
-                if (!this.value.Equals(value))
+                if (this.value == null || !this.value.Equals(value))
                 {
                     this.value = value;
-                    OnSetValue();
+                    //OnSetValue();
+                    setUnderlyingValue?.Invoke(value);
                     // raise changed event
                     RaiseValueChanged();
                 }
@@ -102,9 +111,16 @@ namespace MVVMDatabinding
         protected DataItemGetter<T> valueGetter = null;
         protected DataItemSetter<T> valueSetter = null;
 
-        //private UnityAction<T> setUnderlyingValue = null;
+        [SerializeField]
+        private UnityEvent<T> getAction = null;
 
-        public void HookUpToProperty(UnityEngine.Object dataSourceOwner, PropertyInfo propertyInfo)
+
+        [SerializeField]
+        private UnityEvent<T> setUnderlyingValue = null;
+        //[SerializeField]
+        //private UnityAction<T> setAction = null;
+
+        public override void EditorInit(UnityEngine.Object dataSourceOwner, PropertyInfo propertyInfo)
         {
 #if UNITY_EDITOR
             /// What am I trying to do here? 
@@ -114,10 +130,14 @@ namespace MVVMDatabinding
             /// The signature of the getter should be T() and the setter should be
             /// void(T)
             /// 
-            //setUnderlyingValue = (T val) => { propertyInfo.SetValue(this, val); };
 
-            valueSetter = propertyInfo.GetSetMethod().CreateDelegate(typeof(DataItemSetter<T>), dataSourceOwner) as DataItemSetter<T>;
+            if (setUnderlyingValue == null)
+            {
+                setUnderlyingValue = new UnityEvent<T>();
+            }
 
+            UnityAction<T> setAction = propertyInfo.GetSetMethod().CreateDelegate(typeof(UnityAction<T>), dataSourceOwner) as UnityAction<T>;
+            UnityEventTools.AddPersistentListener<T>(setUnderlyingValue, setAction);
 #endif       
         }
 
@@ -127,6 +147,7 @@ namespace MVVMDatabinding
             {
                 PropertyInfo propertyInfo = dataSourceOwner.GetType().GetProperty(Name);
                 valueGetter = propertyInfo.GetGetMethod().CreateDelegate(typeof(DataItemGetter<T>), dataSourceOwner) as DataItemGetter<T>;
+                SyncItemWithSource();
             }
         }
 
@@ -140,12 +161,12 @@ namespace MVVMDatabinding
 
         private void OnSetValue()
         {
-            if (!valueGetter.Invoke().Equals(Value))
+            T sourceValue = valueGetter.Invoke();
+            if (sourceValue == null || !sourceValue.Equals(Value))
             {
                 valueSetter?.Invoke(Value);
             }
         }
-
     }
 
     /// <summary>
