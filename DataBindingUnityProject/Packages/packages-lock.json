@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "com.quothy.unity-mvvm-databinding": {
-      "version": "file:../../com.quothy.mvvm-data-binding",
+    "com.kf.unity-mvvm-databinding": {
+      "version": "file:../../com.kf.mvvm-data-binding",
       "depth": 0,
       "source": "local",
       "dependencies": {}
