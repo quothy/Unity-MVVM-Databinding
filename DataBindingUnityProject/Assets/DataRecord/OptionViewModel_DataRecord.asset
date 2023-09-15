@@ -19,5 +19,9 @@ MonoBehaviour:
   dataItems:
   - Id: 0
     Name: OptionLocked
+    Type: System.Boolean
+    Comment: 
   - Id: 1
     Name: OptionName
+    Type: System.String
+    Comment: 

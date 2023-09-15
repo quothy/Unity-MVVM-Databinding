@@ -78,6 +78,21 @@ public class MainViewModel : BaseGlobalViewModel
         }
     }
 
+    private string editableString = "blah";
+    [BindableData(5, comment: "This string is for editing")]
+    public string EditableString
+    {
+        get => editableString;
+        set
+        {
+            if (editableString != value)
+            {
+                editableString = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     [SerializeField]
     private bool testCheckbox = false;
 

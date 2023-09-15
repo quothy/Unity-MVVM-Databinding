@@ -52,6 +52,7 @@ MonoBehaviour:
   - rid: 4598207211627872268
   - rid: 4598207211627872314
   - rid: 4598207211627872316
+  - rid: 4598207457257324551
   testCheckbox: 1
   testEnable: 1
   text: test
@@ -63,33 +64,182 @@ MonoBehaviour:
       data:
         id: 0
         name: ExampleBool
+        getAction:
+          m_PersistentCalls:
+            m_Calls: []
+        setUnderlyingValue:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 5687866778487118610}
+              m_TargetAssemblyTypeName: MainViewModel, Assembly-CSharp
+              m_MethodName: set_ExampleBool
+              m_Mode: 0
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: 
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
     - rid: 4598207211627872265
       type: {class: DataItemInt, ns: MVVMDatabinding, asm: MVVM-Databinding}
       data:
         id: 1
         name: ExampleInt
+        getAction:
+          m_PersistentCalls:
+            m_Calls: []
+        setUnderlyingValue:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 5687866778487118610}
+              m_TargetAssemblyTypeName: MainViewModel, Assembly-CSharp
+              m_MethodName: set_ExampleInt
+              m_Mode: 0
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: 
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
     - rid: 4598207211627872266
       type: {class: DataItemFloat, ns: MVVMDatabinding, asm: MVVM-Databinding}
       data:
         id: 2
         name: ExampleFloat
+        getAction:
+          m_PersistentCalls:
+            m_Calls: []
+        setUnderlyingValue:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 5687866778487118610}
+              m_TargetAssemblyTypeName: MainViewModel, Assembly-CSharp
+              m_MethodName: set_ExampleFloat
+              m_Mode: 0
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: 
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
     - rid: 4598207211627872267
       type: {class: DataItemString, ns: MVVMDatabinding, asm: MVVM-Databinding}
       data:
         id: 3
         name: CounterString
+        getAction:
+          m_PersistentCalls:
+            m_Calls: []
+        setUnderlyingValue:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 5687866778487118610}
+              m_TargetAssemblyTypeName: MainViewModel, Assembly-CSharp
+              m_MethodName: set_CounterString
+              m_Mode: 0
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: 
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
     - rid: 4598207211627872268
       type: {class: DataItemAction, ns: MVVMDatabinding, asm: MVVM-Databinding}
       data:
         id: 10
         name: IncrementCounter
+        getAction:
+          m_PersistentCalls:
+            m_Calls: []
+        setUnderlyingValue:
+          m_PersistentCalls:
+            m_Calls: []
     - rid: 4598207211627872314
       type: {class: DataItemBool, ns: MVVMDatabinding, asm: MVVM-Databinding}
       data:
         id: 4
         name: OptionsLocked
+        getAction:
+          m_PersistentCalls:
+            m_Calls: []
+        setUnderlyingValue:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 5687866778487118610}
+              m_TargetAssemblyTypeName: MainViewModel, Assembly-CSharp
+              m_MethodName: set_OptionsLocked
+              m_Mode: 0
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: 
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+            - m_Target: {fileID: 5687866778487118610}
+              m_TargetAssemblyTypeName: MainViewModel, Assembly-CSharp
+              m_MethodName: set_OptionsLocked
+              m_Mode: 0
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: 
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
     - rid: 4598207211627872316
       type: {class: DataItemAction, ns: MVVMDatabinding, asm: MVVM-Databinding}
       data:
         id: 11
         name: ToggleOptionsLock
+        getAction:
+          m_PersistentCalls:
+            m_Calls: []
+        setUnderlyingValue:
+          m_PersistentCalls:
+            m_Calls: []
+    - rid: 4598207457257324551
+      type: {class: DataItemString, ns: MVVMDatabinding, asm: MVVM-Databinding}
+      data:
+        id: 5
+        name: EditableString
+        getAction:
+          m_PersistentCalls:
+            m_Calls: []
+        setUnderlyingValue:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 5687866778487118610}
+              m_TargetAssemblyTypeName: MainViewModel, Assembly-CSharp
+              m_MethodName: set_EditableString
+              m_Mode: 0
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: 
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+            - m_Target: {fileID: 5687866778487118610}
+              m_TargetAssemblyTypeName: MainViewModel, Assembly-CSharp
+              m_MethodName: set_EditableString
+              m_Mode: 0
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: 
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2

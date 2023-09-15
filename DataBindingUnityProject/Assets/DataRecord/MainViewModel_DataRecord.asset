@@ -46,3 +46,7 @@ MonoBehaviour:
     Name: ToggleOptionsLock
     Type: System.Action
     Comment: 
+  - Id: 5
+    Name: EditableString
+    Type: System.String
+    Comment: This string is for editing
