@@ -17,6 +17,12 @@ namespace MVVMDatabinding
             return property.propertyPath.LastIndexOf(".") != -1;
         }
 
+        public static bool IsPropertyAListItem(SerializedProperty property)
+        {
+            int lastIdx = property.propertyPath.LastIndexOf(".");
+            return property.propertyPath[lastIdx - 1] == ']';
+        }
+
         public static bool TryGetParentProperty(SerializedProperty property, out SerializedProperty parent)
         {
             parent = null;
@@ -67,6 +73,28 @@ namespace MVVMDatabinding
             value = default;
             return false;
         }
+
+
+        public static bool TryGetListItem(string listName, int listIndex, object targetObject, out object listItem)
+        {
+            listItem = null;
+            if (TryGetValue<IEnumerable>(listName, targetObject.GetType(), targetObject, out IEnumerable list))
+            {
+                var iterator = list.GetEnumerator();
+                int count = 0;
+                for (int i = 0; i <= listIndex; i++)
+                {
+                    if (!iterator.MoveNext())
+                    {
+                        return false;
+                    }
+                }
+
+                listItem = iterator.Current;
+            }
+            return listItem != null;
+        }
+
 
         public static bool TryFindPropertyGetter<FieldType>(string propertyName, Type targetType, object targetObject, out Func<FieldType> getterFunc, bool checkChildFields = false)
         {
