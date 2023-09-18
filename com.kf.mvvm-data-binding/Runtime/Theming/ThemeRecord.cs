@@ -104,7 +104,7 @@ namespace MVVMDatabinding.Theming
             usedIds.Clear();
             foreach (var item in recordItems)
             {
-                if (item.Id == int.MinValue || usedIds.Contains(item.Id))
+                if (item.Id == int.MinValue || usedIds.Contains(item.Id) || item.Id == 0)
                 {
                     item.Id = UnityEngine.Random.Range(0, int.MaxValue);
                     UnityEditor.EditorUtility.SetDirty(this);
