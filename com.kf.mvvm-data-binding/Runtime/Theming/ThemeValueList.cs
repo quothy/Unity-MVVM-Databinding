@@ -115,7 +115,7 @@ namespace MVVMDatabinding.Theming
         {
             get
             {
-                if (availableItemNames == null || (ThemeRecordValid && availableItemNames.Count != themeRecord.RecordItems.Count))
+                if (availableItemNames == null || ThemeRecordValid)
                 {
                     TryPopulateItemNames();
                 }
