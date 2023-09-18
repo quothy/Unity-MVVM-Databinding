@@ -130,9 +130,17 @@ namespace MVVMDatabinding.Theming
                 string selected = string.Empty;
                 if (themeRecord != null)
                 {
-                    themeRecord.TryGetInfoForId(itemId, out selected, out itemType);
-                    name = selected;
-                    UpdateThemeValue();
+                    if (themeRecord.TryGetInfoForId(itemId, out selected, out itemType))
+                    {
+                        name = selected;
+                        UpdateThemeValue();
+                    }
+                    else
+                    {
+                        itemId = 0;
+                        name = string.Empty;
+                        themeValue = null;
+                    }
                 }
                 else
                 {
