@@ -1,8 +1,12 @@
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MVVMDatabinding.Theming
 {
@@ -13,6 +17,69 @@ namespace MVVMDatabinding.Theming
         HighContrast,
     }
 
+    public interface IThemeValue
+    {
+        Type DataType { get; }
+
+        UnityEvent ValueChanged { get; }
+
+        void SetVariant(ThemeVariant variant);
+    }
+
+    [Serializable]
+    public abstract class ThemeValue : IThemeValue
+    {
+        protected ThemeVariant activeVariant = ThemeVariant.Light;
+        public abstract Type DataType { get; }
+        public UnityEvent ValueChanged { get; protected set; } = new UnityEvent();
+
+        public void SetVariant(ThemeVariant variant)
+        {
+            activeVariant = variant;
+            ValueChanged?.Invoke();
+        }
+    }
+
+    public abstract class ThemeValue<T> : ThemeValue
+    {
+        [SerializeField]
+        private T light;
+
+        [SerializeField]
+        private T dark;
+
+        [SerializeField]
+        private T highContrast;
+
+        public T Value
+        {
+            get
+            {
+                switch (activeVariant)
+                {
+                    case ThemeVariant.Light:
+                        return light;
+                    case ThemeVariant.Dark:
+                        return dark;
+                    case ThemeVariant.HighContrast:
+                        return highContrast;
+                }
+
+                return default(T);
+            }
+        }
+
+        public override Type DataType => typeof(T);
+    }
+
+    public class ColorThemeValue : ThemeValue<Color> { }
+    public class GradientThemeValue : ThemeValue<Gradient> { }
+    public class MaterialThemeValue : ThemeValue<Material> { }
+    public class TextureThemeValue : ThemeValue<Texture> { }
+    public class IntThemeValue : ThemeValue<int> { }
+    public class FloatThemeValue : ThemeValue<float> { }
+    public class Vector4ThemeValue : ThemeValue<Vector4> { }
+    public class TMPGradientThemeValue : ThemeValue<TMP_ColorGradient> { }
 
     [Serializable]
     public class ThemeItemValue
@@ -32,87 +99,11 @@ namespace MVVMDatabinding.Theming
         [SerializeField]
         private ThemeItemType itemType = ThemeItemType.None;
 
-        #region Theme item value fields
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Color)]
-        [SerializeField]
-        private Color lightColor = Color.white;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Color)]
-        [SerializeField]
-        private Color darkColor = Color.white;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Color)]
-        [SerializeField]
-        private Color hcColor = Color.white;
+        [SerializeReference]
+        private IThemeValue themeValue = null;
 
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Gradient)]
-        [SerializeField]
-        private Gradient lightGradient = null;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Gradient)]
-        [SerializeField]
-        private Gradient darkGradient = null;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Gradient)]
-        [SerializeField]
-        private Gradient hcGradient = null;
-
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Material)]
-        [SerializeField]
-        private Material lightMaterial = null;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Material)]
-        [SerializeField]
-        private Material darkMaterial = null;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Material)]
-        [SerializeField]
-        private Material hcMaterial = null;
-
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Texture)]
-        [SerializeField]
-        private Texture lightTexture = null;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Texture)]
-        [SerializeField]
-        private Texture darkTexture = null;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Texture)]
-        [SerializeField]
-        private Texture hcTexture = null;
-
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Int)]
-        [SerializeField]
-        private int lightInt = 0;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Int)]
-        [SerializeField]
-        private int darkInt = 0;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Int)]
-        [SerializeField]
-        private int hcInt = 0;
-
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Float)]
-        [SerializeField]
-        private float lightFloat = 0;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Float)]
-        [SerializeField]
-        private float darkFloat = 0;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Float)]
-        [SerializeField]
-        private float hcFloat = 0;
-
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Vector4)]
-        [SerializeField]
-        private Vector4 lightVector4 = Vector4.zero;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Vector4)]
-        [SerializeField]
-        private Vector4 darkVector4 = Vector4.zero;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.Vector4)]
-        [SerializeField]
-        private Vector4 hcVector4 = Vector4.zero;
-
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.TMPGradient)]
-        [SerializeField]
-        private TMP_ColorGradient lightTmpGradient = null;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.TMPGradient)]
-        [SerializeField]
-        private TMP_ColorGradient darkTmpGradient = null;
-        [ConditionalVisibility(nameof(itemType), ConditionResultType.ShowIfEquals, (int)ThemeItemType.TMPGradient)]
-        [SerializeField]
-        private TMP_ColorGradient hcTmpGradient = null;
-        #endregion
+        public int Id => itemId;
+        public string Name => name;
 
         public bool ThemeRecordValid
         {
@@ -131,7 +122,6 @@ namespace MVVMDatabinding.Theming
                 return availableItemNames;
             }
         }
-
         
         protected string SelectedItemName
         {
@@ -142,6 +132,7 @@ namespace MVVMDatabinding.Theming
                 {
                     themeRecord.TryGetInfoForId(itemId, out selected, out itemType);
                     name = selected;
+                    UpdateThemeValue();
                 }
                 else
                 {
@@ -156,12 +147,33 @@ namespace MVVMDatabinding.Theming
                     itemId = id;
                     name = value;
                     itemType = type;
+                    UpdateThemeValue();
                 }
                 else
                 {
                     itemType = ThemeItemType.None;
                 }
             }
+        }
+
+        public IThemeValue ThemeValue => themeValue;
+
+
+        public string RecordName => themeRecord.RecordName;
+
+        public UnityEvent ValueChanged { get; protected set; } = null;
+
+        public void Initialize()
+        {
+            if (themeValue != null && themeValue is ThemeValue typedValue)
+            {
+                typedValue.ValueChanged.AddListener(RaiseValueChanged);
+            }
+        }
+
+        public void RaiseValueChanged()
+        {
+            ValueChanged?.Invoke();
         }
 
         private void TryPopulateItemNames()
@@ -185,6 +197,94 @@ namespace MVVMDatabinding.Theming
                 availableItemNames.Insert(0, string.Empty);
             }
         }
+
+        public bool Editor_OnValidate()
+        {
+#if UNITY_EDITOR
+            // check to make sure that the DataType of themeValue is what we expect it to be
+            if (itemType == ThemeItemType.Color && (themeValue == null || themeValue.DataType != typeof(Color)))
+            {
+                themeValue = new ColorThemeValue();
+                return true;
+            }            
+            if (itemType == ThemeItemType.Gradient && (themeValue == null || themeValue.DataType != typeof(Gradient)))
+            {
+                themeValue = new GradientThemeValue();
+                return true;
+            }
+            if (itemType == ThemeItemType.Material && (themeValue == null || themeValue.DataType != typeof(Material)))
+            {
+                themeValue = new MaterialThemeValue();
+                return true;
+            }
+            if (itemType == ThemeItemType.Texture  && (themeValue == null || themeValue.DataType != typeof(Texture)))
+            {
+                themeValue = new TextureThemeValue();
+                return true;
+            }
+            if (itemType == ThemeItemType.Int && (themeValue == null || themeValue.DataType != typeof(int)))
+            {
+                themeValue = new IntThemeValue();
+                return true;
+            }
+            if (itemType == ThemeItemType.Float && (themeValue == null || themeValue.DataType != typeof(float)))
+            {
+                themeValue = new FloatThemeValue();
+                return true;
+            }
+            if (itemType == ThemeItemType.Vector4 && (themeValue == null || themeValue.DataType != typeof(Vector4)))
+            {
+                themeValue = new Vector4ThemeValue();
+                return true;
+            }
+            if (itemType == ThemeItemType.TMPGradient && (themeValue == null || themeValue.DataType != typeof(TMP_ColorGradient)))
+            {
+                themeValue = new TMPGradientThemeValue();
+                return true;
+            }
+
+            return false;
+#endif
+        }
+
+        public void UpdateThemeValue()
+        {
+#if UNITY_EDITOR
+            // check to make sure that the DataType of themeValue is what we expect it to be
+            if (itemType == ThemeItemType.Color && (themeValue == null || themeValue.DataType != typeof(Color)))
+            {
+                themeValue = new ColorThemeValue();
+            }
+            else if (itemType == ThemeItemType.Gradient && (themeValue == null || themeValue.DataType != typeof(Gradient)))
+            {
+                themeValue = new GradientThemeValue();
+            }
+            else if (itemType == ThemeItemType.Material && (themeValue == null || themeValue.DataType != typeof(Material)))
+            {
+                themeValue = new MaterialThemeValue();
+            }
+            else if (itemType == ThemeItemType.Texture && (themeValue == null || themeValue.DataType != typeof(Texture)))
+            {
+                themeValue = new TextureThemeValue();
+            }
+            else if (itemType == ThemeItemType.Int && (themeValue == null || themeValue.DataType != typeof(int)))
+            {
+                themeValue = new IntThemeValue();
+            }
+            else if (itemType == ThemeItemType.Float && (themeValue == null || themeValue.DataType != typeof(float)))
+            {
+                themeValue = new FloatThemeValue();
+            }
+            else if (itemType == ThemeItemType.Vector4 && (themeValue == null || themeValue.DataType != typeof(Vector4)))
+            {
+                themeValue = new Vector4ThemeValue();
+            }
+            else if (itemType == ThemeItemType.TMPGradient && (themeValue == null || themeValue.DataType != typeof(TMP_ColorGradient)))
+            {
+                themeValue = new TMPGradientThemeValue();
+            }
+#endif
+        }
     }
 
 
@@ -194,16 +294,27 @@ namespace MVVMDatabinding.Theming
         [SerializeField]
         private List<ThemeItemValue> items = null;
 
-        // Start is called before the first frame update
-        void Start()
+        public List<ThemeItemValue> Items => items;
+
+        private void OnValidate()
         {
+            if (!Application.isPlaying)
+            {
+                bool saveChanges = false;
+                foreach (ThemeItemValue value in items)
+                {
+                    if (value.Editor_OnValidate())
+                    {
+                        saveChanges = true;
+                    }
+                }
 
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+                if (saveChanges)
+                {
+                    EditorUtility.SetDirty(this);
+                    AssetDatabase.SaveAssetIfDirty(this);
+                }
+            }
         }
     }
 }
