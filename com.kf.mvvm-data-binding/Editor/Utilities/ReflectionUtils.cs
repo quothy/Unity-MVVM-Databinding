@@ -153,10 +153,13 @@ namespace MVVMDatabinding
                 if (i + 1 == listItemChildren.Length)
                 {
                     // last item
-                    // let's only grab the second to last child
+                    // let's only grab up to the second to last child
                     int lastItemIdx = pathToCheck.IndexOf('.');
-                    finalChildName = pathToCheck.Substring(lastItemIdx, pathToCheck.Length - lastItemIdx).Trim('.');
-                    pathToCheck = pathToCheck.Substring(0, lastItemIdx);
+                    if (lastItemIdx != -1)
+                    {
+                        finalChildName = pathToCheck.Substring(lastItemIdx, pathToCheck.Length - lastItemIdx).Trim('.');
+                        pathToCheck = pathToCheck.Substring(0, lastItemIdx);
+                    }
                 }
 
                 if (!GetChildAtEndOfPath<object>(pathToCheck, target.GetType(), target, out target))
