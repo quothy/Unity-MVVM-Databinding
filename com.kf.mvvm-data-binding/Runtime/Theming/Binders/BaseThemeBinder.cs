@@ -123,11 +123,14 @@ namespace MVVMDatabinding.Theming
 
             availableItemNames.Clear();
 
-            themeRecord.PopulateItemNameListForType(availableItemNames, ThemeItemType);
+            if (DataRecordValid)
+            {
+                themeRecord.PopulateItemNameListForType(availableItemNames, ThemeItemType);
+            }
 
             if (availableItemNames.Count > 0)
             {
-                if (themeRecord.TryGetInfoForId(itemId, out string name, out var unused))
+                if (DataRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out var unused))
                 {
                     SelectedItemName = name;
                 }
