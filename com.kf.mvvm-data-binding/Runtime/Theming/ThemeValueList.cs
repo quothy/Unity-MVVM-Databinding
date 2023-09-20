@@ -296,6 +296,12 @@ namespace MVVMDatabinding.Theming
             }
 #endif
         }
+
+        public void ResetAndUpdateThemeValue()
+        {
+            themeValue = null;
+            UpdateThemeValue();
+        }
     }
 
 
