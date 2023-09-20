@@ -25,6 +25,7 @@ namespace MVVMDatabinding.Theming
             if (item is ThemeItem themeItem)
             {
                 dataItemLookup[item.Id] = themeItem;
+                themeItem.ValueChangedWithId += OnItemChangedInSource;
                 OnItemChangedInSource(item.Id);
             }
         }

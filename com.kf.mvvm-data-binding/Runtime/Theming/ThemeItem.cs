@@ -28,6 +28,7 @@ namespace MVVMDatabinding.Theming
         public string Comment { get; private set; }
 
         public UnityEvent ValueChanged { get; private set; } = new UnityEvent();
+        public event Action<int> ValueChangedWithId = null;
 
         private IThemeValue themeValue = null;
 
@@ -46,6 +47,7 @@ namespace MVVMDatabinding.Theming
         public void RaiseValueChanged()
         {
             ValueChanged?.Invoke();
+            ValueChangedWithId?.Invoke(Id);
         }
 
         public void RuntimeInit(UnityEngine.Object dataSourceOwner)
@@ -70,7 +72,7 @@ namespace MVVMDatabinding.Theming
             if (themeValue != null)
             {
                 themeValue.ValueChanged.AddListener(RaiseValueChanged);
-                ValueChanged?.Invoke();
+                RaiseValueChanged();
             }
         }
 
