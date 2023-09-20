@@ -70,6 +70,7 @@ namespace MVVMDatabinding.Theming
             if (themeValue != null)
             {
                 themeValue.ValueChanged.AddListener(RaiseValueChanged);
+                ValueChanged?.Invoke();
             }
         }
 
