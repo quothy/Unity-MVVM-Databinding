@@ -18,7 +18,17 @@ namespace MVVMDatabinding
             if (IsVisible(property))
             {
                 propertyHeight = base.GetPropertyHeight(property, label);
+                if (property.hasVisibleChildren && property.isExpanded)
+                {
+                    SerializedProperty visibleChildrenIterator = property.Copy();
+                    
+                    while (visibleChildrenIterator.NextVisible(true) && property.depth < visibleChildrenIterator.depth)
+                    {
+                        propertyHeight += EditorGUI.GetPropertyHeight(visibleChildrenIterator, new GUIContent(visibleChildrenIterator.displayName), true);
+                    }
 
+                    propertyHeight += 8;
+                }
             }
             else
             {
@@ -51,7 +61,7 @@ namespace MVVMDatabinding
 
             if (comparisonValue)
             {
-                EditorGUI.PropertyField(position, property, label);
+                EditorGUI.PropertyField(position, property, label, property.isExpanded);
             }
         }
 
@@ -79,57 +89,6 @@ namespace MVVMDatabinding
             return comparisonValue;
         }
 
-        private bool GetConditionValue(SerializedProperty property)
-        {
-            bool comparisonValue = false;
-
-            // early out if this element should never be enabled
-            if (visibilityAttribute.Condition == ConditionResultType.Never)
-            {
-                return comparisonValue;
-            }
-
-            if (ReflectionUtils.TryFindSerializedProperty(visibilityAttribute.ConditionPropertyName, property, out SerializedProperty targetProperty))
-            {
-                comparisonValue = targetProperty.boolValue;
-            }
-            else if (property.propertyType == SerializedPropertyType.ManagedReference)
-            {
-                var managedRef = property.managedReferenceValue;
-                Type refType = managedRef.GetType();
-
-                if (ReflectionUtils.TryFindPropertyGetter<bool>(visibilityAttribute.ConditionPropertyName, refType, managedRef, out Func<bool> getter))
-                {
-                    comparisonValue = getter();
-                }
-            }
-            else
-            {
-                if (ReflectionUtils.IsNestedProperty(property) && ReflectionUtils.TryGetParentProperty(property, out SerializedProperty parent))
-                {
-                    if (parent.propertyType == SerializedPropertyType.ManagedReference)
-                    {
-                        var managedRef = parent.managedReferenceValue;
-                        Type refType = managedRef.GetType();
-
-                        if (ReflectionUtils.TryFindPropertyGetter<bool>(visibilityAttribute.ConditionPropertyName, refType, managedRef, out Func<bool> getter))
-                        {
-                            comparisonValue = getter();
-                        }
-                    }
-                }
-                else
-                {
-                    if (ReflectionUtils.TryFindPropertyGetter<bool>(visibilityAttribute.ConditionPropertyName, property.serializedObject.GetType(), property.serializedObject, out Func<bool> getter))
-                    {
-                        comparisonValue = getter();
-                    }
-                }
-            }
-
-            return comparisonValue;
-        }
-
         private bool EvaluateComparison<T>(SerializedProperty property)
         {
             // early out if this element should never be enabled
@@ -139,6 +98,13 @@ namespace MVVMDatabinding
             }
 
             bool comparisonResult = false;
+
+            string conditionPath = visibilityAttribute.ConditionPropertyName;
+            if (ReflectionUtils.IsNestedProperty(property.propertyPath))
+            {
+                int lastItemIdx = property.propertyPath.LastIndexOf('.');
+                conditionPath = property.propertyPath.Substring(0, lastItemIdx + 1) + conditionPath;
+            }
 
             if (ReflectionUtils.TryFindSerializedProperty(visibilityAttribute.ConditionPropertyName, property, out SerializedProperty targetProperty))
             {
@@ -155,37 +121,12 @@ namespace MVVMDatabinding
                     comparisonResult = CompareInt(intValue);
                 }
             }
-            else if (property.propertyType == SerializedPropertyType.ManagedReference)
-            {
-                var managedRef = property.managedReferenceValue;
-                Type refType = managedRef.GetType();
-
-                if (ReflectionUtils.TryFindPropertyGetter<T>(visibilityAttribute.ConditionPropertyName, refType, managedRef, out Func<T> getter))
-                {
-                    comparisonResult = EvaluateValue<T>(getter());
-                }
-            }
             else
             {
-                if (ReflectionUtils.IsNestedProperty(property) && ReflectionUtils.TryGetParentProperty(property, out SerializedProperty parent))
+                object target = property.serializedObject.targetObject;
+                if (ReflectionUtils.DigForValue<T>(conditionPath, target.GetType(), target, out T value))
                 {
-                    if (parent.propertyType == SerializedPropertyType.ManagedReference)
-                    {
-                        var managedRef = parent.managedReferenceValue;
-                        Type refType = managedRef.GetType();
-
-                        if (ReflectionUtils.TryFindPropertyGetter<T>(visibilityAttribute.ConditionPropertyName, refType, managedRef, out Func<T> getter))
-                        {
-                            comparisonResult = EvaluateValue<T>(getter());
-                        }
-                    }
-                }
-                else
-                {
-                    if (ReflectionUtils.TryFindPropertyGetter<T>(visibilityAttribute.ConditionPropertyName, property.serializedObject.GetType(), property.serializedObject, out Func<T> getter))
-                    {
-                        comparisonResult = EvaluateValue<T>(getter());
-                    }
+                    comparisonResult = EvaluateValue<T>(value);
                 }
             }
 
