@@ -20,6 +20,8 @@ namespace MVVMDatabinding.Theming
         private bool idModifiedAtRuntime = false;
         public bool IdModifiedAtRuntime => idModifiedAtRuntime;
 
+        private ThemeVariant activeVariant = ThemeVariant.Light;
+
         public void AddItem(IDataItem item)
         {
             if (item is ThemeItem themeItem)
@@ -27,6 +29,7 @@ namespace MVVMDatabinding.Theming
                 dataItemLookup[item.Id] = themeItem;
                 themeItem.ValueChangedWithId += OnItemChangedInSource;
                 OnItemChangedInSource(item.Id);
+                themeItem.SetThemeVariant(activeVariant);
             }
         }
 
@@ -54,6 +57,7 @@ namespace MVVMDatabinding.Theming
 
         public void SetThemeVariant(ThemeVariant variant)
         {
+            activeVariant = variant;
             foreach (var kvp in dataItemLookup)
             {
                 kvp.Value.SetThemeVariant(variant);

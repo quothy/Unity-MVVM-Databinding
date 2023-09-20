@@ -31,6 +31,7 @@ namespace MVVMDatabinding.Theming
         public event Action<int> ValueChangedWithId = null;
 
         private IThemeValue themeValue = null;
+        private ThemeVariant variant = ThemeVariant.Light;
 
         public void EditorInit(UnityEngine.Object dataSourceOwner, PropertyInfo propertyInfo)
         {
@@ -72,12 +73,14 @@ namespace MVVMDatabinding.Theming
             if (themeValue != null)
             {
                 themeValue.ValueChanged.AddListener(RaiseValueChanged);
+                themeValue.SetVariant(variant);
                 RaiseValueChanged();
             }
         }
 
         public void SetThemeVariant(ThemeVariant variant)
         {
+            this.variant = variant;
             if (themeValue != null)
             {
                 themeValue.SetVariant(variant);

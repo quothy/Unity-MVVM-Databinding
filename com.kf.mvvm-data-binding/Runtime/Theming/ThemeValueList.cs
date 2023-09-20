@@ -29,7 +29,7 @@ namespace MVVMDatabinding.Theming
     [Serializable]
     public abstract class ThemeValue : IThemeValue
     {
-        protected ThemeVariant activeVariant = ThemeVariant.Light;
+        protected ThemeVariant activeVariant { get; set; } = ThemeVariant.Light;
         public abstract Type DataType { get; }
         public UnityEvent ValueChanged { get; protected set; } = new UnityEvent();
 
@@ -208,6 +208,7 @@ namespace MVVMDatabinding.Theming
                 availableItemNames.Insert(0, string.Empty);
             }
         }
+
 
         public bool Editor_OnValidate()
         {
