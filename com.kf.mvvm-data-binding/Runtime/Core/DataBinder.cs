@@ -11,7 +11,7 @@ namespace MVVMDatabinding
         [SerializeReference]
         private List<IBinder> binders = null;
 
-        private void Awake()
+        private void Start()
         {
             foreach (IBinder binder in binders)
             {
