@@ -14,7 +14,7 @@ namespace MVVMDatabinding
             EnsureCacheInitialized();
 
             // make sure dataItemType implements IDataItem before adding to the cache
-            if (!dataItemType.IsAssignableFrom(typeof(IDataItem)))
+            if (!typeof(IDataItem).IsAssignableFrom(dataItemType))
             {
                 Debug.LogErrorFormat("[DataItemTypeCache] Cannot add {0} as the type for {1} because it does not implement IDataItem!", dataItemType, underlyingDataType);
                 return;
