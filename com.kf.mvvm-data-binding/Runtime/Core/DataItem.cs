@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor.Events;
@@ -190,7 +191,7 @@ namespace MVVMDatabinding
 
     public class DataItemVector4 : DataItem<Vector4> { }
 
-
+    public class DataItemList : DataItem<IList> { }
 
     public class DataItemAction : DataItem<Action> 
     {

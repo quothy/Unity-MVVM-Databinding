@@ -56,6 +56,8 @@ namespace MVVMDatabinding
             dataItemTypeCache[typeof(Vector3)] = typeof(DataItemVector3);
             dataItemTypeCache[typeof(Vector4)] = typeof(DataItemVector4);
 
+            dataItemTypeCache[typeof(IList)] = typeof(DataItemList);
+
             dataItemTypeCache[typeof(Action)] = typeof(DataItemAction);
         }
     }

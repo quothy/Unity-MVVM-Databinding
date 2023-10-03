@@ -33,5 +33,8 @@ namespace MVVMDatabinding
         bool TryGetItem<T>(int id, out T item);
 
         bool TrySetItem<T>(int id, T item);
+
+        bool TryGetItemAtIndex<T>(int id, int index, out T item);
+        bool TrySetItemAtIndex<T>(int id, int index, T item);
     }
 }

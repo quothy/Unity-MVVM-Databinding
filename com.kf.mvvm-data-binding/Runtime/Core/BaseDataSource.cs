@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace MVVMDatabinding
 {
@@ -180,6 +181,40 @@ namespace MVVMDatabinding
             {
                 typedItem.Value = item;
                 success = true;
+            }
+
+            return success;
+        }
+
+        public bool TryGetItemAtIndex<T>(int id, int index, out T item)
+        {
+            bool success = false;
+            item = default(T);
+
+            if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is List<T> typedList)
+            {
+                if (typedList.Count > id)
+                {
+                    item = typedList[id];
+                    success = true;
+                }
+            }
+
+            return success;
+        }
+
+        public bool TrySetItemAtIndex<T>(int id, int index, T itemValue)
+        {
+            bool success = false;
+            if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is List<T> typedList)
+            {
+                if (typedList.Count > id)
+                {
+                    typedList[id] = itemValue;
+                    success = true;
+
+                    // TODO: how to handle notifying that list contents have changed?
+                }
             }
 
             return success;
