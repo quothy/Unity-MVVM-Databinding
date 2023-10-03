@@ -41,9 +41,9 @@ namespace MVVMDatabinding
             InitializeData();
         }
 
-
         public void InitializeData()
         {
+            RegisterCustomDataTypes();
             dataSource = new ViewModelDataSource();
             dataSource.InitializeFromViewModel(this);
             dataSource.LoadDataItems(dataItemList);
@@ -62,6 +62,8 @@ namespace MVVMDatabinding
             {
                 dataItemList = new List<IDataItem>();
             }
+
+            RegisterCustomDataTypes();
 
             List<int> updatedIds = new List<int>();
 
@@ -139,6 +141,8 @@ namespace MVVMDatabinding
 #endif
         }
 
+
+        protected virtual void RegisterCustomDataTypes() { }
 
 #if UNITY_EDITOR
         private void AddOrUpdateDataItemFromPropertyInfo(UnityEngine.Object owner, PropertyInfo info, int id, string comment = "")

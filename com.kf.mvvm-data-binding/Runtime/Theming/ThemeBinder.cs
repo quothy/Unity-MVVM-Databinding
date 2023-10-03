@@ -1,42 +1,42 @@
 // Copyright (c) 2023 Katie Fremont
 // Licensed under the MIT license
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MVVMDatabinding
+namespace MVVMDatabinding.Theming
 {
-    public class DataBinder : MonoBehaviour
+    public class ThemeBinder : MonoBehaviour
     {
         [SerializeReference]
-        private List<IBinder> binders = null;
+        private List<IThemeBinder> binders = null;
 
-        private void Start()
+        private void Awake()
         {
-            foreach (IBinder binder in binders)
+            foreach (IThemeBinder binder in binders)
             {
-                binder.Bind(gameObject);
+                binder.Bind();
             }
         }
 
         private void OnDestroy()
         {
-            foreach (IBinder binder in binders)
+            foreach (IThemeBinder binder in binders)
             {
                 binder.Unbind();
             }
         }
-
-        public void AddBinder(IBinder binder)
+        public void AddBinder(IThemeBinder binder)
         {
             if (binders == null)
             {
-                binders = new List<IBinder>();
+                binders = new List<IThemeBinder>();
             }
             binders.Add(binder);
         }
 
-        public void ReplaceBinderAtIndex(IBinder binder, int index)
+        public void ReplaceBinderAtIndex(IThemeBinder binder, int index)
         {
             binders[index] = binder;
         }

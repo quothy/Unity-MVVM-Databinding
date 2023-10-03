@@ -97,7 +97,40 @@ namespace MVVMDatabinding
             }
             else
             {
-                if (ReflectionUtils.IsNestedProperty(property) && ReflectionUtils.TryGetParentProperty(property, out SerializedProperty parent))
+                if (ReflectionUtils.IsPropertyAListItem(property))
+                {
+                    //int brackIdx = property.propertyPath.LastIndexOf('[');
+                    //int listNameIdxEnd = property.propertyPath.IndexOf(".Array");
+                    //SerializedProperty listProp = property.serializedObject.FindProperty(property.propertyPath.Substring(0, listNameIdxEnd));
+
+                    //int elementIdx = Convert.ToInt32(property.propertyPath.Substring(brackIdx + 1, 1));
+
+                    //string listPropName = property.propertyPath.Substring(0, listNameIdxEnd);
+                    //int endOfListSyntaxIndex = property.propertyPath.LastIndexOf("].");
+                    //endOfListSyntaxIndex++;
+                    //string afterListItemName = string.Empty;
+                    //if (endOfListSyntaxIndex != -1)
+                    //{
+                    //    afterListItemName = endOfListSyntaxIndex + 1 >= property.propertyPath.Length ? string.Empty : property.propertyPath.Substring(endOfListSyntaxIndex + 1, property.propertyPath.Length - endOfListSyntaxIndex - 1);
+
+                    //    int lastChildStartIdx = afterListItemName.LastIndexOf('.');
+                    //    if (lastChildStartIdx > 0)
+                    //    {
+                    //        afterListItemName = afterListItemName.Substring(0, lastChildStartIdx);
+                    //    }
+                    //    else
+                    //    {
+                    //        afterListItemName = string.Empty;
+                    //    }
+                    //}
+
+                    int lastItemIdx = property.propertyPath.LastIndexOf('.');
+                    string path = property.propertyPath.Substring(0, lastItemIdx);
+
+                    ReflectionUtils.DigForValue<List<string>>(path + "." + dropdownAttribute.OptionsSourcePropertyName, property.serializedObject.targetObject.GetType(), property.serializedObject.targetObject, out options);
+
+                }
+                else if (ReflectionUtils.IsNestedProperty(property) && ReflectionUtils.TryGetParentProperty(property, out SerializedProperty parent))
                 {
                     if (parent.propertyType == SerializedPropertyType.ManagedReference)
                     {
@@ -149,7 +182,15 @@ namespace MVVMDatabinding
             }
             else
             {
-                if (ReflectionUtils.IsNestedProperty(property) && ReflectionUtils.TryGetParentProperty(property, out SerializedProperty parent))
+                if (ReflectionUtils.IsPropertyAListItem(property))
+                {
+
+                    int lastItemIdx = property.propertyPath.LastIndexOf('.');
+                    string path = property.propertyPath.Substring(0, lastItemIdx);
+
+                    ReflectionUtils.DigForValue<string>(path + "." + dropdownAttribute.SelectedOptionPropertyName, property.serializedObject.targetObject.GetType(), property.serializedObject.targetObject, out selected);
+                }
+                else if (ReflectionUtils.IsNestedProperty(property) && ReflectionUtils.TryGetParentProperty(property, out SerializedProperty parent))
                 {
                     if (parent.propertyType == SerializedPropertyType.ManagedReference)
                     {
@@ -178,7 +219,6 @@ namespace MVVMDatabinding
                 }
             }
 
-
             return selected;
         }
 
@@ -197,7 +237,43 @@ namespace MVVMDatabinding
             }
             else
             {
-                if (ReflectionUtils.IsNestedProperty(property) && ReflectionUtils.TryGetParentProperty(property, out SerializedProperty parent))
+                if (ReflectionUtils.IsPropertyAListItem(property))
+                {
+                    int brackIdx = property.propertyPath.LastIndexOf('[');
+                    int listNameIdxEnd = property.propertyPath.IndexOf(".Array");
+                    SerializedProperty listProp = property.serializedObject.FindProperty(property.propertyPath.Substring(0, listNameIdxEnd));
+
+                    int elementIdx = Convert.ToInt32(property.propertyPath.Substring(brackIdx + 1, 1));
+
+                    string listPropName = property.propertyPath.Substring(0, listNameIdxEnd);
+                    int endOfListSyntaxIndex = property.propertyPath.LastIndexOf("].");
+                    endOfListSyntaxIndex++;
+                    string afterListItemName = string.Empty;
+                    if (endOfListSyntaxIndex != -1)
+                    {
+                        afterListItemName = endOfListSyntaxIndex + 1 >= property.propertyPath.Length ? string.Empty : property.propertyPath.Substring(endOfListSyntaxIndex + 1, property.propertyPath.Length - endOfListSyntaxIndex - 1);
+
+                        int lastChildStartIdx = afterListItemName.LastIndexOf('.');
+                        if (lastChildStartIdx > 0)
+                        {
+                            afterListItemName = afterListItemName.Substring(0, lastChildStartIdx);
+                        }
+                        else
+                        {
+                            afterListItemName = string.Empty;
+                        }
+                    }
+
+                    int lastItemIdx = property.propertyPath.LastIndexOf('.');
+                    string path = property.propertyPath.Substring(0, lastItemIdx);
+                    ReflectionUtils.DigForValueAndSet<string>(path + "." + dropdownAttribute.SelectedOptionPropertyName, property.serializedObject.targetObject.GetType(), property.serializedObject.targetObject, option);
+
+                    //if (ReflectionUtils.TryGetListItem(listPropName, elementIdx, property.serializedObject.targetObject, out object listItem))
+                    //{
+                    //    ReflectionUtils.DigForValueAndSet<string>(afterListItemName + "." + dropdownAttribute.SelectedOptionPropertyName, listItem.GetType(), listItem, option);
+                    //}
+                }
+                else if (ReflectionUtils.IsNestedProperty(property) && ReflectionUtils.TryGetParentProperty(property, out SerializedProperty parent))
                 {
                     if (parent.propertyType == SerializedPropertyType.ManagedReference)
                     {

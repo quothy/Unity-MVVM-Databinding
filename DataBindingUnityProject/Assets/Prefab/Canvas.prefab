@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 643887722397612973}
   - component: {fileID: 4891106287017206913}
   - component: {fileID: 589966324837468740}
+  - component: {fileID: 8262565849872203120}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -284,11 +285,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   binders:
-  - rid: 4598207457257324552
+  - rid: 4598207527680737300
   references:
     version: 2
     RefIds:
-    - rid: 4598207457257324552
+    - rid: 4598207527680737300
       type: {class: TextBinder, ns: MVVMDatabinding, asm: MVVM-Databinding}
       data:
         dataRecord: {fileID: 11400000, guid: dcbd76ca2ce00764a968d3e9e9b804e2, type: 2}
@@ -298,8 +299,33 @@ MonoBehaviour:
         name: EditableString (TextBinder)
         comment: This string is for editing
         bindDirection: 0
-        text: {fileID: 4891106287017206913}
+        text: {fileID: 0}
         textInput: {fileID: 0}
+--- !u!114 &8262565849872203120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708511733653331951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e175cba8a3f0344abcd543277ca87d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binders:
+  - rid: 4598207527680737299
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207527680737299
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 1489431790
+        name: Test Text Color (ColorThemeBinder)
+        targets:
+        - {fileID: 4891106287017206913}
 --- !u!1 &2203854360554748767
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,6 +531,7 @@ GameObject:
   - component: {fileID: 4869112575732238848}
   - component: {fileID: 4869112575732238850}
   - component: {fileID: 4869112575732238851}
+  - component: {fileID: 992603368}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -629,6 +656,31 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &992603368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4869112575732238849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e175cba8a3f0344abcd543277ca87d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binders:
+  - rid: 4598207527680737302
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207527680737302
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 1489431790
+        name: Test Text Color (ColorThemeBinder)
+        targets:
+        - {fileID: 4869112575732238851}
 --- !u!1 &4869112576404524046
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +692,7 @@ GameObject:
   - component: {fileID: 4869112576404524033}
   - component: {fileID: 4869112576404524035}
   - component: {fileID: 4869112576404524032}
+  - component: {fileID: 3146487812075801096}
   m_Layer: 5
   m_Name: Backplate
   m_TagString: Untagged
@@ -705,6 +758,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3146487812075801096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4869112576404524046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e175cba8a3f0344abcd543277ca87d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binders:
+  - rid: 4598207527680737290
+  - rid: 4598207527680737295
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207527680737290
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 1658081638
+        name: Test Backplate (ColorThemeBinder)
+        targets:
+        - {fileID: 4869112576404524032}
+    - rid: 4598207527680737295
+      type: {class: MaterialThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 474124520
+        name: TestMaterial (MaterialThemeBinder)
+        targets:
+        - {fileID: 4869112576404524032}
 --- !u!1 &4869112576439738282
 GameObject:
   m_ObjectHideFlags: 0
@@ -716,6 +803,7 @@ GameObject:
   - component: {fileID: 4869112576439738285}
   - component: {fileID: 4869112576439738287}
   - component: {fileID: 4869112576439738284}
+  - component: {fileID: 7412178237218160887}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -840,6 +928,31 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7412178237218160887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4869112576439738282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e175cba8a3f0344abcd543277ca87d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binders:
+  - rid: 4598207527680737302
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207527680737302
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 1489431790
+        name: Test Text Color (ColorThemeBinder)
+        targets:
+        - {fileID: 4869112576439738284}
 --- !u!1 &4869112576578683188
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,6 +964,7 @@ GameObject:
   - component: {fileID: 4869112576578683191}
   - component: {fileID: 4869112576578683145}
   - component: {fileID: 4869112576578683190}
+  - component: {fileID: 1654239699}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -975,6 +1089,31 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1654239699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4869112576578683188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e175cba8a3f0344abcd543277ca87d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binders:
+  - rid: 4598207527680737302
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207527680737302
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 1489431790
+        name: Test Text Color (ColorThemeBinder)
+        targets:
+        - {fileID: 4869112576578683190}
 --- !u!1 &4869112576716521064
 GameObject:
   m_ObjectHideFlags: 0
@@ -1135,6 +1274,7 @@ GameObject:
   - component: {fileID: 4869112576968946971}
   - component: {fileID: 4869112576968946968}
   - component: {fileID: 4869112576968946969}
+  - component: {fileID: 1073654925}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1245,6 +1385,31 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1073654925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4869112576968946950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e175cba8a3f0344abcd543277ca87d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binders:
+  - rid: 4598207527680737304
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207527680737304
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 7323843
+        name: Test Button Backplate Color (ColorThemeBinder)
+        targets:
+        - {fileID: 4869112576968946968}
 --- !u!1 &4869112576988108501
 GameObject:
   m_ObjectHideFlags: 0
@@ -1295,6 +1460,7 @@ GameObject:
   - component: {fileID: 4869112577306776479}
   - component: {fileID: 4869112577306776476}
   - component: {fileID: 4869112577306776477}
+  - component: {fileID: 1888302801}
   m_Layer: 5
   m_Name: Button_Lock
   m_TagString: Untagged
@@ -1419,7 +1585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   binders:
   - rid: 4598207211627872318
-  - rid: 4598207211627872322
+  - rid: 4598207527680737301
   references:
     version: 2
     RefIds:
@@ -1434,7 +1600,7 @@ MonoBehaviour:
         comment: 
         bindDirection: 1
         button: {fileID: 4869112577306776476}
-    - rid: 4598207211627872322
+    - rid: 4598207527680737301
       type: {class: StringSwapBinder, ns: MVVMDatabinding, asm: MVVM-Databinding}
       data:
         dataRecord: {fileID: 11400000, guid: dcbd76ca2ce00764a968d3e9e9b804e2, type: 2}
@@ -1442,10 +1608,35 @@ MonoBehaviour:
         dataSourceInstance: {fileID: 0}
         itemId: 4
         name: OptionsLocked (StringSwapBinder)
-        comment: 
-        text: {fileID: 4869112576578683190}
+        comment: Whether or not all options should be considered locked
+        text: {fileID: 0}
         trueString: Locked
         falseString: Unlocked
+--- !u!114 &1888302801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4869112577306776475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e175cba8a3f0344abcd543277ca87d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binders:
+  - rid: 4598207527680737304
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207527680737304
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 7323843
+        name: Test Button Backplate Color (ColorThemeBinder)
+        targets:
+        - {fileID: 4869112577306776479}
 --- !u!1 &5649640650103489004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1459,6 +1650,7 @@ GameObject:
   - component: {fileID: 8900911126526804434}
   - component: {fileID: 3057681399145917680}
   - component: {fileID: 593222861425553544}
+  - component: {fileID: 4702975691258062229}
   m_Layer: 5
   m_Name: InputField (TMP)
   m_TagString: Untagged
@@ -1652,6 +1844,40 @@ MonoBehaviour:
         bindDirection: 1
         text: {fileID: 0}
         textInput: {fileID: 3057681399145917680}
+--- !u!114 &4702975691258062229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5649640650103489004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e175cba8a3f0344abcd543277ca87d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binders:
+  - rid: 4598207527680737305
+  - rid: 4598207527680737307
+  references:
+    version: 2
+    RefIds:
+    - rid: 4598207527680737305
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 7323843
+        name: Test Button Backplate Color (ColorThemeBinder)
+        targets:
+        - {fileID: 8900911126526804434}
+    - rid: 4598207527680737307
+      type: {class: ColorThemeBinder, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        themeRecord: {fileID: 11400000, guid: e39821975cbd50e43bb2a50b6b3463c6, type: 2}
+        itemId: 1489431790
+        name: Test Text Color (ColorThemeBinder)
+        targets:
+        - {fileID: 6315395223633737632}
 --- !u!1 &7894742628794274514
 GameObject:
   m_ObjectHideFlags: 0

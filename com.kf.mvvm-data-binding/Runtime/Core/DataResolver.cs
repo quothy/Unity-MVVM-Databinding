@@ -42,6 +42,8 @@ namespace MVVMDatabinding
         /// </summary>
         private List<string> availableItemNames = null;
 
+        private GameObject bindingObject = null;
+
         public event Action DataUpdated = null;
 
         public bool DataRecordValid
@@ -85,6 +87,20 @@ namespace MVVMDatabinding
             }
         }
 
+        private int fullSourceId = int.MinValue;
+
+        protected int SourceId
+        {
+            get
+            {
+                if (fullSourceId == int.MinValue && TryResolveDataSourceId(out int sourceId))
+                {
+                    fullSourceId = sourceId;
+                }
+                return fullSourceId;
+            }
+        }
+
         private bool editor_RecordRequiresExtraData => dataRecord != null && dataRecord.ExtraDataRequiredAtRuntime;
         private bool editor_SourceInstanceNeedsSet => editor_RecordRequiresExtraData && resolutionType == DataSourceIdResolutionType.ManuallySetInstance;
 
@@ -110,14 +126,15 @@ namespace MVVMDatabinding
             }
         }
 
-        public void Subscribe()
+        public void Subscribe(GameObject gameObject)
         {
-            DataSourceManager.SubscribeToItem(dataRecord.SourceId, itemId, OnDataItemUpdate);
+            bindingObject = gameObject;
+            DataSourceManager.SubscribeToItem(SourceId, itemId, OnDataItemUpdate);
         }
 
         public void Unsubscribe()
         {
-            DataSourceManager.UnsubscribeFromItem(dataRecord.SourceId, itemId, OnDataItemUpdate);
+            DataSourceManager.UnsubscribeFromItem(SourceId, itemId, OnDataItemUpdate);
         }
 
         public bool TryGetData<T>(out T data)
@@ -147,7 +164,54 @@ namespace MVVMDatabinding
 
         protected bool TryGetDataSource(out IDataSource dataSource)
         {
-            return DataSourceManager.TryGetDataSource(dataRecord.SourceId, out dataSource);
+            return DataSourceManager.TryGetDataSource(SourceId, out dataSource);
         }
+
+        private bool TryResolveDataSourceId(out int sourceId)
+        {
+            if (!dataRecord.ExtraDataRequiredAtRuntime)
+            {
+                sourceId = dataRecord.SourceId;
+                return true;
+            }
+
+            if (resolutionType == DataSourceIdResolutionType.ManuallySetInstance)
+            {
+                if (dataSourceInstance != null)
+                {
+                    int id = dataSourceInstance.GetInstanceID();
+                    string fullName = BaseDataSource.ResolveNameWithRuntimeId(dataRecord.SourceName, id);
+                    sourceId = Animator.StringToHash(fullName);
+                    return true;
+                }
+            }
+            else if (resolutionType == DataSourceIdResolutionType.GetComponentInParent)
+            {
+                if (bindingObject != null && ViewModelTypeCache.TryGetViewModelType(dataRecord.SourceType, out Type viewModelType))
+                {
+                    var source = bindingObject.GetComponentInParent(viewModelType);
+                    if (source != null)
+                    {
+                        int id = source.gameObject.GetInstanceID();
+                        string fullName = BaseDataSource.ResolveNameWithRuntimeId(dataRecord.SourceName, id);
+                        sourceId = Animator.StringToHash(fullName);
+                        Debug.Log($"[BaseBinder] Resolved data source: name = {fullName}  id = {sourceId}");
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.LogErrorFormat("[BaseBinder] Failed to find ViewModel of type {0} in parent of {1}", viewModelType, bindingObject.name);
+                    }
+                }
+                else
+                {
+                    Debug.LogErrorFormat("[BaseBinder] Failed to retrieve ViewModel type from cache for data record (source name: {0}, source type: {1})", dataRecord.SourceName, dataRecord.SourceType);
+                }
+            }
+
+            sourceId = int.MinValue;
+            return false;
+        }
+
     }
 }
