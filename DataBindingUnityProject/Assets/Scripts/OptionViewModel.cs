@@ -49,7 +49,7 @@ public class OptionViewModel : BaseViewModel
         if (lockStateData != null)
         {
             lockStateData.DataUpdated += OnLockStateDataChanged;
-            lockStateData.Subscribe();
+            lockStateData.Subscribe(this.gameObject);
         }
     }
 
