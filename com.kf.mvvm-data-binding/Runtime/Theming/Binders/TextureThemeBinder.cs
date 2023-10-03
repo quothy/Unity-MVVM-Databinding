@@ -1,5 +1,6 @@
 // Copyright (c) 2023 Katie Fremont
 // Licensed under the MIT license
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,15 +9,18 @@ namespace MVVMDatabinding.Theming
     public class TextureThemeBinder : BaseThemeBinder<Texture>
     {
         [SerializeField]
-        private RawImage target = null;
+        private List<RawImage> targets = null;
 
         protected override ThemeItemType ThemeItemType => ThemeItemType.Texture;
 
         protected override void OnDataUpdated(Texture dataValue)
         {
-            if (target != null)
+            if (targets != null)
             {
-                target.texture = dataValue;
+                foreach (RawImage target in targets)
+                {
+                    target.texture = dataValue;
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Katie Fremont
 // Licensed under the MIT license
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,15 +10,18 @@ namespace MVVMDatabinding.Theming
     public class ColorThemeBinder : BaseThemeBinder<Color>
     {
         [SerializeField]
-        private Graphic target = null; 
+        private List<Graphic> targets = null; 
 
         protected override ThemeItemType ThemeItemType => ThemeItemType.Color;
 
         protected override void OnDataUpdated(Color dataValue)
         {
-            if (target != null)
+            if (targets != null)
             {
-                target.color = dataValue;
+                foreach (Graphic target in targets)
+                {
+                    target.color = dataValue;
+                }
             }
         }
     }
