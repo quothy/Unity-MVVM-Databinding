@@ -166,7 +166,7 @@ namespace MVVMDatabinding
 
         protected bool TryGetDataSource(out IDataSource dataSource)
         {
-            return DataSourceManager.TryGetDataSource(dataRecord.SourceId, out dataSource);
+            return DataSourceManager.TryGetDataSource(SourceId, out dataSource);
         }
 
         protected abstract void OnDataUpdated(T dataValue);
