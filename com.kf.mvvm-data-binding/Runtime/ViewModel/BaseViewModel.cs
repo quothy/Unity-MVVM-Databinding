@@ -141,7 +141,6 @@ namespace MVVMDatabinding
 #endif
         }
 
-
         protected virtual void RegisterCustomDataTypes() { }
 
 #if UNITY_EDITOR

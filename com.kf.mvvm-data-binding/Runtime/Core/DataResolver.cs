@@ -137,6 +137,13 @@ namespace MVVMDatabinding
             DataSourceManager.UnsubscribeFromItem(SourceId, itemId, OnDataItemUpdate);
         }
 
+        public bool TryGetBindingInfo(out int sourceId, out int itemId)
+        {
+            sourceId = SourceId;
+            itemId = this.itemId;
+            return sourceId != int.MinValue && itemId != -1;
+        }
+
         public bool TryGetData<T>(out T data)
         {
             if (TryGetDataSource(out IDataSource source))
