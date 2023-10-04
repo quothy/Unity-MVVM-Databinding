@@ -30,6 +30,10 @@ namespace MVVMDatabinding
         {
             EnsureCacheInitialized();
             dataItemType = null;
+            if (typeof(IList).IsAssignableFrom(underlyingDataType))
+            {
+                return dataItemTypeCache.TryGetValue(typeof(IList), out dataItemType);
+            }
             return dataItemTypeCache.TryGetValue(underlyingDataType, out dataItemType);
         }
 

@@ -137,6 +137,10 @@ namespace MVVMDatabinding
                 setUnderlyingValue = new UnityEvent<T>();
             }
 
+            if (typeof(IList).IsAssignableFrom(typeof(T)))
+            {
+                return;
+            }
             UnityAction<T> setAction = propertyInfo.GetSetMethod().CreateDelegate(typeof(UnityAction<T>), dataSourceOwner) as UnityAction<T>;
             UnityEventTools.AddPersistentListener<T>(setUnderlyingValue, setAction);
 #endif       

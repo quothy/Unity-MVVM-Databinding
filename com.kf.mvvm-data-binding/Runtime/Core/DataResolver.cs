@@ -113,6 +113,11 @@ namespace MVVMDatabinding
 
             availableItemNames.Clear();
 
+            if (!DataRecordValid)
+            {
+                return;
+            }
+
             dataRecord.PopulateItemNameList(availableItemNames);
 
             if (dataRecord.TryGetNameForId(itemId, out string name))
