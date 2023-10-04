@@ -45,6 +45,7 @@ namespace MVVMDatabinding
         private static void RegisterBuiltInTypes()
         {
             dataItemTypeCache[typeof(int)] = typeof(DataItemInt);
+            dataItemTypeCache[typeof(long)] = typeof(DataItemLong);
             dataItemTypeCache[typeof(float)] = typeof(DataItemFloat);
             dataItemTypeCache[typeof(bool)] = typeof(DataItemBool);
             dataItemTypeCache[typeof(string)] = typeof(DataItemString);

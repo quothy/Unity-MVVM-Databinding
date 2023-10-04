@@ -178,6 +178,7 @@ namespace MVVMDatabinding
     /// Any built in types that get added here must also be added to <see cref="DataItemTypeCache.RegisterBuiltInTypes"/>.
     /// </summary>
     public class DataItemInt : DataItem<int> { }
+    public class DataItemLong : DataItem<long> { }
     public class DataItemFloat : DataItem<float> { }
     public class DataItemBool : DataItem<bool> { }
     public class DataItemString : DataItem<string> { }
