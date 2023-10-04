@@ -30,9 +30,9 @@ namespace MVVMDatabinding
         {
             EnsureCacheInitialized();
             dataItemType = null;
-            if (typeof(IList).IsAssignableFrom(underlyingDataType))
+            if (typeof(DataList).IsAssignableFrom(underlyingDataType))
             {
-                return dataItemTypeCache.TryGetValue(typeof(IList), out dataItemType);
+                return dataItemTypeCache.TryGetValue(typeof(DataList), out dataItemType);
             }
             return dataItemTypeCache.TryGetValue(underlyingDataType, out dataItemType);
         }
@@ -61,7 +61,7 @@ namespace MVVMDatabinding
             dataItemTypeCache[typeof(Vector3)] = typeof(DataItemVector3);
             dataItemTypeCache[typeof(Vector4)] = typeof(DataItemVector4);
 
-            dataItemTypeCache[typeof(IList)] = typeof(DataItemList);
+            dataItemTypeCache[typeof(DataList)] = typeof(DataItemList);
 
             dataItemTypeCache[typeof(Action)] = typeof(DataItemAction);
         }

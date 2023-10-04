@@ -191,7 +191,7 @@ namespace MVVMDatabinding
             bool success = false;
             item = default(T);
 
-            if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is List<T> typedList)
+            if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is DataList<T> typedList)
             {
                 if (typedList.Count > id)
                 {
@@ -206,7 +206,7 @@ namespace MVVMDatabinding
         public bool TrySetItemAtIndex<T>(int id, int index, T itemValue)
         {
             bool success = false;
-            if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is List<T> typedList)
+            if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is DataList<T> typedList)
             {
                 if (typedList.Count > id)
                 {

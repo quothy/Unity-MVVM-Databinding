@@ -196,7 +196,20 @@ namespace MVVMDatabinding
 
     public class DataItemVector4 : DataItem<Vector4> { }
 
-    public class DataItemList : DataItem<IList> { }
+    public class DataItemList : DataItem<DataList> 
+    {
+        public override void EditorInit(UnityEngine.Object dataSourceOwner, PropertyInfo propertyInfo)
+        {
+            // skip setting up setter logic for now 
+        }
+
+        public override void RuntimeInit(UnityEngine.Object dataSourceOwner)
+        {
+            base.RuntimeInit(dataSourceOwner);
+
+            Value.ListUpdated += RaiseValueChanged;
+        }
+    }
 
     public class DataItemAction : DataItem<Action> 
     {
