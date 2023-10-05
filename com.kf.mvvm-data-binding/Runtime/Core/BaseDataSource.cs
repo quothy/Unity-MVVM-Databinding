@@ -193,9 +193,9 @@ namespace MVVMDatabinding
 
             if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is DataList<T> typedList)
             {
-                if (typedList.Count > id)
+                if (typedList.Count > index)
                 {
-                    item = typedList[id];
+                    item = typedList[index];
                     success = true;
                 }
             }
@@ -208,9 +208,9 @@ namespace MVVMDatabinding
             bool success = false;
             if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is DataList<T> typedList)
             {
-                if (typedList.Count > id)
+                if (typedList.Count > index)
                 {
-                    typedList[id] = itemValue;
+                    typedList[index] = itemValue;
                     success = true;
 
                     // TODO: how to handle notifying that list contents have changed?
