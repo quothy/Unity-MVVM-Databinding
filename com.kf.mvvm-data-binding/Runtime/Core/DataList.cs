@@ -34,6 +34,12 @@ namespace MVVMDatabinding
             OnListUpdated();
         }
 
+        public void AddRange(IEnumerable<T> range)
+        {
+            dataList.AddRange(range);
+            OnListUpdated();
+        }
+
         public void Clear()
         {
             dataList.Clear();
