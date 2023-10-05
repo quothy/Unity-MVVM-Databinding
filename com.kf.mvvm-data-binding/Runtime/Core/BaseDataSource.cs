@@ -153,7 +153,7 @@ namespace MVVMDatabinding
 
         public void UnsubscribeFromItem(int id, DataItemUpdate onUpdate)
         {
-            if (subscriberLookup.TryGetValue(id, out List<DataItemUpdate> list))
+            if (subscriberLookup != null && subscriberLookup.TryGetValue(id, out List<DataItemUpdate> list))
             {
                 list.Remove(onUpdate);
             }
