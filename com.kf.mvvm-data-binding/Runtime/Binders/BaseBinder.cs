@@ -224,6 +224,15 @@ namespace MVVMDatabinding
             return false;
         }
 
+
+        protected void TrySetDataValue(T dataValue)
+        {
+            if (TryGetDataSource(out IDataSource dataSource))
+            {
+                dataSource.TrySetItem<T>(itemId, dataValue);
+            }
+        }
+
         private void TryPopulateItemNames()
         {
             if (availableItemNames == null)
