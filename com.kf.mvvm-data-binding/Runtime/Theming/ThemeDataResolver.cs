@@ -48,14 +48,14 @@ namespace MVVMDatabinding.Theming
                 string selected = string.Empty;
                 if (themeRecord != null)
                 {
-                    themeRecord.TryGetInfoForId(itemId, out selected, out ThemeItemType unused);
+                    themeRecord.TryGetInfoForId(itemId, out selected, out ThemeItemType unused, out bool excludeFromVariants);
                     name = selected;
                 }
                 return selected;
             }
             set
             {
-                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType unused))
+                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType unused, out bool excludeFromVariants))
                 {
                     itemId = id;
                     name = value;
@@ -89,7 +89,7 @@ namespace MVVMDatabinding.Theming
                 themeRecord.PopulateItemNameList(availableItemNames);
             }
 
-            if (DataRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out ThemeItemType unused))
+            if (DataRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out ThemeItemType unused, out bool excludeFromVariants))
             {
                 SelectedItemName = name;
             }

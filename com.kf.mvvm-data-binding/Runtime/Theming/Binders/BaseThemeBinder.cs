@@ -57,7 +57,7 @@ namespace MVVMDatabinding.Theming
                         name = BinderTypeName;
                         selected = editor_notAvailableMessage;
                     }
-                    else if (themeRecord.TryGetInfoForId(itemId, out selected, out ThemeItemType type))
+                    else if (themeRecord.TryGetInfoForId(itemId, out selected, out ThemeItemType type, out bool excludeFromVariants))
                     {
                         name = selected + BinderTypeName;
                     }
@@ -67,7 +67,7 @@ namespace MVVMDatabinding.Theming
             }
             set
             {
-                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType type))
+                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType type, out bool excludeFromVariants))
                 {
                     itemId = id;
                     name = value + BinderTypeName;
@@ -130,7 +130,7 @@ namespace MVVMDatabinding.Theming
 
             if (availableItemNames.Count > 0)
             {
-                if (DataRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out var unused))
+                if (DataRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out var unused, out bool excludeFromVariants))
                 {
                     SelectedItemName = name;
                 }

@@ -23,6 +23,8 @@ namespace MVVMDatabinding.Theming
 
         UnityEvent ValueChanged { get; }
 
+        bool ExcludedFromVariants { get; set; }
+
         void SetVariant(ThemeVariant variant);
     }
 
@@ -33,6 +35,20 @@ namespace MVVMDatabinding.Theming
         public abstract Type DataType { get; }
         public UnityEvent ValueChanged { get; protected set; } = new UnityEvent();
 
+        [HideInInspector]
+        [SerializeField]
+        protected bool excludedFromVariants = false;
+
+
+        public bool ExcludedFromVariants
+        {
+            get => excludedFromVariants;
+            set
+            {
+                excludedFromVariants = value;
+            }
+        }
+
         public void SetVariant(ThemeVariant variant)
         {
             activeVariant = variant;
@@ -42,19 +58,31 @@ namespace MVVMDatabinding.Theming
 
     public abstract class ThemeValue<T> : ThemeValue
     {
+        [ConditionalVisibility(nameof(ExcludedFromVariants), ConditionResultType.ShowIfNotEquals)]
         [SerializeField]
         private T light;
 
+        [ConditionalVisibility(nameof(ExcludedFromVariants), ConditionResultType.ShowIfNotEquals)]
         [SerializeField]
         private T dark;
 
+        [ConditionalVisibility(nameof(ExcludedFromVariants), ConditionResultType.ShowIfNotEquals)]
         [SerializeField]
         private T highContrast;
+
+        [ConditionalVisibility(nameof(ExcludedFromVariants), ConditionResultType.ShowIfEquals)]
+        [SerializeField]
+        private T value;
 
         public T Value
         {
             get
             {
+                if (ExcludedFromVariants)
+                {
+                    return value;
+                }
+
                 switch (activeVariant)
                 {
                     case ThemeVariant.Light:
@@ -80,6 +108,7 @@ namespace MVVMDatabinding.Theming
     public class FloatThemeValue : ThemeValue<float> { }
     public class Vector4ThemeValue : ThemeValue<Vector4> { }
     public class TMPGradientThemeValue : ThemeValue<TMP_ColorGradient> { }
+    public class FontSettingsThemeValue : ThemeValue<ThemeFontSettings> { }
 
     [Serializable]
     public class ThemeItemValue
@@ -130,10 +159,11 @@ namespace MVVMDatabinding.Theming
                 string selected = string.Empty;
                 if (themeRecord != null)
                 {
-                    if (themeRecord.TryGetInfoForId(itemId, out selected, out itemType))
+                    if (themeRecord.TryGetInfoForId(itemId, out selected, out itemType, out bool excludeFromVariants))
                     {
                         name = selected;
                         UpdateThemeValue();
+                        themeValue.ExcludedFromVariants = excludeFromVariants;
                     }
                     else
                     {
@@ -150,12 +180,13 @@ namespace MVVMDatabinding.Theming
             }
             set
             {
-                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType type))
+                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType type, out bool excludeFromVariants))
                 {
                     itemId = id;
                     name = value;
                     itemType = type;
                     UpdateThemeValue();
+                    themeValue.ExcludedFromVariants = excludeFromVariants;
                 }
                 else
                 {
@@ -198,7 +229,7 @@ namespace MVVMDatabinding.Theming
                 themeRecord.PopulateItemNameList(availableItemNames);
             }
 
-            if (ThemeRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out itemType))
+            if (ThemeRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out itemType, out bool excludeFromVariants))
             {
                 SelectedItemName = name;
             }
@@ -254,6 +285,11 @@ namespace MVVMDatabinding.Theming
                 themeValue = new TMPGradientThemeValue();
                 return true;
             }
+            if (itemType == ThemeItemType.FontSettings && (themeValue == null || themeValue.DataType != typeof(ThemeFontSettings)))
+            {
+                themeValue = new FontSettingsThemeValue();
+                return true;
+            }
 
             return false;
 #endif
@@ -294,6 +330,10 @@ namespace MVVMDatabinding.Theming
             else if (itemType == ThemeItemType.TMPGradient && (themeValue == null || themeValue.DataType != typeof(TMP_ColorGradient)))
             {
                 themeValue = new TMPGradientThemeValue();
+            }
+            else if (itemType == ThemeItemType.FontSettings && (themeValue == null || themeValue.DataType != typeof(ThemeFontSettings)))
+            {
+                themeValue = new FontSettingsThemeValue();
             }
 #endif
         }
