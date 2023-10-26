@@ -20,7 +20,7 @@ namespace MVVMDatabinding.Theming
                 // show update data record button
                 if (GUILayout.Button("Load & Apply Theme", GUILayout.Height(30)))
                 {
-                    // TODO:
+                    (target as Theme).Editor_LoadTheme();
                 }
             }
 
