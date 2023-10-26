@@ -135,6 +135,13 @@ namespace MVVMDatabinding
 
         public string ItemName { get; private set; }
 
+        /// <summary>
+        /// Warning: Does not get called the first time the DataBinder enables.
+        /// </summary>
+        public virtual void OnEnable() { }
+
+        public virtual void OnDisable() { }
+
         public virtual void Bind(GameObject bindingObject)
         {
             this.bindingObject = bindingObject;
