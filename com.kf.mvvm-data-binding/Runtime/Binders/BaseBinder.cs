@@ -111,7 +111,7 @@ namespace MVVMDatabinding
         }
 
         private int fullSourceId = int.MinValue;
-        private GameObject bindingObject = null;
+        protected GameObject bindingObject = null;
 
 
         private bool editor_RecordRequiresExtraData => dataRecord != null && dataRecord.ExtraDataRequiredAtRuntime;
