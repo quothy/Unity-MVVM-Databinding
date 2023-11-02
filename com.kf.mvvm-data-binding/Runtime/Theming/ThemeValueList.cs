@@ -291,8 +291,8 @@ namespace MVVMDatabinding.Theming
                 return true;
             }
 
-            return false;
 #endif
+            return false;
         }
 
         public void UpdateThemeValue()
@@ -367,11 +367,13 @@ namespace MVVMDatabinding.Theming
                     }
                 }
 
+#if UNITY_EDITOR
                 if (saveChanges)
                 {
                     EditorUtility.SetDirty(this);
                     AssetDatabase.SaveAssetIfDirty(this);
                 }
+#endif
             }
         }
     }
