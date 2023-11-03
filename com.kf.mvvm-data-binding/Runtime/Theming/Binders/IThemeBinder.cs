@@ -12,5 +12,12 @@ namespace MVVMDatabinding.Theming
         void Unbind();
 
         void OnThemeItemUpdate(IDataSource dataSource, int itemId);
+
+#if UNITY_EDITOR
+        ThemeRecord Record { get; }
+        int ItemId { get; }
+        // NOTE: We're using object here only because this is strictly an Editor time call. 
+        void Editor_ForceUpdateItemValue(object value);
+#endif
     }
 }

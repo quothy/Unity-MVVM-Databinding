@@ -26,6 +26,11 @@ namespace MVVMDatabinding.Theming
         bool ExcludedFromVariants { get; set; }
 
         void SetVariant(ThemeVariant variant);
+
+#if UNITY_EDITOR
+        // NOTE: We're only using object here because it's strictly editor-only code.
+        object Editor_GetValue();
+#endif
     }
 
     [Serializable]
@@ -54,6 +59,10 @@ namespace MVVMDatabinding.Theming
             activeVariant = variant;
             ValueChanged?.Invoke();
         }
+
+#if UNITY_EDITOR
+        public abstract object Editor_GetValue();
+#endif
     }
 
     public abstract class ThemeValue<T> : ThemeValue
@@ -98,6 +107,13 @@ namespace MVVMDatabinding.Theming
         }
 
         public override Type DataType => typeof(T);
+
+#if UNITY_EDITOR
+        public override object Editor_GetValue()
+        {
+            return excludedFromVariants ? value : light;
+        }
+#endif
     }
 
     public class ColorThemeValue : ThemeValue<Color> { }
@@ -343,6 +359,13 @@ namespace MVVMDatabinding.Theming
             themeValue = null;
             UpdateThemeValue();
         }
+
+#if UNITY_EDITOR
+        public bool MatchesItem(ThemeRecord record, int itemId)
+        {
+            return record == themeRecord && itemId == this.itemId;
+        }
+#endif
     }
 
 

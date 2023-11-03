@@ -75,6 +75,8 @@ namespace MVVMDatabinding.Theming
             }
         }
 
+        protected bool IsBindingValid => DataRecordValid && !string.IsNullOrWhiteSpace(SelectedItemName);
+
         /// <summary>
         /// We're going to want to display strings for the items on the Inspector UI
         /// </summary>
@@ -145,5 +147,15 @@ namespace MVVMDatabinding.Theming
                 availableItemNames.Insert(0, string.Format(noDataItemsOfTypeAvailableMessage,ThemeItemType.ToString()));
             }
         }
+
+#if UNITY_EDITOR
+        public ThemeRecord Record => themeRecord;
+        public int ItemId => itemId;
+
+        public void Editor_ForceUpdateItemValue(object value)
+        {
+            OnDataUpdated((T)value);
+        }
+#endif
     }
 }

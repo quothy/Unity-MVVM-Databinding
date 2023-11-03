@@ -21,6 +21,9 @@ namespace MVVMDatabinding.Theming
 
         private int listItemOffset = 10;
 
+        private int binderIndex = -1;
+        private Theme selectedTheme = null;
+
         private void OnEnable()
         {
             dataBinder = target as ThemeBinder;
@@ -32,7 +35,18 @@ namespace MVVMDatabinding.Theming
             DrawBinders();
 
             serializedObject.ApplyModifiedProperties();
+
+            if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "ObjectSelectorUpdated")
+            {
+                selectedTheme = EditorGUIUtility.GetObjectPickerObject() as Theme;
+                if (selectedTheme != null )
+                {
+                    // try to update the value
+                    SelectValueFromTheme(selectedTheme);
+                }
+            }
         }
+
         private void DrawBinders()
         {
             if (binderList == null)
@@ -67,6 +81,18 @@ namespace MVVMDatabinding.Theming
             if (binderProp.managedReferenceValue != null)
             {
                 EditorGUI.PropertyField(rect, binderProp, new GUIContent(binderProp.FindPropertyRelative("name").stringValue), true);
+                if (!Application.isPlaying && binderProp.isExpanded)
+                {
+                    // add a button that lets you pick a Theme asset, then finds the given item and applies the value
+                    Vector2 buttonSize = new Vector2(75, 15);
+                    Vector2 buttonLocation = new Vector2(rect.x + rect.width, rect.y + buttonSize.y) - buttonSize;
+                    Rect buttonRect = new Rect(buttonLocation, buttonSize);
+                    if (GUI.Button(buttonRect, "Update"))
+                    {
+                        binderIndex = index;
+                        EditorGUIUtility.ShowObjectPicker<Theme>(selectedTheme, false, "t:Theme", 0);
+                    }
+                }
             }
         }
 
@@ -104,6 +130,27 @@ namespace MVVMDatabinding.Theming
 
                     binderNames.Add(type.Name);
                     binderTypeLookup[type.Name] = type;
+                }
+            }
+        }
+
+        private void SelectValueFromTheme(Theme selected)
+        {
+            // first get the ThemeRecord and item ID we're searching for
+            if (binderIndex != -1)
+            {
+                IThemeBinder binder = serializedObject.FindProperty("binders").GetArrayElementAtIndex(binderIndex).managedReferenceValue as IThemeBinder;
+
+                foreach (ThemeValueList valueList in selected.ThemeValueListCollection)
+                {
+                    foreach (ThemeItemValue value in valueList.Items)
+                    {
+                        if (value.MatchesItem(binder.Record, binder.ItemId))
+                        {
+                            binder.Editor_ForceUpdateItemValue(value.ThemeValue.Editor_GetValue());
+                            break;
+                        }
+                    }
                 }
             }
         }
