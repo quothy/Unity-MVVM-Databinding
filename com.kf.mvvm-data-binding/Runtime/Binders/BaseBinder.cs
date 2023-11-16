@@ -1,7 +1,6 @@
 // Copyright (c) 2023 Katie Fremont
 // Licensed under the MIT license
 
-using Codice.CM.Common;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -109,6 +108,9 @@ namespace MVVMDatabinding
             }
         }
 
+        protected bool isListItem = false;
+        protected int listItemIndex = -1;
+
         private int fullSourceId = int.MinValue;
         protected GameObject bindingObject = null;
 
@@ -145,6 +147,13 @@ namespace MVVMDatabinding
         {
             this.bindingObject = bindingObject;
             Subscribe();
+        }
+
+        public virtual void Bind(GameObject bindingObject, bool isListItem, int listItemIndex)
+        {
+            Bind(bindingObject);
+            // do list item specific stuff here
+
         }
 
         public virtual void Unbind()
