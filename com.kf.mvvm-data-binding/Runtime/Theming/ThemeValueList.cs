@@ -23,7 +23,14 @@ namespace MVVMDatabinding.Theming
 
         UnityEvent ValueChanged { get; }
 
+        bool ExcludedFromVariants { get; set; }
+
         void SetVariant(ThemeVariant variant);
+
+#if UNITY_EDITOR
+        // NOTE: We're only using object here because it's strictly editor-only code.
+        object Editor_GetValue();
+#endif
     }
 
     [Serializable]
@@ -33,28 +40,58 @@ namespace MVVMDatabinding.Theming
         public abstract Type DataType { get; }
         public UnityEvent ValueChanged { get; protected set; } = new UnityEvent();
 
+        [HideInInspector]
+        [SerializeField]
+        protected bool excludedFromVariants = false;
+
+
+        public bool ExcludedFromVariants
+        {
+            get => excludedFromVariants;
+            set
+            {
+                excludedFromVariants = value;
+            }
+        }
+
         public void SetVariant(ThemeVariant variant)
         {
             activeVariant = variant;
             ValueChanged?.Invoke();
         }
+
+#if UNITY_EDITOR
+        public abstract object Editor_GetValue();
+#endif
     }
 
     public abstract class ThemeValue<T> : ThemeValue
     {
+        [ConditionalVisibility(nameof(ExcludedFromVariants), ConditionResultType.ShowIfNotEquals)]
         [SerializeField]
         private T light;
 
+        [ConditionalVisibility(nameof(ExcludedFromVariants), ConditionResultType.ShowIfNotEquals)]
         [SerializeField]
         private T dark;
 
+        [ConditionalVisibility(nameof(ExcludedFromVariants), ConditionResultType.ShowIfNotEquals)]
         [SerializeField]
         private T highContrast;
+
+        [ConditionalVisibility(nameof(ExcludedFromVariants), ConditionResultType.ShowIfEquals)]
+        [SerializeField]
+        private T value;
 
         public T Value
         {
             get
             {
+                if (ExcludedFromVariants)
+                {
+                    return value;
+                }
+
                 switch (activeVariant)
                 {
                     case ThemeVariant.Light:
@@ -70,6 +107,13 @@ namespace MVVMDatabinding.Theming
         }
 
         public override Type DataType => typeof(T);
+
+#if UNITY_EDITOR
+        public override object Editor_GetValue()
+        {
+            return excludedFromVariants ? value : light;
+        }
+#endif
     }
 
     public class ColorThemeValue : ThemeValue<Color> { }
@@ -80,6 +124,7 @@ namespace MVVMDatabinding.Theming
     public class FloatThemeValue : ThemeValue<float> { }
     public class Vector4ThemeValue : ThemeValue<Vector4> { }
     public class TMPGradientThemeValue : ThemeValue<TMP_ColorGradient> { }
+    public class FontSettingsThemeValue : ThemeValue<ThemeFontSettings> { }
 
     [Serializable]
     public class ThemeItemValue
@@ -130,10 +175,11 @@ namespace MVVMDatabinding.Theming
                 string selected = string.Empty;
                 if (themeRecord != null)
                 {
-                    if (themeRecord.TryGetInfoForId(itemId, out selected, out itemType))
+                    if (themeRecord.TryGetInfoForId(itemId, out selected, out itemType, out bool excludeFromVariants))
                     {
                         name = selected;
                         UpdateThemeValue();
+                        themeValue.ExcludedFromVariants = excludeFromVariants;
                     }
                     else
                     {
@@ -150,12 +196,13 @@ namespace MVVMDatabinding.Theming
             }
             set
             {
-                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType type))
+                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType type, out bool excludeFromVariants))
                 {
                     itemId = id;
                     name = value;
                     itemType = type;
                     UpdateThemeValue();
+                    themeValue.ExcludedFromVariants = excludeFromVariants;
                 }
                 else
                 {
@@ -198,7 +245,7 @@ namespace MVVMDatabinding.Theming
                 themeRecord.PopulateItemNameList(availableItemNames);
             }
 
-            if (ThemeRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out itemType))
+            if (ThemeRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out itemType, out bool excludeFromVariants))
             {
                 SelectedItemName = name;
             }
@@ -254,9 +301,14 @@ namespace MVVMDatabinding.Theming
                 themeValue = new TMPGradientThemeValue();
                 return true;
             }
+            if (itemType == ThemeItemType.FontSettings && (themeValue == null || themeValue.DataType != typeof(ThemeFontSettings)))
+            {
+                themeValue = new FontSettingsThemeValue();
+                return true;
+            }
 
-            return false;
 #endif
+            return false;
         }
 
         public void UpdateThemeValue()
@@ -295,6 +347,10 @@ namespace MVVMDatabinding.Theming
             {
                 themeValue = new TMPGradientThemeValue();
             }
+            else if (itemType == ThemeItemType.FontSettings && (themeValue == null || themeValue.DataType != typeof(ThemeFontSettings)))
+            {
+                themeValue = new FontSettingsThemeValue();
+            }
 #endif
         }
 
@@ -303,6 +359,13 @@ namespace MVVMDatabinding.Theming
             themeValue = null;
             UpdateThemeValue();
         }
+
+#if UNITY_EDITOR
+        public bool MatchesItem(ThemeRecord record, int itemId)
+        {
+            return record == themeRecord && itemId == this.itemId;
+        }
+#endif
     }
 
 
@@ -327,11 +390,13 @@ namespace MVVMDatabinding.Theming
                     }
                 }
 
+#if UNITY_EDITOR
                 if (saveChanges)
                 {
                     EditorUtility.SetDirty(this);
                     AssetDatabase.SaveAssetIfDirty(this);
                 }
+#endif
             }
         }
     }

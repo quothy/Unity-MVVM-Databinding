@@ -113,6 +113,11 @@ namespace MVVMDatabinding
 
             availableItemNames.Clear();
 
+            if (!DataRecordValid)
+            {
+                return;
+            }
+
             dataRecord.PopulateItemNameList(availableItemNames);
 
             if (dataRecord.TryGetNameForId(itemId, out string name))
@@ -135,6 +140,13 @@ namespace MVVMDatabinding
         public void Unsubscribe()
         {
             DataSourceManager.UnsubscribeFromItem(SourceId, itemId, OnDataItemUpdate);
+        }
+
+        public bool TryGetBindingInfo(out int sourceId, out int itemId)
+        {
+            sourceId = SourceId;
+            itemId = this.itemId;
+            return sourceId != int.MinValue && itemId != -1;
         }
 
         public bool TryGetData<T>(out T data)

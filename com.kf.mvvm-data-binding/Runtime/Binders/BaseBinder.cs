@@ -15,12 +15,12 @@ namespace MVVMDatabinding
     }
 
     [Serializable]
-    public abstract class BaseBinder<T> : IBinder
+    public abstract class BaseBinder : IBinder
     {
-        private const string noDataItemsOfTypeAvailableMessage = "<No items of type {0} to bind to>";
+        protected const string noDataItemsOfTypeAvailableMessage = "<No items of type {0} to bind to>";
 
         [SerializeField]
-        private DataRecord dataRecord = null;
+        protected DataRecord dataRecord = null;
 
         [ConditionalVisibility(nameof(editor_RecordRequiresExtraData), ConditionResultType.ShowIfEquals)]
         [SerializeField]
@@ -43,8 +43,6 @@ namespace MVVMDatabinding
         private string comment = string.Empty;
         private bool editor_IsCommentEmpty => string.IsNullOrWhiteSpace(comment);
 
-        private string editor_notAvailableMessage => string.Format(noDataItemsOfTypeAvailableMessage, typeof(T).ToString());
-
         protected string binderTypeName = string.Empty;
         private string BinderTypeName
         {
@@ -65,17 +63,17 @@ namespace MVVMDatabinding
             get => dataRecord != null;
         }
 
-        protected string SelectedItemName 
+        protected string SelectedItemName
         {
             get
             {
                 string selected = string.Empty;
                 if (dataRecord != null)
                 {
-                    if (availableItemNames.Count == 0 || (availableItemNames.Count == 1 && availableItemNames[0] == editor_notAvailableMessage))
+                    if (availableItemNames.Count == 0 || (availableItemNames.Count == 1 && availableItemNames[0] == GetTypedAvailabilityMessage()))
                     {
                         name = BinderTypeName;
-                        selected = editor_notAvailableMessage;
+                        selected = GetTypedAvailabilityMessage();
                         comment = string.Empty;
                     }
                     else if (dataRecord.TryGetNameForId(itemId, out selected))
@@ -83,7 +81,7 @@ namespace MVVMDatabinding
                         name = selected + BinderTypeName;
                         dataRecord.TryGetCommentForId(itemId, out comment);
                     }
-                    
+
                 }
                 return selected;
             }
@@ -110,8 +108,11 @@ namespace MVVMDatabinding
             }
         }
 
+        protected bool isListItem = false;
+        protected int listItemIndex = -1;
+
         private int fullSourceId = int.MinValue;
-        private GameObject bindingObject = null;
+        protected GameObject bindingObject = null;
 
 
         private bool editor_RecordRequiresExtraData => dataRecord != null && dataRecord.ExtraDataRequiredAtRuntime;
@@ -120,7 +121,7 @@ namespace MVVMDatabinding
         /// <summary>
         /// We're going to want to display strings for the items on the Inspector UI
         /// </summary>
-        private List<string> availableItemNames = null;
+        protected List<string> availableItemNames = null;
         protected int SourceId
         {
             get
@@ -135,10 +136,24 @@ namespace MVVMDatabinding
 
         public string ItemName { get; private set; }
 
+        /// <summary>
+        /// Warning: Does not get called the first time the DataBinder enables.
+        /// </summary>
+        public virtual void OnEnable() { }
+
+        public virtual void OnDisable() { }
+
         public virtual void Bind(GameObject bindingObject)
         {
             this.bindingObject = bindingObject;
             Subscribe();
+        }
+
+        public virtual void Bind(GameObject bindingObject, bool isListItem, int listItemIndex)
+        {
+            Bind(bindingObject);
+            // do list item specific stuff here
+
         }
 
         public virtual void Unbind()
@@ -156,20 +171,12 @@ namespace MVVMDatabinding
             DataSourceManager.UnsubscribeFromItem(SourceId, itemId, OnDataItemUpdate);
         }
 
-        public virtual void OnDataItemUpdate(IDataSource dataSource, int itemId)
-        {
-            if (dataSource.TryGetItem<T>(itemId, out T itemValue))
-            {
-                OnDataUpdated(itemValue);
-            }
-        }
+        public abstract void OnDataItemUpdate(IDataSource dataSource, int itemId);
 
         protected bool TryGetDataSource(out IDataSource dataSource)
         {
-            return DataSourceManager.TryGetDataSource(dataRecord.SourceId, out dataSource);
+            return DataSourceManager.TryGetDataSource(SourceId, out dataSource);
         }
-
-        protected abstract void OnDataUpdated(T dataValue);
 
         private bool TryResolveDataSourceId(out int sourceId)
         {
@@ -226,7 +233,7 @@ namespace MVVMDatabinding
 
             availableItemNames.Clear();
 
-            dataRecord.PopulateItemNameListForType(availableItemNames, typeof(T).ToString());
+            TryRetrieveTypedItemNames();
 
             if (availableItemNames.Count > 0)
             {
@@ -242,8 +249,49 @@ namespace MVVMDatabinding
             else
             {
                 // insert an empty string at the beginning of the list if no valid option has been selected                
-                availableItemNames.Insert(0, string.Format(noDataItemsOfTypeAvailableMessage, typeof(T).ToString()));
+                availableItemNames.Insert(0, GetTypedAvailabilityMessage());
             }
+        }
+
+        protected virtual void TryRetrieveTypedItemNames()
+        {
+            dataRecord.PopulateItemNameList(availableItemNames);
+        }
+        protected virtual string GetTypedAvailabilityMessage()
+        {
+            return noDataItemsOfTypeAvailableMessage;
+        }
+    }
+
+    [Serializable]
+    public abstract class BaseBinder<T> : BaseBinder
+    {
+        public override void OnDataItemUpdate(IDataSource dataSource, int itemId)
+        {
+            if (dataSource.TryGetItem<T>(itemId, out T itemValue))
+            {
+                OnDataUpdated(itemValue);
+            }
+        }
+
+        protected abstract void OnDataUpdated(T dataValue);
+
+        protected void TrySetDataValue(T dataValue)
+        {
+            if (TryGetDataSource(out IDataSource dataSource))
+            {
+                dataSource.TrySetItem<T>(itemId, dataValue);
+            }
+        }
+
+        protected override void TryRetrieveTypedItemNames()
+        {
+            dataRecord.PopulateItemNameListForType(availableItemNames, typeof(T).ToString());
+        }
+
+        protected override string GetTypedAvailabilityMessage()
+        {
+            return string.Format(noDataItemsOfTypeAvailableMessage, typeof(T).ToString());
         }
     }
 }

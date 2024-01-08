@@ -152,7 +152,7 @@ namespace MVVMDatabinding
 
         public void UnsubscribeFromItem(int id, DataItemUpdate onUpdate)
         {
-            if (subscriberLookup.TryGetValue(id, out List<DataItemUpdate> list))
+            if (subscriberLookup != null && subscriberLookup.TryGetValue(id, out List<DataItemUpdate> list))
             {
                 list.Remove(onUpdate);
             }
@@ -180,6 +180,40 @@ namespace MVVMDatabinding
             {
                 typedItem.Value = item;
                 success = true;
+            }
+
+            return success;
+        }
+
+        public bool TryGetItemAtIndex<T>(int id, int index, out T item)
+        {
+            bool success = false;
+            item = default(T);
+
+            if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is DataList<T> typedList)
+            {
+                if (typedList.Count > index)
+                {
+                    item = typedList[index];
+                    success = true;
+                }
+            }
+
+            return success;
+        }
+
+        public bool TrySetItemAtIndex<T>(int id, int index, T itemValue)
+        {
+            bool success = false;
+            if (dataItemLookup.TryGetValue(id, out IDataItem dataItem) && dataItem is DataItemList listItem && listItem.Value is DataList<T> typedList)
+            {
+                if (typedList.Count > index)
+                {
+                    typedList[index] = itemValue;
+                    success = true;
+
+                    // TODO: how to handle notifying that list contents have changed?
+                }
             }
 
             return success;

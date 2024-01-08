@@ -1,3 +1,6 @@
+// Copyright (c) 2023 Katie Fremont
+// Licensed under the MIT license
+
 using System;
 using System.Reflection;
 using System.Collections;
@@ -129,7 +132,7 @@ namespace MVVMDatabinding
         public static bool DigForValue<FieldType>(string propertyPath, Type targetType, object targetObject, out FieldType value)
         {
             propertyPath = propertyPath.Trim('.');
-            if (!IsNestedProperty(propertyPath) || !IsPropertyAListItem(propertyPath))
+            if (!IsNestedProperty(propertyPath) && !IsPropertyAListItem(propertyPath))
             {
                 return TryGetValue<FieldType>(propertyPath, targetType, targetObject, out value);
             }

@@ -20,6 +20,7 @@ namespace MVVMDatabinding.Theming
         Float,
         Vector4,
         TMPGradient,
+        FontSettings,
     }
 
     [Serializable]
@@ -29,6 +30,7 @@ namespace MVVMDatabinding.Theming
         public int Id = int.MinValue;
         public string Name = string.Empty;
         public ThemeItemType Type = ThemeItemType.None;
+        public bool ExcludeFromVariants = false;
     }
 
     [CreateAssetMenu(fileName = "ThemeRecord", menuName = "MVVM/Theming/Theme Record")]
@@ -65,32 +67,36 @@ namespace MVVMDatabinding.Theming
             }
         }
 
-        public bool TryGetInfoForName(string name, out int id, out ThemeItemType itemType)
+        public bool TryGetInfoForName(string name, out int id, out ThemeItemType itemType, out bool excludeFromVariants)
         {
             id = int.MinValue;
             itemType = ThemeItemType.None;
+            excludeFromVariants = false;
             foreach (ThemeRecordItem item in recordItems)
             {
                 if (name == item.Name)
                 {
                     id = item.Id;
                     itemType = item.Type;
+                    excludeFromVariants = item.ExcludeFromVariants;
                     break;
                 }
             }
             return id != int.MinValue;
         }
 
-        public bool TryGetInfoForId(int id, out string name, out ThemeItemType itemType)
+        public bool TryGetInfoForId(int id, out string name, out ThemeItemType itemType, out bool excludeFromVariants)
         {
             name = string.Empty;
             itemType = ThemeItemType.None;
+            excludeFromVariants = false;
             foreach (ThemeRecordItem item in recordItems)
             {
                 if (id == item.Id)
                 {
                     name = item.Name;
                     itemType = item.Type;
+                    excludeFromVariants = item.ExcludeFromVariants;
                     break;
                 }
             }

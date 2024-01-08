@@ -30,6 +30,10 @@ namespace MVVMDatabinding
         {
             EnsureCacheInitialized();
             dataItemType = null;
+            if (typeof(DataList).IsAssignableFrom(underlyingDataType))
+            {
+                return dataItemTypeCache.TryGetValue(typeof(DataList), out dataItemType);
+            }
             return dataItemTypeCache.TryGetValue(underlyingDataType, out dataItemType);
         }
 
@@ -45,6 +49,7 @@ namespace MVVMDatabinding
         private static void RegisterBuiltInTypes()
         {
             dataItemTypeCache[typeof(int)] = typeof(DataItemInt);
+            dataItemTypeCache[typeof(long)] = typeof(DataItemLong);
             dataItemTypeCache[typeof(float)] = typeof(DataItemFloat);
             dataItemTypeCache[typeof(bool)] = typeof(DataItemBool);
             dataItemTypeCache[typeof(string)] = typeof(DataItemString);
@@ -55,6 +60,8 @@ namespace MVVMDatabinding
             dataItemTypeCache[typeof(Vector2)] = typeof(DataItemVector2);
             dataItemTypeCache[typeof(Vector3)] = typeof(DataItemVector3);
             dataItemTypeCache[typeof(Vector4)] = typeof(DataItemVector4);
+
+            dataItemTypeCache[typeof(DataList)] = typeof(DataItemList);
 
             dataItemTypeCache[typeof(Action)] = typeof(DataItemAction);
         }

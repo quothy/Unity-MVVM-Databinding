@@ -119,5 +119,18 @@ namespace MVVMDatabinding.Theming
             // not needed
             return false;
         }
+
+        public bool TryGetItemAtIndex<T>(int id, int index, out T item)
+        {
+            // not needed
+            item = default(T);
+            return false;
+        }
+
+        public bool TrySetItemAtIndex<T>(int id, int index, T item)
+        {
+            // not needed
+            return false;
+        }
     }
 }

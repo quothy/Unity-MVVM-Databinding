@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor.Events;
@@ -136,6 +137,10 @@ namespace MVVMDatabinding
                 setUnderlyingValue = new UnityEvent<T>();
             }
 
+            if (typeof(IList).IsAssignableFrom(typeof(T)))
+            {
+                return;
+            }
             UnityAction<T> setAction = propertyInfo.GetSetMethod().CreateDelegate(typeof(UnityAction<T>), dataSourceOwner) as UnityAction<T>;
             UnityEventTools.AddPersistentListener<T>(setUnderlyingValue, setAction);
 #endif       
@@ -177,6 +182,7 @@ namespace MVVMDatabinding
     /// Any built in types that get added here must also be added to <see cref="DataItemTypeCache.RegisterBuiltInTypes"/>.
     /// </summary>
     public class DataItemInt : DataItem<int> { }
+    public class DataItemLong : DataItem<long> { }
     public class DataItemFloat : DataItem<float> { }
     public class DataItemBool : DataItem<bool> { }
     public class DataItemString : DataItem<string> { }
@@ -190,7 +196,20 @@ namespace MVVMDatabinding
 
     public class DataItemVector4 : DataItem<Vector4> { }
 
+    public class DataItemList : DataItem<DataList> 
+    {
+        public override void EditorInit(UnityEngine.Object dataSourceOwner, PropertyInfo propertyInfo)
+        {
+            // skip setting up setter logic for now 
+        }
 
+        public override void RuntimeInit(UnityEngine.Object dataSourceOwner)
+        {
+            base.RuntimeInit(dataSourceOwner);
+
+            Value.ListUpdated += RaiseValueChanged;
+        }
+    }
 
     public class DataItemAction : DataItem<Action> 
     {

@@ -17,21 +17,36 @@ MonoBehaviour:
   - Id: 971343254
     Name: TestColor
     Type: 1
+    ExcludeFromVariants: 0
   - Id: 474124520
     Name: TestMaterial
     Type: 3
+    ExcludeFromVariants: 0
   - Id: 1804571361
     Name: TestTexture
     Type: 4
+    ExcludeFromVariants: 0
   - Id: 751585132
     Name: TestInt
     Type: 5
+    ExcludeFromVariants: 0
   - Id: 1489431790
     Name: Test Text Color
     Type: 1
+    ExcludeFromVariants: 0
   - Id: 1658081638
     Name: Test Backplate
     Type: 1
+    ExcludeFromVariants: 0
   - Id: 7323843
     Name: Test Button Backplate Color
     Type: 1
+    ExcludeFromVariants: 0
+  - Id: 1081140946
+    Name: Test Font Settings
+    Type: 9
+    ExcludeFromVariants: 1
+  - Id: 1437340287
+    Name: Other Font Settings
+    Type: 9
+    ExcludeFromVariants: 1

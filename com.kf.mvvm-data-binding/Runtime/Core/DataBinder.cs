@@ -11,11 +11,33 @@ namespace MVVMDatabinding
         [SerializeReference]
         private List<IBinder> binders = null;
 
+        private bool bindingDone = false;
+
+        private void OnEnable()
+        {
+            if (bindingDone)
+            {
+                foreach (IBinder binder in binders)
+                {
+                    binder.OnEnable();
+                }
+            }
+        }
+
         private void Start()
         {
             foreach (IBinder binder in binders)
             {
                 binder.Bind(gameObject);
+            }
+            bindingDone = true;
+        }
+
+        private void OnDisable()
+        {
+            foreach (IBinder binder in binders)
+            {
+                binder.OnDisable();
             }
         }
 
