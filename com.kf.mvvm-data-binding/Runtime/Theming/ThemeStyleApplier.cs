@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Sprites;
 using UnityEngine;
 
 namespace MVVMDatabinding.Theming
@@ -76,6 +77,7 @@ namespace MVVMDatabinding.Theming
             }
         }
 
+        public ThemeStyle Style => themeStyle;
 
         private void Editor_PopulateStyleNameOptions()
         {
@@ -110,6 +112,52 @@ namespace MVVMDatabinding.Theming
     public class ThemeStyleApplier : MonoBehaviour
     {
         [SerializeField]
-        private List<ThemeStylePicker> themeStyles = null; 
+        private List<ThemeStylePicker> themeStyles = null;
+
+        private void OnValidate()
+        {
+            DiscoverThemeBinders(cachedBinders);
+            foreach (ThemeStylePicker picker in themeStyles)
+            {
+                UpdateBinders(picker);
+            }
+        }
+
+#if UNITY_EDITOR   
+        private List<ThemeBinder> cachedBinders = new List<ThemeBinder>();
+        public void Editor_OnThemeStyleChanged(ThemeStylePicker picker)
+        {
+            DiscoverThemeBinders(cachedBinders);
+            UpdateBinders(picker);
+        }
+
+        private void UpdateBinders(ThemeStylePicker picker)
+        {
+            foreach (ThemeBinder cached in cachedBinders)
+            {
+                foreach (IThemeBinder binder in cached.Binders)
+                {
+                    binder.Editor_SetStyle(picker.Style);
+                }
+            }
+        }
+
+        private void DiscoverThemeBinders(List<ThemeBinder> binders)
+        {
+            // need to be able to collect up and cache any sibling or child ThemeBinders in 
+            // order to propagate selected style info from ThemeStylePickers
+            binders.Clear();
+
+            // check for sibling first
+            if (gameObject.TryGetComponent<ThemeBinder>(out ThemeBinder binder))
+            {
+                binders.Add(binder);
+            }
+
+            // then get any child ThemeBinders
+            var childBinders = gameObject.GetComponentsInChildren<ThemeBinder>();
+            binders.AddRange(childBinders);
+        }
+#endif
     }
 }
