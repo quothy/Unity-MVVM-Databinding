@@ -6,7 +6,7 @@ namespace MVVMDatabinding.Theming
     public interface IThemeBinder
     {
         string Name { get; }
-        bool DataRecordValid { get; }
+        bool ThemeTemplateValid { get; }
 
         void Bind();
         void Unbind();
@@ -14,10 +14,11 @@ namespace MVVMDatabinding.Theming
         void OnThemeItemUpdate(IDataSource dataSource, int itemId);
 
 #if UNITY_EDITOR
-        ThemeRecord Record { get; }
+        ThemeStyleTemplate Template { get; }
         int ItemId { get; }
         // NOTE: We're using object here only because this is strictly an Editor time call. 
         void Editor_ForceUpdateItemValue(object value);
+        void Editor_SetStyle(ThemeStyle style);
 #endif
     }
 }

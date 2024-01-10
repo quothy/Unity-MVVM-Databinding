@@ -12,6 +12,8 @@ namespace MVVMDatabinding.Theming
     {
         public List<ThemeValueList> ThemeValueListCollection = null;
 
+        public List<ThemeStyle> ThemeStyleList = null;
+
         public void Editor_LoadTheme()
         {
             if (ThemeManager.IsInitialized)

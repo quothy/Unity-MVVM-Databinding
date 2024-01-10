@@ -141,17 +141,31 @@ namespace MVVMDatabinding.Theming
             {
                 IThemeBinder binder = serializedObject.FindProperty("binders").GetArrayElementAtIndex(binderIndex).managedReferenceValue as IThemeBinder;
 
-                foreach (ThemeValueList valueList in selected.ThemeValueListCollection)
+                foreach (ThemeStyle style in selected.ThemeStyleList)
                 {
-                    foreach (ThemeItemValue value in valueList.Items)
+                    if (binder.Template == style.Template && binder.ThemeTemplateValid)
                     {
-                        if (value.MatchesItem(binder.Record, binder.ItemId))
+                        foreach (ThemeStyleValue styleValue in style.Values)
                         {
-                            binder.Editor_ForceUpdateItemValue(value.ThemeValue.Editor_GetValue());
-                            break;
+                            if (binder.ItemId == styleValue.Id)
+                            {
+                                binder.Editor_ForceUpdateItemValue(styleValue);
+                            }
                         }
                     }
                 }
+
+                //foreach (ThemeValueList valueList in selected.ThemeValueListCollection)
+                //{
+                //    foreach (ThemeItemValue value in valueList.Items)
+                //    {
+                //        if (value.MatchesItem(binder.Record, binder.ItemId))
+                //        {
+                //            binder.Editor_ForceUpdateItemValue(value.ThemeValue.Editor_GetValue());
+                //            break;
+                //        }
+                //    }
+                //}
             }
         }
 

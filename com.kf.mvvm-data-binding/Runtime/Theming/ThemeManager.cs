@@ -49,31 +49,58 @@ namespace MVVMDatabinding.Theming
 
         public void LoadTheme(Theme theme)
         {
-            foreach (ThemeValueList valueList in theme.ThemeValueListCollection)
+            foreach (ThemeStyle style in theme.ThemeStyleList)
             {
-                foreach (ThemeItemValue themeItemValue in valueList.Items)
+                foreach (ThemeStyleValue styleValue in style.Values)
                 {
-                    int sourceId = GetThemeSourceId(themeItemValue.RecordName);
+                    int sourceId = GetThemeSourceId(style.StyleName);
                     if (!themeDataSourceLookup.TryGetValue(sourceId, out ThemeDataSource themeDataSource))
                     {
                         themeDataSource = new ThemeDataSource();
-                        themeDataSource.Initialize(themeItemValue.RecordName, false);
+                        themeDataSource.Initialize(style.StyleName, false);
                         themeDataSourceLookup[sourceId] = themeDataSource;
                         themeDataSource.SetThemeVariant(ActiveVariant);
                     }
 
-                    if (!themeDataSource.TryGetThemeItem(themeItemValue.Id, out ThemeItem themeItem))
+                    if (!themeDataSource.TryGetThemeItem(styleValue.Id, out ThemeItem themeItem))
                     {
                         // TODO: pool these for performance? It'll at least make sure we allocate most of the memory up front
                         themeItem = new ThemeItem();
-                        themeItem.Initialize(themeItemValue.Id, themeItemValue.Name);
+                        themeItem.Initialize(styleValue.Id, styleValue.Name);
                         themeDataSource.AddItem(themeItem);
                         themeItem.SetThemeVariant(ActiveVariant);
                     }
 
-                    themeItem.SetThemeItemValue(themeItemValue);
+                    themeItem.SetThemeItemValue(styleValue);
+
                 }
             }
+
+            //foreach (ThemeValueList valueList in theme.ThemeValueListCollection)
+            //{
+            //    foreach (ThemeItemValue themeItemValue in valueList.Items)
+            //    {
+            //        int sourceId = GetThemeSourceId(themeItemValue.RecordName);
+            //        if (!themeDataSourceLookup.TryGetValue(sourceId, out ThemeDataSource themeDataSource))
+            //        {
+            //            themeDataSource = new ThemeDataSource();
+            //            themeDataSource.Initialize(themeItemValue.RecordName, false);
+            //            themeDataSourceLookup[sourceId] = themeDataSource;
+            //            themeDataSource.SetThemeVariant(ActiveVariant);
+            //        }
+
+            //        if (!themeDataSource.TryGetThemeItem(themeItemValue.Id, out ThemeItem themeItem))
+            //        {
+            //            // TODO: pool these for performance? It'll at least make sure we allocate most of the memory up front
+            //            themeItem = new ThemeItem();
+            //            themeItem.Initialize(themeItemValue.Id, themeItemValue.Name);
+            //            themeDataSource.AddItem(themeItem);
+            //            themeItem.SetThemeVariant(ActiveVariant);
+            //        }
+
+            //        themeItem.SetThemeItemValue(themeItemValue);
+            //    }
+            //}
         }
 
         public void ChangeThemeVariant(ThemeVariant variant)

@@ -23,7 +23,7 @@ namespace MVVMDatabinding.Theming
         private List<ThemeTemplateItem> templateItems = null;
 
         public List<ThemeTemplateItem> TemplateItems => templateItems;
-
+        public int ItemCount => templateItems.Count;
 #if UNITY_EDITOR
         private List<int> usedIds = new List<int>();
 #endif
