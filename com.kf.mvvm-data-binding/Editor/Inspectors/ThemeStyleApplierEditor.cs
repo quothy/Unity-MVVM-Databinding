@@ -16,20 +16,22 @@ namespace MVVMDatabinding.Theming
 
             GUILayout.Space(10);
 
-            if (GUILayout.Button("Update Visuals to Match Style", GUILayout.Height(30)))
+            if (!Application.isPlaying)
             {
-                EditorGUIUtility.ShowObjectPicker<Theme>(selectedTheme, false, "t:Theme", 0);
-            }
-
-
-            if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "ObjectSelectorUpdated")
-            {
-                selectedTheme = EditorGUIUtility.GetObjectPickerObject() as Theme;
-                if (selectedTheme != null)
+                if (GUILayout.Button("Update Visuals to Match Style", GUILayout.Height(30)))
                 {
-                    Debug.Log("Updating visuals with selected theme");
-                    // try to update the value
-                    (target as ThemeStyleApplier).Editor_ForceUpdateVisuals(selectedTheme);
+                    EditorGUIUtility.ShowObjectPicker<Theme>(selectedTheme, false, "t:Theme", 0);
+                }
+
+                if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "ObjectSelectorUpdated")
+                {
+                    selectedTheme = EditorGUIUtility.GetObjectPickerObject() as Theme;
+                    if (selectedTheme != null)
+                    {
+                        Debug.Log("Updating visuals with selected theme");
+                        // try to update the value
+                        (target as ThemeStyleApplier).Editor_ForceUpdateVisuals(selectedTheme);
+                    }
                 }
             }
         }
