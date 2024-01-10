@@ -10,19 +10,27 @@ namespace MVVMDatabinding
     [Serializable]
     public class DataRecordItem
     {
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
         public int Id = -1;
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
         public string Name = string.Empty;
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
         public string Type = string.Empty;
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
         public string Comment = string.Empty;
     }
 
     public class DataRecord : ScriptableObject
     {
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
         public int SourceId = -1;
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
         public string SourceName = string.Empty;
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
         public string SourceType = string.Empty;
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
         public bool ExtraDataRequiredAtRuntime = false;
-
+        
         [SerializeField]
         private List<DataRecordItem> dataItems = null;
 
