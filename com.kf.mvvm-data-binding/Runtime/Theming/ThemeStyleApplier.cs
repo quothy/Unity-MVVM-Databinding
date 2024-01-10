@@ -1,0 +1,115 @@
+using System;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
+namespace MVVMDatabinding.Theming
+{
+    [Serializable]
+    public class ThemeStylePicker
+    {
+        private const string noStylesMatchingTemplateAvailableMessage = "<No styles of template {0} found>";
+        [SerializeField]
+        private ThemeStyleTemplate template = null;
+
+        [ConditionalVisibility(nameof(TemplateValid), ConditionResultType.ShowIfEquals)]
+        [DropdownSelection(nameof(StyleNameOptions), nameof(SelectedItemName))]
+        [SerializeField]
+        private ThemeStyle themeStyle = null;
+
+        protected bool TemplateValid => template != null;
+
+        // TODO: cache these globally so each ThemeStyleApplier doesn't need to do the work?
+        private Dictionary<string, ThemeStyle> cachedStyles = new Dictionary<string, ThemeStyle>();
+        private List<string> styleNameOptions = null;
+        public List<string> StyleNameOptions
+        {
+            get
+            {
+                if (styleNameOptions == null || cachedStyles.Count == 0 || !cachedStyles.TryGetValue(styleNameOptions[0], out var style) || style.Template != template)
+                {
+                    if (styleNameOptions == null)
+                    {
+                        styleNameOptions = new List<string>();
+                    }
+
+                    Editor_PopulateStyleNameOptions();
+                }
+
+                return styleNameOptions;
+            }
+        }
+
+        private string editor_notAvailableMessage => string.Format(noStylesMatchingTemplateAvailableMessage, template != null ? template.ToString() : "null");
+        protected string SelectedItemName
+        {
+            get
+            {
+                string selected = string.Empty;
+                if (template != null)
+                {
+                    if (styleNameOptions.Count == 0 || (styleNameOptions.Count == 1 && styleNameOptions[0] == editor_notAvailableMessage))
+                    {
+                        selected = editor_notAvailableMessage;
+                    }
+                    else if (themeStyle != null)
+                    {
+                        selected = themeStyle.StyleName;
+                    }
+                    else
+                    {
+                        selected = string.Empty;
+                    }
+
+                }
+                return selected;
+            }
+            set
+            {
+                if (template && cachedStyles.TryGetValue(value, out ThemeStyle style))
+                {
+                    themeStyle = style;
+                    // TODO: need to propagate the change through any child ThemeBinders
+                    // TODO: change ThemeBinders to work with styles & templates and add a way to pass in style-specific info
+                    // TODO: should we enable style changes at runtime?
+                }
+            }
+        }
+
+
+        private void Editor_PopulateStyleNameOptions()
+        {
+#if UNITY_EDITOR
+            string[] styleGuids = AssetDatabase.FindAssets("t:ThemeStyle");
+            if (cachedStyles == null)
+            {
+                cachedStyles = new Dictionary<string, ThemeStyle>(styleGuids.Length);
+            }
+            styleNameOptions.Clear();
+            cachedStyles.Clear();
+
+            foreach (string guid in styleGuids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                ThemeStyle style = AssetDatabase.LoadAssetAtPath<ThemeStyle>(assetPath);
+                if (style.Template == template && !cachedStyles.TryGetValue(style.StyleName, out  ThemeStyle unused))
+                {
+                    cachedStyles.Add(style.StyleName, style);
+                    styleNameOptions.Add(style.StyleName);
+                }
+            }
+
+            if (themeStyle == null && cachedStyles.Count > 0)
+            {
+                styleNameOptions.Insert(0, string.Empty);
+            }
+#endif
+        }
+    }
+
+    public class ThemeStyleApplier : MonoBehaviour
+    {
+        [SerializeField]
+        private List<ThemeStylePicker> themeStyles = null; 
+    }
+}
