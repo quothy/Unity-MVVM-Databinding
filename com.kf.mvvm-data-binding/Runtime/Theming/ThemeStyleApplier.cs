@@ -10,6 +10,9 @@ namespace MVVMDatabinding.Theming
     public class ThemeStylePicker
     {
         private const string noStylesMatchingTemplateAvailableMessage = "<No styles of template {0} found>";
+
+        internal event Action<ThemeStylePicker> ThemeStyleChanged = null;
+
         [SerializeField]
         private ThemeStyleTemplate template = null;
 
@@ -70,6 +73,7 @@ namespace MVVMDatabinding.Theming
                 if (template && cachedStyles.TryGetValue(value, out ThemeStyle style))
                 {
                     themeStyle = style;
+                    ThemeStyleChanged?.Invoke(this);
                     // TODO: need to propagate the change through any child ThemeBinders
                     // TODO: change ThemeBinders to work with styles & templates and add a way to pass in style-specific info
                     // TODO: should we enable style changes at runtime?
@@ -78,6 +82,18 @@ namespace MVVMDatabinding.Theming
         }
 
         public ThemeStyle Style => themeStyle;
+
+        public bool Editor_Subscribed => ThemeStyleChanged != null;
+
+        internal void Editor_OnValidate()
+        {
+            if (styleNameOptions == null)
+            {
+                styleNameOptions = new List<string>();
+            }
+
+            Editor_PopulateStyleNameOptions();
+        }
 
         private void Editor_PopulateStyleNameOptions()
         {
@@ -119,16 +135,41 @@ namespace MVVMDatabinding.Theming
             DiscoverThemeBinders(cachedBinders);
             foreach (ThemeStylePicker picker in themeStyles)
             {
+                if (!picker.Editor_Subscribed)
+                {
+                    picker.ThemeStyleChanged += Editor_OnThemeStyleChanged;
+                }
+                picker.Editor_OnValidate();
                 UpdateBinders(picker);
             }
         }
 
-#if UNITY_EDITOR   
+#if UNITY_EDITOR
+        private bool subscribedToPickerEvent = false;
+
         private List<ThemeBinder> cachedBinders = new List<ThemeBinder>();
         public void Editor_OnThemeStyleChanged(ThemeStylePicker picker)
         {
+            if (!themeStyles.Contains(picker))
+            {
+                return;
+            }
+
             DiscoverThemeBinders(cachedBinders);
             UpdateBinders(picker);
+        }
+
+        public void Editor_ForceUpdateVisuals(Theme selectedTheme)
+        {
+            DiscoverThemeBinders(cachedBinders);
+
+            foreach (ThemeBinder cached in cachedBinders)
+            {
+                foreach (IThemeBinder binder in cached.Binders)
+                {
+                    binder.Editor_ForceUpdateValueFromTheme(selectedTheme);
+                }
+            }
         }
 
         private void UpdateBinders(ThemeStylePicker picker)

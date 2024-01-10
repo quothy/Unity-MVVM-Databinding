@@ -161,6 +161,24 @@ namespace MVVMDatabinding.Theming
             OnDataUpdated((T)value);
         }
 
+        public void Editor_ForceUpdateValueFromTheme(Theme theme)
+        {
+            foreach (ThemeStyle style in theme.ThemeStyleList)
+            {
+                if (style.Template == Template && style == themeStyle)
+                {
+                    foreach (var value in style.Values)
+                    {
+                        if (value.Id == this.itemId)
+                        {
+                            OnDataUpdated((T)value.ThemeValue.Editor_GetValue());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         public void Editor_SetStyle(ThemeStyle style)
         {
             if (style.Template != Template)

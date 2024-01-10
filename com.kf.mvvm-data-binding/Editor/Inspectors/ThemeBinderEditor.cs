@@ -81,18 +81,6 @@ namespace MVVMDatabinding.Theming
             if (binderProp.managedReferenceValue != null)
             {
                 EditorGUI.PropertyField(rect, binderProp, new GUIContent(binderProp.FindPropertyRelative("name").stringValue), true);
-                if (!Application.isPlaying )//&& binderProp.isExpanded)
-                {
-                    // add a button that lets you pick a Theme asset, then finds the given item and applies the value
-                    Vector2 buttonSize = new Vector2(75, 25);
-                    Vector2 buttonLocation = new Vector2(rect.x + rect.width, rect.y + buttonSize.y) - buttonSize;
-                    Rect buttonRect = new Rect(buttonLocation, buttonSize);
-                    if (GUI.Button(buttonRect, "Update"))
-                    {
-                        binderIndex = index;
-                        EditorGUIUtility.ShowObjectPicker<Theme>(selectedTheme, false, "t:Theme", 0);
-                    }
-                }
             }
         }
 
@@ -154,18 +142,6 @@ namespace MVVMDatabinding.Theming
                         }
                     }
                 }
-
-                //foreach (ThemeValueList valueList in selected.ThemeValueListCollection)
-                //{
-                //    foreach (ThemeItemValue value in valueList.Items)
-                //    {
-                //        if (value.MatchesItem(binder.Record, binder.ItemId))
-                //        {
-                //            binder.Editor_ForceUpdateItemValue(value.ThemeValue.Editor_GetValue());
-                //            break;
-                //        }
-                //    }
-                //}
             }
         }
 

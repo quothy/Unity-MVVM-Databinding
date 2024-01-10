@@ -18,6 +18,7 @@ namespace MVVMDatabinding.Theming
         int ItemId { get; }
         // NOTE: We're using object here only because this is strictly an Editor time call. 
         void Editor_ForceUpdateItemValue(object value);
+        void Editor_ForceUpdateValueFromTheme(Theme theme);
         void Editor_SetStyle(ThemeStyle style);
 #endif
     }
