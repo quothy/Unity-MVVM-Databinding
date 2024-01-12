@@ -181,7 +181,7 @@ namespace MVVMDatabinding.Theming
 
         public void Editor_SetStyle(ThemeStyle style)
         {
-            if (style.Template != Template)
+            if (style == null || style.Template != Template)
             {
                 return;
             }

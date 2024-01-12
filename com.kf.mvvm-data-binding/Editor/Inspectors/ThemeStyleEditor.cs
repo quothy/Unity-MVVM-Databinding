@@ -25,12 +25,15 @@ namespace MVVMDatabinding.Theming
             if (themeStyle.Values?.Count != valueListCount)
             {
                 CheckUniqueness();
-                valueListCount = themeStyle.Values != null ? themeStyle.Values.Count : 0;
+                valueListCount = themeStyle != null && themeStyle.Values != null ? themeStyle.Values.Count : 0;
 
-                // TODO: propagate template from style to style value
-                foreach (var value in themeStyle.Values)
+                if (themeStyle != null)
                 {
-                    value.Editor_SetTemplate(themeStyle.Template);
+                    // TODO: propagate template from style to style value
+                    foreach (var value in themeStyle.Values)
+                    {
+                        value.Editor_SetTemplate(themeStyle.Template);
+                    }
                 }
             }
         }

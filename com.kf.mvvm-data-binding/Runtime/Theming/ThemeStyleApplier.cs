@@ -30,6 +30,7 @@ namespace MVVMDatabinding.Theming
         {
             get
             {
+
                 if (styleNameOptions == null || cachedStyles.Count == 0 || !cachedStyles.TryGetValue(styleNameOptions[0], out var style) || style.Template != template)
                 {
                     if (styleNameOptions == null)
@@ -38,6 +39,12 @@ namespace MVVMDatabinding.Theming
                     }
 
                     Editor_PopulateStyleNameOptions();
+                }
+
+                // reset the themeStyle to null when changing the template to a different template
+                if (themeStyle != null && (cachedStyles.Count == 0 || !styleNameOptions.Contains(themeStyle.StyleName)))
+                {
+                    themeStyle = null;
                 }
 
                 return styleNameOptions;
