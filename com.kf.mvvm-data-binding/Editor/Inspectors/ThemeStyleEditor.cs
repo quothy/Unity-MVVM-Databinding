@@ -27,7 +27,7 @@ namespace MVVMDatabinding.Theming
                 CheckUniqueness();
                 valueListCount = themeStyle != null && themeStyle.Values != null ? themeStyle.Values.Count : 0;
 
-                if (themeStyle != null)
+                if (themeStyle != null && themeStyle.Values != null)
                 {
                     // TODO: propagate template from style to style value
                     foreach (var value in themeStyle.Values)
