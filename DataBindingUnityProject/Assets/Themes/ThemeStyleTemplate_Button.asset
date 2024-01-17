@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c076e3a1dea9705498d6caa85e435548, type: 3}
-  m_Name: Theme
+  m_Script: {fileID: 11500000, guid: 230f7018788bea0409fbe0f4290bb022, type: 3}
+  m_Name: ThemeStyleTemplate_Button
   m_EditorClassIdentifier: 
-  ThemeValueListCollection: []
-  ThemeStyleList:
-  - {fileID: 11400000, guid: 38c7a44fec5b24e4a9f3290e85d3f74c, type: 2}
-  - {fileID: 11400000, guid: 13acd0e3e3870ce47931ee42161838e9, type: 2}
+  templateItems:
+  - Id: 110047568
+    Name: Backplate
+    Type: 1
+    ExcludeFromVariants: 0

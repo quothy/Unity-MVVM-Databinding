@@ -1,10 +1,9 @@
-// Copyright (c) 2023 Katie Fremont
+// Copyright (c) 2024 Katie Fremont
 // Licensed under the MIT license
 
 using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -127,10 +126,10 @@ namespace MVVMDatabinding.Theming
     public class FontSettingsThemeValue : ThemeValue<ThemeFontSettings> { }
 
     [Serializable]
-    public class ThemeItemValue
+    public class ThemeStyleValue
     {
         [SerializeField]
-        private ThemeRecord themeRecord = null;
+        private ThemeStyleTemplate themeTemplate = null;
 
         [DropdownSelection(nameof(ItemNameOptions), nameof(SelectedItemName))]
         [SerializeField]
@@ -152,7 +151,7 @@ namespace MVVMDatabinding.Theming
 
         public bool ThemeRecordValid
         {
-            get => themeRecord != null;
+            get => themeTemplate != null;
         }
 
         private List<string> availableItemNames = null;
@@ -167,15 +166,15 @@ namespace MVVMDatabinding.Theming
                 return availableItemNames;
             }
         }
-        
+
         protected string SelectedItemName
         {
             get
             {
                 string selected = string.Empty;
-                if (themeRecord != null)
+                if (themeTemplate != null)
                 {
-                    if (themeRecord.TryGetInfoForId(itemId, out selected, out itemType, out bool excludeFromVariants))
+                    if (themeTemplate.TryGetInfoForId(itemId, out selected, out itemType, out bool excludeFromVariants))
                     {
                         name = selected;
                         UpdateThemeValue();
@@ -196,7 +195,7 @@ namespace MVVMDatabinding.Theming
             }
             set
             {
-                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType type, out bool excludeFromVariants))
+                if (themeTemplate && themeTemplate.TryGetInfoForName(value, out int id, out ThemeItemType type, out bool excludeFromVariants))
                 {
                     itemId = id;
                     name = value;
@@ -213,8 +212,6 @@ namespace MVVMDatabinding.Theming
 
         public IThemeValue ThemeValue => themeValue;
 
-
-        public string RecordName => themeRecord.RecordName;
 
         public UnityEvent ValueChanged { get; protected set; } = null;
 
@@ -242,10 +239,10 @@ namespace MVVMDatabinding.Theming
 
             if (ThemeRecordValid)
             {
-                themeRecord.PopulateItemNameList(availableItemNames);
+                themeTemplate.PopulateItemNameList(availableItemNames);
             }
 
-            if (ThemeRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out itemType, out bool excludeFromVariants))
+            if (ThemeRecordValid && themeTemplate.TryGetInfoForId(itemId, out string name, out itemType, out bool excludeFromVariants))
             {
                 SelectedItemName = name;
             }
@@ -256,6 +253,14 @@ namespace MVVMDatabinding.Theming
             }
         }
 
+        public void Editor_SetTemplate(ThemeStyleTemplate template)
+        {
+            if (template != this.themeTemplate)
+            {
+                themeTemplate = template;
+                // TODO: clear existing values in case it changes?
+            }
+        }
 
         public bool Editor_OnValidate()
         {
@@ -265,7 +270,7 @@ namespace MVVMDatabinding.Theming
             {
                 themeValue = new ColorThemeValue();
                 return true;
-            }            
+            }
             if (itemType == ThemeItemType.Gradient && (themeValue == null || themeValue.DataType != typeof(Gradient)))
             {
                 themeValue = new GradientThemeValue();
@@ -276,7 +281,7 @@ namespace MVVMDatabinding.Theming
                 themeValue = new MaterialThemeValue();
                 return true;
             }
-            if (itemType == ThemeItemType.Texture  && (themeValue == null || themeValue.DataType != typeof(Texture)))
+            if (itemType == ThemeItemType.Texture && (themeValue == null || themeValue.DataType != typeof(Texture)))
             {
                 themeValue = new TextureThemeValue();
                 return true;
@@ -361,43 +366,45 @@ namespace MVVMDatabinding.Theming
         }
 
 #if UNITY_EDITOR
-        public bool MatchesItem(ThemeRecord record, int itemId)
+        public bool MatchesItem(ThemeStyleTemplate template, int itemId)
         {
-            return record == themeRecord && itemId == this.itemId;
+            return template == themeTemplate && itemId == this.itemId;
         }
 #endif
     }
 
-
-    [CreateAssetMenu(fileName = "ThemeValueList", menuName ="MVVM/Theming/Theme Value List")]
-    public class ThemeValueList : ScriptableObject
+    /// <summary>
+    /// A ThemeStyle implements values for items defined in a template. There can be 
+    /// multiple ThemeStyle objects for each template (e.g.- Button template with primary/secondary/CTA
+    /// styles based on it). ThemeStyles define dark/light/high contrast values for selected items defined
+    /// in the theme template (e.g.- font color). 
+    /// </summary>
+    [CreateAssetMenu(fileName = "ThemeStyle", menuName = "MVVM/Theming/Theme Style")]
+    public class ThemeStyle : ScriptableObject
     {
         [SerializeField]
-        private List<ThemeItemValue> items = null;
+        private string styleName = string.Empty;
 
-        public List<ThemeItemValue> Items => items;
+        [SerializeField]
+        private ThemeStyleTemplate template = null;
 
-        private void OnValidate()
+        [SerializeField]
+        private List<ThemeStyleValue> themeStyleValues = null;
+
+        public string StyleName => styleName;
+        public ThemeStyleTemplate Template => template;
+        public List<ThemeStyleValue> Values => themeStyleValues;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            if (!Application.isPlaying)
-            {
-                bool saveChanges = false;
-                foreach (ThemeItemValue value in items)
-                {
-                    if (value.Editor_OnValidate())
-                    {
-                        saveChanges = true;
-                    }
-                }
 
-#if UNITY_EDITOR
-                if (saveChanges)
-                {
-                    EditorUtility.SetDirty(this);
-                    AssetDatabase.SaveAssetIfDirty(this);
-                }
-#endif
-            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
         }
     }
 }

@@ -1,8 +1,7 @@
-// Copyright (c) 2023 Katie Fremont
+// Copyright (c) 2024 Katie Fremont
 // Licensed under the MIT license
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -23,34 +22,31 @@ namespace MVVMDatabinding.Theming
         FontSettings,
     }
 
-    [Serializable]
-    public class ThemeRecordItem
+    [CreateAssetMenu(fileName = "ThemeStyleTemplate", menuName = "MVVM/Theming/Theme Style Template")]
+    public class ThemeStyleTemplate : ScriptableObject
     {
-        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
-        public int Id = int.MinValue;
-        public string Name = string.Empty;
-        public ThemeItemType Type = ThemeItemType.None;
-        public bool ExcludeFromVariants = false;
-    }
-
-    [CreateAssetMenu(fileName = "ThemeRecord", menuName = "MVVM/Theming/Theme Record")]
-    public class ThemeRecord : ScriptableObject
-    {
-        [SerializeField]
-        private string recordName = string.Empty;
+        [Serializable]
+        public class ThemeTemplateItem
+        {
+            [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
+            public int Id = int.MinValue;
+            public string Name = string.Empty;
+            public ThemeItemType Type = ThemeItemType.None;
+            public bool ExcludeFromVariants = false;
+        }
 
         [SerializeField]
-        private List<ThemeRecordItem> recordItems = null;
+        private List<ThemeTemplateItem> templateItems = null;
 
-        public string RecordName => recordName;
-        public List<ThemeRecordItem> RecordItems => recordItems;
-
+        public List<ThemeTemplateItem> TemplateItems => templateItems;
+        public int ItemCount => templateItems.Count;
 #if UNITY_EDITOR
         private List<int> usedIds = new List<int>();
 #endif
+
         public void PopulateItemNameList(List<string> itemNames)
         {
-            foreach (ThemeRecordItem item in recordItems)
+            foreach (ThemeTemplateItem item in templateItems)
             {
                 itemNames.Add(item.Name);
             }
@@ -58,7 +54,7 @@ namespace MVVMDatabinding.Theming
 
         public void PopulateItemNameListForType(List<string> itemNames, ThemeItemType type)
         {
-            foreach (ThemeRecordItem item in recordItems)
+            foreach (ThemeTemplateItem item in templateItems)
             {
                 if (item.Type == type)
                 {
@@ -72,7 +68,7 @@ namespace MVVMDatabinding.Theming
             id = int.MinValue;
             itemType = ThemeItemType.None;
             excludeFromVariants = false;
-            foreach (ThemeRecordItem item in recordItems)
+            foreach (ThemeTemplateItem item in templateItems)
             {
                 if (name == item.Name)
                 {
@@ -90,7 +86,7 @@ namespace MVVMDatabinding.Theming
             name = string.Empty;
             itemType = ThemeItemType.None;
             excludeFromVariants = false;
-            foreach (ThemeRecordItem item in recordItems)
+            foreach (ThemeTemplateItem item in templateItems)
             {
                 if (id == item.Id)
                 {
@@ -103,12 +99,13 @@ namespace MVVMDatabinding.Theming
             return !string.IsNullOrWhiteSpace(name);
         }
 
+
         private void OnValidate()
         {
 #if UNITY_EDITOR
             bool anySet = false;
             usedIds.Clear();
-            foreach (var item in recordItems)
+            foreach (var item in templateItems)
             {
                 if (item.Id == int.MinValue || usedIds.Contains(item.Id) || item.Id == 0)
                 {
@@ -126,5 +123,6 @@ namespace MVVMDatabinding.Theming
             }
 #endif
         }
+
     }
 }

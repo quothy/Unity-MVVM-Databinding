@@ -12,7 +12,7 @@ namespace MVVMDatabinding.Theming
     public class ThemeDataResolver
     {
         [SerializeField]
-        protected ThemeRecord themeRecord = null;
+        protected ThemeStyleTemplate themeTemplate = null;
 
         [DropdownSelection(nameof(ItemNameOptions), nameof(SelectedItemName))]
         [SerializeField]
@@ -34,11 +34,13 @@ namespace MVVMDatabinding.Theming
         /// </summary>
         private List<string> availableItemNames = null;
 
+        private ThemeStyle themeStyle = null;
+
         public event Action DataUpdated = null;
 
         public bool DataRecordValid
         {
-            get => themeRecord != null;
+            get => themeTemplate != null;
         }
 
         protected string SelectedItemName
@@ -46,16 +48,16 @@ namespace MVVMDatabinding.Theming
             get
             {
                 string selected = string.Empty;
-                if (themeRecord != null)
+                if (themeTemplate != null)
                 {
-                    themeRecord.TryGetInfoForId(itemId, out selected, out ThemeItemType unused, out bool excludeFromVariants);
+                    themeTemplate.TryGetInfoForId(itemId, out selected, out ThemeItemType unused, out bool excludeFromVariants);
                     name = selected;
                 }
                 return selected;
             }
             set
             {
-                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType unused, out bool excludeFromVariants))
+                if (themeTemplate && themeTemplate.TryGetInfoForName(value, out int id, out ThemeItemType unused, out bool excludeFromVariants))
                 {
                     itemId = id;
                     name = value;
@@ -86,10 +88,10 @@ namespace MVVMDatabinding.Theming
 
             if (DataRecordValid)
             {
-                themeRecord.PopulateItemNameList(availableItemNames);
+                themeTemplate.PopulateItemNameList(availableItemNames);
             }
 
-            if (DataRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out ThemeItemType unused, out bool excludeFromVariants))
+            if (DataRecordValid && themeTemplate.TryGetInfoForId(itemId, out string name, out ThemeItemType unused, out bool excludeFromVariants))
             {
                 SelectedItemName = name;
             }
@@ -100,16 +102,39 @@ namespace MVVMDatabinding.Theming
             }
         }
 
-        public void Subscribe()
+        public void Subscribe(GameObject go)
         {
-            int sourceId = ThemeManager.GetThemeSourceId(themeRecord.RecordName);
+            // try to resolve the ThemeStyle via ThemeStyleApplier
+            if (themeStyle == null)
+            {
+                if (go.TryGetComponent<ThemeStyleApplier>(out ThemeStyleApplier applier) && TryGetStyle(applier, out ThemeStyle style))
+                {
+                    themeStyle = style;
+                }
+                else
+                {
+                    applier = go.GetComponentInParent<ThemeStyleApplier>();
+                    if (applier != null && TryGetStyle(applier, out style))
+                    {
+                        themeStyle = style;
+                    }
+                }
+            }
+            if (themeStyle == null)
+            {
+                Debug.LogWarningFormat("[ThemeDataResolver] Unable to resolve theme style for {0}, item {1}", themeTemplate.name, SelectedItemName);
+            }
+            int sourceId = ThemeManager.GetThemeSourceId(themeStyle.StyleName);
             DataSourceManager.SubscribeToItem(sourceId, itemId, OnDataItemUpdate);
         }
 
         public void Unsubscribe()
         {
-            int sourceId = ThemeManager.GetThemeSourceId(themeRecord.RecordName);
-            DataSourceManager.UnsubscribeFromItem(sourceId, itemId, OnDataItemUpdate);
+            if (themeStyle != null)
+            {
+                int sourceId = ThemeManager.GetThemeSourceId(themeStyle.StyleName);
+                DataSourceManager.UnsubscribeFromItem(sourceId, itemId, OnDataItemUpdate);
+            }
         }
 
         public bool TryGetData<T>(out T data)
@@ -129,8 +154,14 @@ namespace MVVMDatabinding.Theming
 
         protected bool TryGetDataSource(out IDataSource dataSource)
         {
-            int sourceId = ThemeManager.GetThemeSourceId(themeRecord.RecordName);
+            int sourceId = ThemeManager.GetThemeSourceId(themeStyle.StyleName);
             return DataSourceManager.TryGetDataSource(sourceId, out dataSource);
+        }
+
+        private bool TryGetStyle(ThemeStyleApplier applier, out ThemeStyle style)
+        {
+            style = null;
+            return applier.TryFindStyleForItem(themeTemplate, itemId, out style);
         }
     }
 }

@@ -1,33 +1,41 @@
-// Copyright (c) 2023 Katie Fremont
+// Copyright (c) 2024 Katie Fremont
 // Licensed under the MIT license
 
-using MVVMDatabinding.Theming;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace MVVMDatabinding
+namespace MVVMDatabinding.Theming
 {
-    [CustomEditor(typeof(ThemeValueList))]
-    public class ThemeValueListEditor : Editor
+    [CustomEditor(typeof(ThemeStyle))]
+    public class ThemeStyleEditor : Editor
     {
-        private ThemeValueList valueList = null;
+        private ThemeStyle themeStyle = null;
         private int valueListCount = 0;
 
         private void OnEnable()
         {
-            valueList = serializedObject.targetObject as ThemeValueList;
-            valueListCount = valueList.Items != null ? valueList.Items.Count : 0;
+            themeStyle = serializedObject.targetObject as ThemeStyle;
+            valueListCount = themeStyle.Values != null ? themeStyle.Values.Count : 0;
         }
 
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 
-            if (valueList.Items?.Count != valueListCount)
+            if (themeStyle.Values?.Count != valueListCount)
             {
                 CheckUniqueness();
-                valueListCount = valueList.Items != null ? valueList.Items.Count : 0;
+                valueListCount = themeStyle != null && themeStyle.Values != null ? themeStyle.Values.Count : 0;
+
+                if (themeStyle != null && themeStyle.Values != null)
+                {
+                    // TODO: propagate template from style to style value
+                    foreach (var value in themeStyle.Values)
+                    {
+                        value.Editor_SetTemplate(themeStyle.Template);
+                    }
+                }
             }
         }
 
@@ -41,9 +49,14 @@ namespace MVVMDatabinding
             DiscoverThemeValueTypes();
             uniquenessCheckList.Clear();
 
-            SerializedProperty listProp = serializedObject.FindProperty("items");
+            SerializedProperty listProp = serializedObject.FindProperty("values");
 
-            for (int i = 0; i < valueList.Items.Count; i++)
+            if (listProp == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < themeStyle.Values.Count; i++)
             {
                 var prop = listProp.GetArrayElementAtIndex(i);
 
@@ -56,8 +69,8 @@ namespace MVVMDatabinding
                     continue;
                 }
 
-                valueList.Items[i].ResetAndUpdateThemeValue();
-                PrefabUtility.RecordPrefabInstancePropertyModifications(valueList);
+                themeStyle.Values[i].ResetAndUpdateThemeValue();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(themeStyle);
 
             }
         }
@@ -83,4 +96,5 @@ namespace MVVMDatabinding
             }
         }
     }
+
 }

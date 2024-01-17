@@ -12,6 +12,9 @@ namespace MVVMDatabinding.Theming
         [SerializeReference]
         private List<IThemeBinder> binders = null;
 
+#if UNITY_EDITOR
+        public List<IThemeBinder> Binders => binders;
+#endif
         private void Awake()
         {
             foreach (IThemeBinder binder in binders)

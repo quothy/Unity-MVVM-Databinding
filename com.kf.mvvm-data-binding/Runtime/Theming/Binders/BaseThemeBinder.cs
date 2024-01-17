@@ -13,15 +13,19 @@ namespace MVVMDatabinding.Theming
         private const string noDataItemsOfTypeAvailableMessage = "<No items of type {0} to bind to>";
 
         [SerializeField]
-        private ThemeRecord themeRecord = null;
+        private ThemeStyleTemplate themeTemplate = null;
 
-        [ConditionalVisibility(nameof(DataRecordValid), ConditionResultType.ShowIfEquals)]
+        [ConditionalVisibility(nameof(ThemeTemplateValid), ConditionResultType.ShowIfEquals)]
         [DropdownSelection(nameof(ItemNameOptions), nameof(SelectedItemName))]
         [SerializeField]
         protected int itemId = -1;
 
         [ConditionalVisibility("", ConditionResultType.Never)]
         public string name = string.Empty;
+
+        [ConditionalEnable("", ConditionalEnableAttribute.ConditionalEnableType.Never)]
+        [SerializeField]
+        private ThemeStyle themeStyle = null;
 
         private string editor_notAvailableMessage => string.Format(noDataItemsOfTypeAvailableMessage, typeof(T).ToString());
 
@@ -40,9 +44,9 @@ namespace MVVMDatabinding.Theming
 
         public string Name => name;
 
-        public bool DataRecordValid
+        public bool ThemeTemplateValid
         {
-            get => themeRecord != null;
+            get => themeTemplate != null;
         }
 
         protected string SelectedItemName
@@ -50,14 +54,14 @@ namespace MVVMDatabinding.Theming
             get
             {
                 string selected = string.Empty;
-                if (themeRecord != null)
+                if (themeTemplate != null)
                 {
                     if (availableItemNames.Count == 0 || (availableItemNames.Count == 1 && availableItemNames[0] == editor_notAvailableMessage))
                     {
                         name = BinderTypeName;
                         selected = editor_notAvailableMessage;
                     }
-                    else if (themeRecord.TryGetInfoForId(itemId, out selected, out ThemeItemType type, out bool excludeFromVariants))
+                    else if (themeTemplate.TryGetInfoForId(itemId, out selected, out ThemeItemType type, out bool excludeFromVariants))
                     {
                         name = selected + BinderTypeName;
                     }
@@ -67,7 +71,7 @@ namespace MVVMDatabinding.Theming
             }
             set
             {
-                if (themeRecord && themeRecord.TryGetInfoForName(value, out int id, out ThemeItemType type, out bool excludeFromVariants))
+                if (themeTemplate && themeTemplate.TryGetInfoForName(value, out int id, out ThemeItemType type, out bool excludeFromVariants))
                 {
                     itemId = id;
                     name = value + BinderTypeName;
@@ -75,7 +79,7 @@ namespace MVVMDatabinding.Theming
             }
         }
 
-        protected bool IsBindingValid => DataRecordValid && !string.IsNullOrWhiteSpace(SelectedItemName);
+        protected bool IsBindingValid => ThemeTemplateValid && !string.IsNullOrWhiteSpace(SelectedItemName);
 
         /// <summary>
         /// We're going to want to display strings for the items on the Inspector UI
@@ -85,7 +89,7 @@ namespace MVVMDatabinding.Theming
         {
             get
             {
-                if (availableItemNames == null || (DataRecordValid && availableItemNames.Count != themeRecord.RecordItems.Count))
+                if (availableItemNames == null || (ThemeTemplateValid && availableItemNames.Count != themeTemplate.TemplateItems.Count))
                 {
                     TryPopulateItemNames();
                 }
@@ -98,12 +102,12 @@ namespace MVVMDatabinding.Theming
         public void Bind()
         {
             // subscribe to the theme item
-            int sourceId = ThemeManager.GetThemeSourceId(themeRecord.RecordName);
+            int sourceId = ThemeManager.GetThemeSourceId(themeStyle.StyleName);
             DataSourceManager.SubscribeToItem(sourceId, itemId, OnThemeItemUpdate);
         }
         public void Unbind()
         {
-            int sourceId = ThemeManager.GetThemeSourceId(themeRecord.RecordName);
+            int sourceId = ThemeManager.GetThemeSourceId(themeStyle.StyleName);
             DataSourceManager.UnsubscribeFromItem(sourceId, itemId, OnThemeItemUpdate);
         }
 
@@ -125,14 +129,14 @@ namespace MVVMDatabinding.Theming
 
             availableItemNames.Clear();
 
-            if (DataRecordValid)
+            if (ThemeTemplateValid)
             {
-                themeRecord.PopulateItemNameListForType(availableItemNames, ThemeItemType);
+                themeTemplate.PopulateItemNameListForType(availableItemNames, ThemeItemType);
             }
 
             if (availableItemNames.Count > 0)
             {
-                if (DataRecordValid && themeRecord.TryGetInfoForId(itemId, out string name, out var unused, out bool excludeFromVariants))
+                if (ThemeTemplateValid && themeTemplate.TryGetInfoForId(itemId, out string name, out var unused, out bool excludeFromVariants))
                 {
                     SelectedItemName = name;
                 }
@@ -149,12 +153,47 @@ namespace MVVMDatabinding.Theming
         }
 
 #if UNITY_EDITOR
-        public ThemeRecord Record => themeRecord;
+        public ThemeStyleTemplate Template => themeTemplate;
         public int ItemId => itemId;
 
         public void Editor_ForceUpdateItemValue(object value)
         {
             OnDataUpdated((T)value);
+        }
+
+        public void Editor_ForceUpdateValueFromTheme(Theme theme)
+        {
+            foreach (ThemeStyle style in theme.ThemeStyleList)
+            {
+                if (style.Template == Template && style == themeStyle)
+                {
+                    foreach (var value in style.Values)
+                    {
+                        if (value.Id == this.itemId)
+                        {
+                            OnDataUpdated((T)value.ThemeValue.Editor_GetValue());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void Editor_SetStyle(ThemeStyle style)
+        {
+            if (style == null || style.Template != Template)
+            {
+                return;
+            }
+
+            foreach (ThemeStyleValue value in style.Values)
+            {
+                if (value.Id == itemId)
+                {
+                    themeStyle = style;
+                    // TODO: force save asset?
+                }
+            }
         }
 #endif
     }

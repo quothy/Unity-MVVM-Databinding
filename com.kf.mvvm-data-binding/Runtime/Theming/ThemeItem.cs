@@ -61,14 +61,14 @@ namespace MVVMDatabinding.Theming
             // do nothing
         }
 
-        public void SetThemeItemValue(ThemeItemValue themeItemValue)
+        public void SetThemeItemValue(ThemeStyleValue styleValue)
         {
             if (this.themeValue != null)
             {
                 themeValue.ValueChanged.RemoveListener(RaiseValueChanged);
             }
 
-            this.themeValue = themeItemValue.ThemeValue;
+            this.themeValue = styleValue.ThemeValue;
 
             if (themeValue != null)
             {
