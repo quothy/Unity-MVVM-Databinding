@@ -9,20 +9,6 @@ using UnityEngine;
 
 namespace MVVMDatabinding.Theming
 {
-    public enum ThemeItemType
-    {
-        None,
-        Color,
-        Gradient,
-        Material,
-        Texture,
-        Int,
-        Float,
-        Vector4,
-        TMPGradient,
-        FontSettings,
-    }
-
     [Serializable]
     public class ThemeRecordItem
     {

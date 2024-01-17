@@ -1,11 +1,27 @@
+// Copyright (c) 2024 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace MVVMDatabinding.Theming
 {
+    public enum ThemeItemType
+    {
+        None,
+        Color,
+        Gradient,
+        Material,
+        Texture,
+        Int,
+        Float,
+        Vector4,
+        TMPGradient,
+        FontSettings,
+    }
+
     [CreateAssetMenu(fileName = "ThemeStyleTemplate", menuName = "MVVM/Theming/Theme Style Template")]
     public class ThemeStyleTemplate : ScriptableObject
     {

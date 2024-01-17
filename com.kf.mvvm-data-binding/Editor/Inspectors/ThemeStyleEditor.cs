@@ -1,8 +1,9 @@
+// Copyright (c) 2024 Katie Fremont
+// Licensed under the MIT license
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
 namespace MVVMDatabinding.Theming
 {

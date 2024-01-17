@@ -10,8 +10,6 @@ namespace MVVMDatabinding.Theming
     [CreateAssetMenu(fileName = "Theme", menuName = "MVVM/Theming/Theme")]
     public class Theme : ScriptableObject
     {
-        public List<ThemeValueList> ThemeValueListCollection = null;
-
         public List<ThemeStyle> ThemeStyleList = null;
 
         public void Editor_LoadTheme()
