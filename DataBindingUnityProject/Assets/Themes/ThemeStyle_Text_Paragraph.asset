@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed3aa29d5341a443897ae3ee8dccc93, type: 3}
+  m_Name: ThemeStyle_Text_Paragraph
+  m_EditorClassIdentifier: 
+  styleName: Paragraph
+  template: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
+  themeStyleValues:
+  - themeTemplate: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
+    itemId: 105789788
+    name: settings
+    itemType: 9
+    themeValue:
+      rid: 5417913042522341376
+  - themeTemplate: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
+    itemId: 1308019674
+    name: size
+    itemType: 5
+    themeValue:
+      rid: 5417913042522341377
+  - themeTemplate: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
+    itemId: 268968527
+    name: color
+    itemType: 1
+    themeValue:
+      rid: 5417913042522341378
+  references:
+    version: 2
+    RefIds:
+    - rid: 5417913042522341376
+      type: {class: FontSettingsThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 1
+        light:
+          FontAsset: {fileID: 0}
+          AutosizeFont: 0
+          FontSize: 16
+          MinSize: 12
+          MaxSize: 12
+          FontStyle: 0
+          LineHeight: 0
+          CharacterSpacing: 0
+        dark:
+          FontAsset: {fileID: 0}
+          AutosizeFont: 0
+          FontSize: 16
+          MinSize: 12
+          MaxSize: 12
+          FontStyle: 0
+          LineHeight: 0
+          CharacterSpacing: 0
+        highContrast:
+          FontAsset: {fileID: 0}
+          AutosizeFont: 0
+          FontSize: 16
+          MinSize: 12
+          MaxSize: 12
+          FontStyle: 0
+          LineHeight: 0
+          CharacterSpacing: 0
+        value:
+          FontAsset: {fileID: 0}
+          AutosizeFont: 0
+          FontSize: 16
+          MinSize: 12
+          MaxSize: 12
+          FontStyle: 0
+          LineHeight: 0
+          CharacterSpacing: 0
+    - rid: 5417913042522341377
+      type: {class: IntThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 1
+        light: 0
+        dark: 0
+        highContrast: 0
+        value: 0
+    - rid: 5417913042522341378
+      type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 0
+        light: {r: 0, g: 0.32923606, b: 0.5568628, a: 1}
+        dark: {r: 0, g: 0, b: 0, a: 0}
+        highContrast: {r: 0, g: 0, b: 0, a: 0}
+        value: {r: 0, g: 0, b: 0, a: 0}

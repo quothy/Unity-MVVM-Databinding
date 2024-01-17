@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed3aa29d5341a443897ae3ee8dccc93, type: 3}
+  m_Name: ThemeStyle_Button
+  m_EditorClassIdentifier: 
+  styleName: Button
+  template: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a, type: 2}
+  themeStyleValues:
+  - themeTemplate: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a, type: 2}
+    itemId: 110047568
+    name: Backplate
+    itemType: 1
+    themeValue:
+      rid: 5417913104825581568
+  references:
+    version: 2
+    RefIds:
+    - rid: 5417913104825581568
+      type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 0
+        light: {r: 0.80392164, g: 0.80392164, b: 0.80392164, a: 1}
+        dark: {r: 0.254717, g: 0.254717, b: 0.254717, a: 1}
+        highContrast: {r: 0, g: 0, b: 0, a: 0}
+        value: {r: 0, g: 0, b: 0, a: 0}
