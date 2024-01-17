@@ -366,9 +366,9 @@ namespace MVVMDatabinding.Theming
         }
 
 #if UNITY_EDITOR
-        public bool MatchesItem(ThemeRecord record, int itemId)
+        public bool MatchesItem(ThemeStyleTemplate template, int itemId)
         {
-            return record == themeTemplate && itemId == this.itemId;
+            return template == themeTemplate && itemId == this.itemId;
         }
 #endif
     }

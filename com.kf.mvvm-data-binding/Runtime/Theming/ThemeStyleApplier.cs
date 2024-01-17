@@ -139,6 +139,28 @@ namespace MVVMDatabinding.Theming
         [SerializeField]
         private List<ThemeStylePicker> themeStyles = null;
 
+        public bool TryFindStyleForItem(ThemeStyleTemplate template, int itemId, out ThemeStyle style)
+        {
+            style = null;
+
+            foreach (ThemeStylePicker picker in themeStyles)
+            {
+                if (picker.Style.Template == template)
+                {
+                    foreach (ThemeStyleValue value in picker.Style.Values)
+                    {
+                        if (value.Id == itemId)
+                        {
+                            style = picker.Style;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return style == null;
+        }
+
         private void OnValidate()
         {
             DiscoverThemeBinders(cachedBinders);
