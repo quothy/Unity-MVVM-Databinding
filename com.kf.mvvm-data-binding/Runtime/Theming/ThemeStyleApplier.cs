@@ -163,6 +163,7 @@ namespace MVVMDatabinding.Theming
 
         private void OnValidate()
         {
+#if UNITY_EDITOR
             DiscoverThemeBinders(cachedBinders);
             foreach (ThemeStylePicker picker in themeStyles)
             {
@@ -173,6 +174,7 @@ namespace MVVMDatabinding.Theming
                 picker.Editor_OnValidate();
                 UpdateBinders(picker);
             }
+#endif
         }
 
 #if UNITY_EDITOR

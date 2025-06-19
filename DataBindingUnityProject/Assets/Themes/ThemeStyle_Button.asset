@@ -21,6 +21,12 @@ MonoBehaviour:
     itemType: 1
     themeValue:
       rid: 5417913104825581568
+  - themeTemplate: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a, type: 2}
+    itemId: 110047568
+    name: Backplate
+    itemType: 1
+    themeValue:
+      rid: 5417913104825581568
   references:
     version: 2
     RefIds:
