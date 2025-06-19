@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainViewModel : BaseGlobalViewModel
+public partial class MainViewModel : BaseGlobalViewModel
 {
     private bool exampleBool = false;
     [BindableData(0, "This is a example boolean that you can bind to, but it's not hooked up to anything")]
@@ -15,7 +15,7 @@ public class MainViewModel : BaseGlobalViewModel
             if (exampleBool != value)
             {
                 exampleBool = value;
-
+                OnPropertyChanged();
             }
         }
     }
@@ -30,6 +30,7 @@ public class MainViewModel : BaseGlobalViewModel
             if (exampleInt != value)
             {
                 exampleInt = value;
+                OnPropertyChanged();
             }
         }
     }
@@ -44,6 +45,7 @@ public class MainViewModel : BaseGlobalViewModel
             if (exampleFloat != value)
             {
                 exampleFloat = value;
+                OnPropertyChanged();
             }
         }
     }

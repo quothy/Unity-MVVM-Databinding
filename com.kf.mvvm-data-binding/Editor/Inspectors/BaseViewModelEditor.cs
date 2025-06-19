@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MVVMDatabinding
 {
     [CustomEditor(typeof(BaseViewModel), true)]
-    public class BaseViewModelEditor : Editor
+    public class BaseViewModelEditor : UnityEditor.Editor
     {
         private BaseViewModel instance = null;
 

@@ -8,7 +8,7 @@ using UnityEditor;
 namespace MVVMDatabinding.Theming
 {
     [CustomEditor(typeof(ThemeStyle))]
-    public class ThemeStyleEditor : Editor
+    public class ThemeStyleEditor : UnityEditor.Editor
     {
         private ThemeStyle themeStyle = null;
         private int valueListCount = 0;

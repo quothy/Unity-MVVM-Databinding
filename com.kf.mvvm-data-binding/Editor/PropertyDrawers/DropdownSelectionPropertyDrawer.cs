@@ -10,7 +10,7 @@ using UnityEngine;
 namespace MVVMDatabinding
 {
     [CustomPropertyDrawer(typeof(DropdownSelectionAttribute))]
-    public class DropdownSelectionPropertyDrawer : PropertyDrawer
+    public class DropdownSelectionPropertyDrawer : UnityEditor.PropertyDrawer
     {
         private DropdownSelectionAttribute dropdownAttribute;
 

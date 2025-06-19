@@ -8,7 +8,7 @@ namespace MVVMDatabinding.Theming
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(ThemeStyleApplier))]
-    public class ThemeStyleApplierEditor : Editor
+    public class ThemeStyleApplierEditor : UnityEditor.Editor
     {
         private Theme selectedTheme = null;
         public override void OnInspectorGUI()

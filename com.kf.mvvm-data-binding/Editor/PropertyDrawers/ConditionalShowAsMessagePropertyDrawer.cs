@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MVVMDatabinding
 {
     [CustomPropertyDrawer(typeof(ConditionalShowAsMessageAttribute))]
-    public class ConditionalShowAsMessagePropertyDrawer : PropertyDrawer
+    public class ConditionalShowAsMessagePropertyDrawer : UnityEditor.PropertyDrawer
     {
         private ConditionalShowAsMessageAttribute showAttribute;
 

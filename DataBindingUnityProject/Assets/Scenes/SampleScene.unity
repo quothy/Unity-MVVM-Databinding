@@ -123,6 +123,27 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &50506609 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4869112576439738282, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4869112576897787561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &50506614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50506609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd266799944d94438c5c9d41611d28e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeStyles:
+  - template: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
+    themeStyle: {fileID: 11400000, guid: 13acd0e3e3870ce47931ee42161838e9, type: 2}
 --- !u!1 &163434984
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,6 +212,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &213858114 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4869112575732238849, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4869112576897787561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &213858119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 213858114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd266799944d94438c5c9d41611d28e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeStyles:
+  - template: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
+    themeStyle: {fileID: 11400000, guid: 13acd0e3e3870ce47931ee42161838e9, type: 2}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,6 +560,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1932911743 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4869112576968946950, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4869112576897787561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1932911749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932911743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd266799944d94438c5c9d41611d28e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeStyles:
+  - template: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a, type: 2}
+    themeStyle: {fileID: 11400000, guid: d2cc95a0e61ca9b429b76e4ccffe5b03, type: 2}
 --- !u!1001 &4869112576897787561
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -525,6 +588,32 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 992603368, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+      propertyPath: managedReferences[4598207527680737302].name
+      value: color (ColorThemeBinder)
+      objectReference: {fileID: 0}
+    - target: {fileID: 992603368, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+      propertyPath: managedReferences[4598207527680737302].itemId
+      value: 268968527
+      objectReference: {fileID: 0}
+    - target: {fileID: 992603368, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+      propertyPath: managedReferences[4598207527680737302].themeTemplate
+      value: 
+      objectReference: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e,
+        type: 2}
+    - target: {fileID: 1073654925, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+      propertyPath: managedReferences[4598207527680737304].name
+      value: Backplate (ColorThemeBinder)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1073654925, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+      propertyPath: managedReferences[4598207527680737304].itemId
+      value: 110047568
+      objectReference: {fileID: 0}
+    - target: {fileID: 1073654925, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+      propertyPath: managedReferences[4598207527680737304].themeTemplate
+      value: 
+      objectReference: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a,
+        type: 2}
     - target: {fileID: 1654239699, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
       propertyPath: managedReferences[4598207527680737302].name
       value: color (ColorThemeBinder)
@@ -599,6 +688,28 @@ PrefabInstance:
       propertyPath: managedReferences[5417913104825581569].targets.Array.data[0]
       value: 
       objectReference: {fileID: 4869112576897787564}
+    - target: {fileID: 3146487812075801096, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207527680737290].name
+      value: Backplate (ColorThemeBinder)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146487812075801096, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207527680737290].itemId
+      value: 110047568
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146487812075801096, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207527680737290].themeTemplate
+      value: 
+      objectReference: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a,
+        type: 2}
+    - target: {fileID: 3146487812075801096, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207527680737295].themeTemplate
+      value: 
+      objectReference: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a,
+        type: 2}
     - target: {fileID: 4869112576716521064, guid: 2a0c9e724e3172342af028ccdac5d0a3,
         type: 3}
       propertyPath: m_Name
@@ -709,7 +820,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7412178237218160887, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207527680737302].name
+      value: color (ColorThemeBinder)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412178237218160887, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207527680737302].itemId
+      value: 268968527
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412178237218160887, guid: 2a0c9e724e3172342af028ccdac5d0a3,
+        type: 3}
+      propertyPath: managedReferences[4598207527680737302].themeTemplate
+      value: 
+      objectReference: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e,
+        type: 2}
+    m_RemovedComponents:
+    - {fileID: 8787645018203439829, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+    - {fileID: 5357106824106624737, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+    - {fileID: 5570596835574662729, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+    - {fileID: 9143719699188204157, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+    - {fileID: 8262565849872203120, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+    - {fileID: 4702975691258062229, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
+    - {fileID: 3146487812075801096, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2a0c9e724e3172342af028ccdac5d0a3, type: 3}
 --- !u!1 &4869112576897787562 stripped
 GameObject:

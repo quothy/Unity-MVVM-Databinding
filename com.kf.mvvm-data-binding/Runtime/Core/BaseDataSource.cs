@@ -53,22 +53,18 @@ namespace MVVMDatabinding
         {
 #if UNITY_EDITOR
             // ensure directory exists
-            try { Directory.CreateDirectory(recordDirPath); } catch { } 
+            try { Directory.CreateDirectory(recordDirPath); } catch { }
 
-            // TODO: implement DataRecord scriptable object creation/population/saving here
             string recordPath = $"{recordDirPath}/{name}_DataRecord.asset";
 
             DataRecord record = null;
             try
             {
-                if (!File.Exists(recordPath))
+                record = AssetDatabase.LoadAssetAtPath<DataRecord>(recordPath);
+                if (record == null)
                 {
                     record = ScriptableObject.CreateInstance<DataRecord>();
-                    AssetDatabase.CreateAsset(record, recordPath.Trim());
-                }
-                else
-                {
-                    record = AssetDatabase.LoadAssetAtPath(recordPath, typeof(DataRecord)) as DataRecord;
+                    AssetDatabase.CreateAsset(record, recordPath);
                 }
             }
             catch (System.Exception ex)
@@ -79,10 +75,14 @@ namespace MVVMDatabinding
             if (record != null)
             {
                 record.PopulateRecord(Id, Name, IdModifiedAtRuntime, dataItems);
+                EditorUtility.SetDirty(record);
+                AssetDatabase.SaveAssetIfDirty(record);
+            }
+            else
+            {
+                Debug.LogError($"[BaseDataSource] Failed to create or load DataRecord at {recordPath}");
             }
 
-            EditorUtility.SetDirty(record);
-            AssetDatabase.SaveAssetIfDirty(record);
 #endif
         }
 

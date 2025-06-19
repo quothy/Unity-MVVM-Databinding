@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MVVMDatabinding
 {
     [CustomPropertyDrawer(typeof(ConditionalEnableAttribute))]
-    public class ConditionalEnablePropertyDrawer : PropertyDrawer
+    public class ConditionalEnablePropertyDrawer : UnityEditor.PropertyDrawer
     {
         private ConditionalEnableAttribute enableAttribute;
 
