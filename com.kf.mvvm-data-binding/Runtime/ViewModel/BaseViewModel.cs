@@ -12,11 +12,11 @@ using System.Reflection;
 
 namespace MVVMDatabinding
 {
-    public abstract class BaseViewModel : MonoBehaviour
+    public abstract partial class BaseViewModel : MonoBehaviour
     {
         [HideInInspector]
         [SerializeReference]
-        private List<IDataItem> dataItemList = null;
+        protected List<IDataItem> dataItemList = null;
 
         private ViewModelDataSource dataSource = null;
 
@@ -41,7 +41,7 @@ namespace MVVMDatabinding
             InitializeData();
         }
 
-        public void InitializeData()
+        public virtual void InitializeData()
         {
             RegisterCustomDataTypes();
             dataSource = new ViewModelDataSource();

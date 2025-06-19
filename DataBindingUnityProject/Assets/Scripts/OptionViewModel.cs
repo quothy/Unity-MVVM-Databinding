@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OptionViewModel : BaseViewModel
+public partial class OptionViewModel : BaseViewModel
 {
     [SerializeField]
     private string optionNameString = "option";

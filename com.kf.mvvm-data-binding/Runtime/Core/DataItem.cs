@@ -81,7 +81,7 @@ namespace MVVMDatabinding
     public delegate T DataItemGetter<T>();
     public delegate void DataItemSetter<T>(T val);
 
-    public abstract class DataItem<T> : DataItem
+    public class DataItem<T> : DataItem
     {
         public override Type DataType => typeof(T);
 
@@ -102,6 +102,7 @@ namespace MVVMDatabinding
                 setUnderlyingValue?.Invoke(value);
                 RaiseValueChanged();
             }
+
         }
 
         // Delegates for codegen assignment

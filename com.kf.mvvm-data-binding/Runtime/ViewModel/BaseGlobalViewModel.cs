@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MVVMDatabinding
 {
-    public class BaseGlobalViewModel : BaseViewModel
+    public abstract class BaseGlobalViewModel : BaseViewModel
     {
         public override bool IsGlobalSource => true;
     }
