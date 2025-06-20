@@ -90,12 +90,10 @@ namespace MVVMDatabinding.Editor
                     sb.AppendLine($"        public DataItem<Action> {method.Name}ActionDataItem;");
                 }
 
-                // Method
-                sb.AppendLine("        protected void InitializeGeneratedDataItems()");
+                // Split into two methods: CreateGeneratedDataItems and InitializeGeneratedDataItems
+                sb.AppendLine("        protected override void CreateGeneratedDataItems()");
                 sb.AppendLine("        {");
-                sb.AppendLine($"            global::UnityEngine.Debug.Log(\"[ViewModelDataItemGenerator] InitializeGeneratedDataItems called for {type.Name}\");");
                 sb.AppendLine("            dataItemList = new List<IDataItem>();");
-
                 foreach (var prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .Where(p => p.GetCustomAttribute(typeof(BindableDataAttribute)) is BindableDataAttribute))
                 {
@@ -104,21 +102,14 @@ namespace MVVMDatabinding.Editor
                     var isDataList = propType == typeof(MVVMDatabinding.DataList) || propType.IsSubclassOf(typeof(MVVMDatabinding.DataList)) || (propType.IsGenericType && (propType.GetGenericTypeDefinition() == typeof(MVVMDatabinding.DataList<>)));
                     if (isDataList)
                     {
-                        var genericArg = propType.IsGenericType ? propType.GetGenericArguments()[0] : null;
-                        var genericTypeName = genericArg != null ? genericArg.FullName.Replace('+', '.') : "object";
                         sb.AppendLine($"            {prop.Name}DataItem = new DataItemList();");
                         sb.AppendLine($"            {prop.Name}DataItem.Initialize({attr.DataItemId}, nameof({type.Name}.{prop.Name}), \"{attr.Comment}\");");
-                        sb.AppendLine($"            {prop.Name}DataItem.valueGetter = () => (MVVMDatabinding.DataList)this.{prop.Name};");
-                        sb.AppendLine($"            {prop.Name}DataItem.valueSetter = v => this.{prop.Name} = (MVVMDatabinding.DataList<{genericTypeName}>)v;");
                         sb.AppendLine($"            dataItemList.Add({prop.Name}DataItem);");
-                        sb.AppendLine($"            {prop.Name}.ListUpdated += () => this.OnPropertyChanged(nameof({prop.Name}));");
                     }
                     else
                     {
                         sb.AppendLine($"            {prop.Name}DataItem = new DataItem<{propType.FullName.Replace('+', '.').Replace("System.", string.Empty)}>();");
                         sb.AppendLine($"            {prop.Name}DataItem.Initialize({attr.DataItemId}, nameof({type.Name}.{prop.Name}), \"{attr.Comment}\");");
-                        sb.AppendLine($"            {prop.Name}DataItem.valueGetter = () => this.{prop.Name};");
-                        sb.AppendLine($"            {prop.Name}DataItem.valueSetter = v => this.{prop.Name} = v;");
                         sb.AppendLine($"            dataItemList.Add({prop.Name}DataItem);");
                     }
                 }
@@ -128,15 +119,43 @@ namespace MVVMDatabinding.Editor
                     var attr = (BindableActionAttribute)method.GetCustomAttribute(typeof(BindableActionAttribute));
                     sb.AppendLine($"            {method.Name}ActionDataItem = new DataItem<Action>();");
                     sb.AppendLine($"            {method.Name}ActionDataItem.Initialize({attr.DataItemId}, nameof({type.Name}.{method.Name}), \"{attr.Comment}\");");
-                    sb.AppendLine($"            {method.Name}ActionDataItem.valueGetter = () => (Action)this.{method.Name};");
                     sb.AppendLine($"            dataItemList.Add({method.Name}ActionDataItem);");
                 }
+                sb.AppendLine("        }");
 
+                sb.AppendLine("        protected void InitializeGeneratedDataItems()");
+                sb.AppendLine("        {");
+                sb.AppendLine($"            global::UnityEngine.Debug.Log(\"[ViewModelDataItemGenerator] InitializeGeneratedDataItems called for {type.Name}\");");
+                foreach (var prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .Where(p => p.GetCustomAttribute(typeof(BindableDataAttribute)) is BindableDataAttribute))
+                {
+                    var propType = prop.PropertyType;
+                    var isDataList = propType == typeof(MVVMDatabinding.DataList) || propType.IsSubclassOf(typeof(MVVMDatabinding.DataList)) || (propType.IsGenericType && (propType.GetGenericTypeDefinition() == typeof(MVVMDatabinding.DataList<>)));
+                    if (isDataList)
+                    {
+                        var genericArg = propType.IsGenericType ? propType.GetGenericArguments()[0] : null;
+                        var genericTypeName = genericArg != null ? genericArg.FullName.Replace('+', '.') : "object";
+                        sb.AppendLine($"            {prop.Name}DataItem.valueGetter = () => (MVVMDatabinding.DataList)this.{prop.Name};");
+                        sb.AppendLine($"            {prop.Name}DataItem.valueSetter = v => this.{prop.Name} = (MVVMDatabinding.DataList<{genericTypeName}>)v;");
+                        sb.AppendLine($"            {prop.Name}.ListUpdated += () => this.OnPropertyChanged(nameof({prop.Name}));");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"            {prop.Name}DataItem.valueGetter = () => this.{prop.Name};");
+                        sb.AppendLine($"            {prop.Name}DataItem.valueSetter = v => this.{prop.Name} = v;");
+                    }
+                }
+                foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .Where(m => m.GetCustomAttribute(typeof(BindableActionAttribute)) is BindableActionAttribute))
+                {
+                    sb.AppendLine($"            {method.Name}ActionDataItem.valueGetter = () => (Action)this.{method.Name};");
+                }
                 sb.AppendLine("        }");
 
                 // Generate override for InitializeData
                 sb.AppendLine("        public override void InitializeData()");
                 sb.AppendLine("        {");
+                sb.AppendLine("            CreateGeneratedDataItems();");
                 sb.AppendLine("            InitializeGeneratedDataItems();");
                 sb.AppendLine("            base.InitializeData();");
                 sb.AppendLine("        }");

@@ -129,6 +129,7 @@ namespace MVVMDatabinding
             // help with runtime scenarios where there are two instances and one didn't get
             // updated post-class rename.
             // And alternative would be to serialize a ref to the DataRecord itself, which might be even better
+            CreateGeneratedDataItems();
             dataSource.Initialize(this.GetType().ToString(), !IsGlobalSource);
             dataSource.GenerateRecord(RecordPath, dataItemList);
 
@@ -138,6 +139,8 @@ namespace MVVMDatabinding
             Debug.Log($"[{this.GetType().ToString()}] Finished updating DataRecord");
 #endif
         }
+
+        protected virtual void CreateGeneratedDataItems() { }
 
         protected virtual void RegisterCustomDataTypes() { }
 
