@@ -223,11 +223,12 @@ namespace MVVMDatabinding.Editor
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("Tools/Generate ViewModel DataItems (Clean)")]
+        [MenuItem("Tools/Clean Generated Code")]
         public static void GenerateClean()
         {
-            // Find all Generated folders under Assets
-            var generatedDirs = Directory.GetDirectories("Assets", "Generated", SearchOption.AllDirectories);
+            // Recursively find all directories named 'Generated' under Assets
+            var allDirs = Directory.GetDirectories("Assets", "*", SearchOption.AllDirectories);
+            var generatedDirs = allDirs.Where(d => Path.GetFileName(d) == "Generated").ToArray();
             foreach (var dir in generatedDirs)
             {
                 var files = Directory.GetFiles(dir, "*.DataItems.g.cs", SearchOption.TopDirectoryOnly);
@@ -238,7 +239,6 @@ namespace MVVMDatabinding.Editor
                 }
             }
             AssetDatabase.Refresh();
-            Generate();
         }
     }
 }
