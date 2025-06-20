@@ -49,7 +49,7 @@ namespace MVVMDatabinding
             }
         }
 
-        public void GenerateRecord(string recordDirPath, List<IDataItem> dataItems)
+        public void GenerateRecord(string recordDirPath, List<IDataItem> dataItems, string typeName = "")
         {
 #if UNITY_EDITOR
             // ensure directory exists
@@ -74,7 +74,7 @@ namespace MVVMDatabinding
 
             if (record != null)
             {
-                record.PopulateRecord(Id, Name, IdModifiedAtRuntime, dataItems);
+                record.PopulateRecord(Id, Name, IdModifiedAtRuntime, dataItems, typeName);
                 EditorUtility.SetDirty(record);
                 AssetDatabase.SaveAssetIfDirty(record);
             }

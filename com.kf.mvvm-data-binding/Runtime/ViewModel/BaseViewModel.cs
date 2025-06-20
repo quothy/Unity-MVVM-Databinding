@@ -131,7 +131,8 @@ namespace MVVMDatabinding
             // And alternative would be to serialize a ref to the DataRecord itself, which might be even better
             CreateGeneratedDataItems();
             dataSource.Initialize(this.GetType().ToString(), !IsGlobalSource);
-            dataSource.GenerateRecord(RecordPath, dataItemList);
+            Type type = this.GetType();
+            dataSource.GenerateRecord(RecordPath, dataItemList, type.AssemblyQualifiedName);
 
             AssetDatabase.SaveAssetIfDirty(this);
 
