@@ -14,8 +14,6 @@ namespace MVVMDatabinding
 {
     public abstract partial class BaseViewModel : MonoBehaviour
     {
-        [HideInInspector]
-        [SerializeReference]
         protected List<IDataItem> dataItemList = null;
 
         private ViewModelDataSource dataSource = null;

@@ -71,7 +71,17 @@ namespace MVVMDatabinding.Editor
                 foreach (var prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .Where(p => p.GetCustomAttribute(typeof(BindableDataAttribute)) != null))
                 {
-                    sb.AppendLine($"        public DataItem<{prop.PropertyType.Name}> {prop.Name}DataItem;");
+                    // If the property type is derived from DataList, use DataItem<DataList>
+                    var propType = prop.PropertyType;
+                    var isDataList = propType == typeof(MVVMDatabinding.DataList) || propType.IsSubclassOf(typeof(MVVMDatabinding.DataList)) || (propType.IsGenericType && (propType.GetGenericTypeDefinition() == typeof(MVVMDatabinding.DataList<>)));
+                    if (isDataList)
+                    {
+                        sb.AppendLine($"        public DataItemList {prop.Name}DataItem;");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"        public DataItem<{propType.FullName.Replace('+', '.').Replace("System.", string.Empty)}> {prop.Name}DataItem;");
+                    }
                 }
                 // Fields for methods
                 foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
@@ -90,11 +100,27 @@ namespace MVVMDatabinding.Editor
                     .Where(p => p.GetCustomAttribute(typeof(BindableDataAttribute)) is BindableDataAttribute))
                 {
                     var attr = (BindableDataAttribute)prop.GetCustomAttribute(typeof(BindableDataAttribute));
-                    sb.AppendLine($"            {prop.Name}DataItem = new DataItem<{prop.PropertyType.Name}>();");
-                    sb.AppendLine($"            {prop.Name}DataItem.Initialize({attr.DataItemId}, nameof({type.Name}.{prop.Name}), \"{attr.Comment}\");");
-                    sb.AppendLine($"            {prop.Name}DataItem.valueGetter = () => this.{prop.Name};");
-                    sb.AppendLine($"            {prop.Name}DataItem.valueSetter = v => this.{prop.Name} = v;");
-                    sb.AppendLine($"            dataItemList.Add({prop.Name}DataItem);");
+                    var propType = prop.PropertyType;
+                    var isDataList = propType == typeof(MVVMDatabinding.DataList) || propType.IsSubclassOf(typeof(MVVMDatabinding.DataList)) || (propType.IsGenericType && (propType.GetGenericTypeDefinition() == typeof(MVVMDatabinding.DataList<>)));
+                    if (isDataList)
+                    {
+                        var genericArg = propType.IsGenericType ? propType.GetGenericArguments()[0] : null;
+                        var genericTypeName = genericArg != null ? genericArg.FullName.Replace('+', '.') : "object";
+                        sb.AppendLine($"            {prop.Name}DataItem = new DataItemList();");
+                        sb.AppendLine($"            {prop.Name}DataItem.Initialize({attr.DataItemId}, nameof({type.Name}.{prop.Name}), \"{attr.Comment}\");");
+                        sb.AppendLine($"            {prop.Name}DataItem.valueGetter = () => (MVVMDatabinding.DataList)this.{prop.Name};");
+                        sb.AppendLine($"            {prop.Name}DataItem.valueSetter = v => this.{prop.Name} = (MVVMDatabinding.DataList<{genericTypeName}>)v;");
+                        sb.AppendLine($"            dataItemList.Add({prop.Name}DataItem);");
+                        sb.AppendLine($"            {prop.Name}.ListUpdated += () => this.OnPropertyChanged(nameof({prop.Name}));");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"            {prop.Name}DataItem = new DataItem<{propType.FullName.Replace('+', '.').Replace("System.", string.Empty)}>();");
+                        sb.AppendLine($"            {prop.Name}DataItem.Initialize({attr.DataItemId}, nameof({type.Name}.{prop.Name}), \"{attr.Comment}\");");
+                        sb.AppendLine($"            {prop.Name}DataItem.valueGetter = () => this.{prop.Name};");
+                        sb.AppendLine($"            {prop.Name}DataItem.valueSetter = v => this.{prop.Name} = v;");
+                        sb.AppendLine($"            dataItemList.Add({prop.Name}DataItem);");
+                    }
                 }
                 foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .Where(m => m.GetCustomAttribute(typeof(BindableActionAttribute)) is BindableActionAttribute))
@@ -125,7 +151,16 @@ namespace MVVMDatabinding.Editor
                 foreach (var prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .Where(p => p.GetCustomAttribute(typeof(BindableDataAttribute)) != null))
                 {
-                    dataItemTypes.Add(prop.PropertyType);
+                    var propType = prop.PropertyType;
+                    var isDataList = propType == typeof(MVVMDatabinding.DataList) || propType.IsSubclassOf(typeof(MVVMDatabinding.DataList)) || (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(MVVMDatabinding.DataList<>));
+                    if (isDataList)
+                    {
+                        dataItemTypes.Add(typeof(MVVMDatabinding.DataList));
+                    }
+                    else
+                    {
+                        dataItemTypes.Add(prop.PropertyType);
+                    }
                 }
                 foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .Where(m => m.GetCustomAttribute(typeof(BindableActionAttribute)) != null))

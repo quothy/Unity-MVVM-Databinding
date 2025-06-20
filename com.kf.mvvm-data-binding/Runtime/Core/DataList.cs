@@ -9,7 +9,22 @@ namespace MVVMDatabinding
     public abstract class DataList
     {
         public event Action ListUpdated;
+        public event Action<int> SelectedIndexChanged;
         public abstract int Count { get; }
+
+        private int selectedIndex = -1;
+        public int SelectedIndex
+        {
+            get => selectedIndex;
+            set
+            {
+                if (selectedIndex != value)
+                {
+                    selectedIndex = value;
+                    SelectedIndexChanged?.Invoke(selectedIndex);
+                }
+            }
+        }
 
         protected void OnListUpdated()
         {
@@ -54,6 +69,12 @@ namespace MVVMDatabinding
                 dataList[key] = value;
                 OnListUpdated();
             }
+        }
+        
+        // Optionally, you can add a strongly-typed SelectedItem property for convenience:
+        public T SelectedItem
+        {
+            get => (SelectedIndex >= 0 && SelectedIndex < dataList.Count) ? dataList[SelectedIndex] : default;
         }
     }
 }
