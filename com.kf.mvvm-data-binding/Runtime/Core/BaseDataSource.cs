@@ -22,6 +22,10 @@ namespace MVVMDatabinding
         private bool idModifiedAtRuntime = false;
         public bool IdModifiedAtRuntime => idModifiedAtRuntime;
 
+        private HashSet<int> activeUpdateIds = new HashSet<int>(20);
+        private Dictionary<int, List<DataItemUpdate>> pendingSubscriptionLookup = new Dictionary<int, List<DataItemUpdate>>(20);
+        private Dictionary<int, List<DataItemUpdate>> pendingUnsubscriptionLookup = new Dictionary<int, List<DataItemUpdate>>(20);
+
         public virtual void Initialize(string sourceName, bool idModifiedAtRuntime)
         {
             name = sourceName;
@@ -123,9 +127,38 @@ namespace MVVMDatabinding
         {
             if (subscriberLookup != null && subscriberLookup.TryGetValue(id, out List<DataItemUpdate> subscribers))
             {
+                activeUpdateIds.Add(id);
                 foreach (DataItemUpdate item in subscribers)
                 {
                     item?.Invoke(this, id);
+                }
+                activeUpdateIds.Remove(id);
+
+                if (pendingSubscriptionLookup.TryGetValue(id, out List<DataItemUpdate> pendingList))
+                {
+                    foreach (DataItemUpdate onUpdate in pendingList)
+                    {
+                        // Otherwise, we add it to the pending list for later processing
+                        subscriberLookup[id].Add(onUpdate);
+
+                        if (dataItemLookup != null && dataItemLookup.TryGetValue(id, out IDataItem item))
+                        {
+                            onUpdate?.Invoke(this, id);
+                        }
+                    }
+                    pendingList.Clear();
+                }
+
+                if (pendingUnsubscriptionLookup.TryGetValue(id, out List<DataItemUpdate> pendingUnsubList))
+                {
+                    foreach (DataItemUpdate onUpdate in pendingUnsubList)
+                    {
+                        if (subscriberLookup.TryGetValue(id, out List<DataItemUpdate> list))
+                        {
+                            list.Remove(onUpdate);
+                        }
+                    }
+                    pendingUnsubList.Clear();
                 }
             }
         }
@@ -142,11 +175,30 @@ namespace MVVMDatabinding
                 subscriberLookup[id] = new List<DataItemUpdate>(20);
             }
 
-            subscriberLookup[id].Add(onUpdate);
-
-            if (dataItemLookup != null && dataItemLookup.TryGetValue(id, out IDataItem item))
+            if (!pendingSubscriptionLookup.TryGetValue(id, out List<DataItemUpdate> pendingList))
             {
-                onUpdate?.Invoke(this, id);
+                pendingSubscriptionLookup[id] = new List<DataItemUpdate>(20);
+            }
+
+            if (!pendingUnsubscriptionLookup.TryGetValue(id, out List<DataItemUpdate> pendingUnsubList))
+            {
+                pendingUnsubscriptionLookup[id] = new List<DataItemUpdate>(20);
+            }
+
+            if (activeUpdateIds.Contains(id))
+            {
+                // If the item is already active, we can directly invoke the update
+                pendingSubscriptionLookup[id].Add(onUpdate);
+            }
+            else
+            {
+                // Otherwise, we add it to the pending list for later processing
+                subscriberLookup[id].Add(onUpdate);
+
+                if (dataItemLookup != null && dataItemLookup.TryGetValue(id, out IDataItem item))
+                {
+                    onUpdate?.Invoke(this, id);
+                }
             }
         }
 
@@ -154,7 +206,15 @@ namespace MVVMDatabinding
         {
             if (subscriberLookup != null && subscriberLookup.TryGetValue(id, out List<DataItemUpdate> list))
             {
-                list.Remove(onUpdate);
+                if (activeUpdateIds.Contains(id))
+                {
+                    pendingUnsubscriptionLookup[id].Add(onUpdate);
+                }
+                else
+                {
+                    // If the item is not active, we can remove it directly from the subscriber list
+                    list.Remove(onUpdate);
+                }
             }
         }
 
