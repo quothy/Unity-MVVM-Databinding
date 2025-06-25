@@ -15,6 +15,7 @@ namespace MVVMDatabinding
     public abstract partial class BaseViewModel : MonoBehaviour
     {
         protected List<IDataItem> dataItemList = null;
+        protected bool initialized = false;
 
         private ViewModelDataSource dataSource = null;
 
@@ -37,6 +38,7 @@ namespace MVVMDatabinding
         {
             ViewModelTypeCache.RegisterViewModelType(this.GetType().ToString(), this.GetType());
             InitializeData();
+            initialized = true;
         }
 
         public virtual void InitializeData()
