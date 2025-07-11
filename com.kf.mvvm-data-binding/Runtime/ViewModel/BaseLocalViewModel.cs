@@ -24,9 +24,10 @@ namespace MVVMDatabinding
             }
         }
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
             Unsubscribe();
+            base.OnDestroy();
         }
 
         public void SetBindingData(int sourceId, int itemId)
@@ -77,6 +78,9 @@ namespace MVVMDatabinding
             }
             else
             {
+                subscribedSourceId = sourceId;
+                subscribedItemId = itemId;
+                subscribedIndex = index;
                 subscribeAfterInitialize = true;
             }
         }

@@ -34,10 +34,10 @@ namespace MVVMDatabinding
             // -- We'll at least start by tracking whether or not the name/ID gets modified at runtime or not
             this.idModifiedAtRuntime = idModifiedAtRuntime;
 
-            if (idModifiedAtRuntime)
-            {
-                Debug.Log($"[BaseDataSource] Registering {sourceName} to id {nameHash}");
-            }
+            // if (idModifiedAtRuntime)
+            // {
+            //     Debug.Log($"[BaseDataSource] Registering {sourceName} to id {nameHash}");
+            // }
 
             if (Application.isPlaying)
             {

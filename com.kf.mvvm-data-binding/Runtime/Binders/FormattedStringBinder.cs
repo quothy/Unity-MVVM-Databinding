@@ -15,17 +15,33 @@ namespace MVVMDatabinding
 
         public override void OnDataItemUpdate(IDataSource dataSource, int itemId)
         {
-            object value = null;
             if (dataSource.TryGetItem<int>(itemId, out int intValue))
-                value = intValue;
-            else if (dataSource.TryGetItem<float>(itemId, out float floatValue))
-                value = floatValue;
-            else if (dataSource.TryGetItem<string>(itemId, out string stringValue))
-                value = stringValue;
-
-            if (value != null && targetText != null)
             {
-                targetText.text = string.Format(format, value);
+                if (targetText != null)
+                {
+                    targetText.text = string.Format(format, intValue);
+                }
+            }
+            else if (dataSource.TryGetItem<float>(itemId, out float floatValue))
+            {
+                if (targetText != null)
+                {
+                    targetText.text = string.Format(format, floatValue);
+                }
+            }
+            else if (dataSource.TryGetItem<string>(itemId, out string stringValue))
+            {
+                if (targetText != null)
+                {
+                    targetText.text = string.Format(format, stringValue);
+                }
+            }
+            else if (dataSource.TryGetItem<Vector2Int>(itemId, out Vector2Int vec2IntValue))
+            {
+                if (targetText != null)
+                {
+                    targetText.text = string.Format(format, vec2IntValue.x, vec2IntValue.y);
+                }                
             }
         }
     }

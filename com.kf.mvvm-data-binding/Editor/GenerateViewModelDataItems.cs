@@ -51,7 +51,7 @@ namespace MVVMDatabinding.Editor
                 var scriptLines = File.ReadAllLines(scriptFile);
                 // Find the namespace of the original class
                 classNamespace = type.Namespace; // Use reflection for namespace
-                Debug.Log($"[ViewModelDataItemGenerator] Detected namespace for {type.Name}: '{classNamespace ?? "<global>"}'");
+                //Debug.Log($"[ViewModelDataItemGenerator] Detected namespace for {type.Name}: '{classNamespace ?? "<global>"}'");
 
                 // Instead of hardcoding namespace, use the detected one
                 if (!string.IsNullOrEmpty(classNamespace))
@@ -80,7 +80,8 @@ namespace MVVMDatabinding.Editor
                     }
                     else
                     {
-                        sb.AppendLine($"        public DataItem<{propType.FullName.Replace('+', '.').Replace("System.", string.Empty)}> {prop.Name}DataItem;");
+                        sb.AppendLine($"        public DataItem<{propType.Name}> {prop.Name}DataItem;");
+                        //sb.AppendLine($"        public DataItem<{propType.FullName.Replace('+', '.').Replace("System.", string.Empty)}> {prop.Name}DataItem;");
                     }
                 }
                 // Fields for methods
@@ -108,7 +109,7 @@ namespace MVVMDatabinding.Editor
                     }
                     else
                     {
-                        sb.AppendLine($"            {prop.Name}DataItem = new DataItem<{propType.FullName.Replace('+', '.').Replace("System.", string.Empty)}>();");
+                        sb.AppendLine($"            {prop.Name}DataItem = new DataItem<{propType.Name}>();");
                         sb.AppendLine($"            {prop.Name}DataItem.Initialize({attr.DataItemId}, nameof({type.Name}.{prop.Name}), \"{attr.Comment}\");");
                         sb.AppendLine($"            dataItemList.Add({prop.Name}DataItem);");
                     }
@@ -125,7 +126,7 @@ namespace MVVMDatabinding.Editor
 
                 sb.AppendLine("        protected void InitializeGeneratedDataItems()");
                 sb.AppendLine("        {");
-                sb.AppendLine($"            global::UnityEngine.Debug.Log(\"[ViewModelDataItemGenerator] InitializeGeneratedDataItems called for {type.Name}\");");
+               // sb.AppendLine($"            global::UnityEngine.Debug.Log(\"[ViewModelDataItemGenerator] InitializeGeneratedDataItems called for {type.Name}\");");
                 foreach (var prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .Where(p => p.GetCustomAttribute(typeof(BindableDataAttribute)) is BindableDataAttribute))
                 {

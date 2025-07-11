@@ -49,9 +49,14 @@ namespace MVVMDatabinding
             dataSource.LoadDataItems(dataItemList);
         }
 
-        protected void OnPropertyChanged([CallerMemberName]string name = "")
+        protected virtual void OnDestroy()
         {
-            dataSource.OnPropertyChanged(name);
+            dataSource.Destroy();
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+            dataSource?.OnPropertyChanged(name);
         }
 
         [ContextMenu("Update Record")]

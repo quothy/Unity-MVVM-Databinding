@@ -199,20 +199,17 @@ namespace MVVMDatabinding
             }
             else if (resolutionType == DataSourceIdResolutionType.GetComponentInParent)
             {
-                if (bindingObject != null && ViewModelTypeCache.TryGetViewModelType(dataRecord.SourceType, out Type viewModelType))
+                Type type = Type.GetType(dataRecord.SourceType);
+                if (type != null)
                 {
-                    var source = bindingObject.GetComponentInParent(viewModelType);
-                    if (source != null)
+                    var found = bindingObject.GetComponentInParent(type);
+                    if (found != null)
                     {
-                        int id = source.gameObject.GetInstanceID();
+                        dataSourceInstance = found.gameObject;
+                        int id = dataSourceInstance.GetInstanceID();
                         string fullName = BaseDataSource.ResolveNameWithRuntimeId(dataRecord.SourceName, id);
                         sourceId = Animator.StringToHash(fullName);
-                        Debug.Log($"[BaseBinder] Resolved data source: name = {fullName}  id = {sourceId}");
                         return true;
-                    }
-                    else
-                    {
-                        Debug.LogErrorFormat("[BaseBinder] Failed to find ViewModel of type {0} in parent of {1}", viewModelType, bindingObject.name);
                     }
                 }
                 else
