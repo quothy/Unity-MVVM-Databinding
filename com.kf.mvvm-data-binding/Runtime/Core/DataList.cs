@@ -2,6 +2,7 @@
 // Licensed under the MIT license
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace MVVMDatabinding
@@ -32,7 +33,7 @@ namespace MVVMDatabinding
         }
     }
 
-    public class DataList<T> : DataList
+    public class DataList<T> : DataList, IEnumerable<T>
     {
         private List<T> dataList = null;
 
@@ -55,10 +56,40 @@ namespace MVVMDatabinding
             OnListUpdated();
         }
 
+        public void Remove(T item)
+        {
+            if (SelectedItem.Equals(item))
+            {
+                SelectedIndex = -1;
+            }
+            dataList.Remove(item);
+            OnListUpdated();
+        }
+
+        public void RemoveAt(int index)
+        {
+            dataList.RemoveAt(index);
+            if (index == SelectedIndex)
+            {
+                SelectedIndex = -1;
+            }
+            OnListUpdated();
+        }
+
         public void Clear()
         {
             dataList.Clear();
             OnListUpdated();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return dataList.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public T this[int key]
