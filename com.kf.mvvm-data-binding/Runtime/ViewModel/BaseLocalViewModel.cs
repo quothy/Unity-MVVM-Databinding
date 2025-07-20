@@ -93,6 +93,7 @@ namespace MVVMDatabinding
                 subscribedItemId = itemId;
                 subscribedIndex = index;
                 DataSourceManager.SubscribeToItem(sourceId, itemId, OnDataUpdated);
+                isSubscribed = true;
             }
         }
 
