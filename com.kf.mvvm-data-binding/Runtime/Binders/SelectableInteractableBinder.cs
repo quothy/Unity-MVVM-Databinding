@@ -15,6 +15,8 @@ namespace MVVMDatabinding
             if (targetSelectable != null)
             {
                 targetSelectable.interactable = value;
+                targetSelectable.enabled = false;
+                targetSelectable.enabled = true;
             }
         }
     }
