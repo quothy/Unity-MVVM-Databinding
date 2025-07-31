@@ -10,11 +10,23 @@ namespace MVVMDatabinding
         [SerializeField]
         private Image targetImage = null;
 
+        [SerializeField]
+        private bool disableIfNull = true;
+
         protected override void OnDataUpdated(Sprite value)
         {
             if (targetImage != null)
             {
                 targetImage.sprite = value;
+
+                if (value == null && disableIfNull)
+                {
+                    targetImage.enabled = false;
+                }
+                else if (value != null && !targetImage.enabled)
+                {
+                    targetImage.enabled = true;
+                }
             }
         }
     }
