@@ -30,7 +30,7 @@ namespace MVVMDatabinding.Editor
 
                 var sb = new StringBuilder();
                 // Collect all usings from the original file
-                var usingSet = new HashSet<string> { "using System;", "using System.Collections.Generic;", "using MVVMDatabinding;" };
+                var usingSet = new HashSet<string> { "using System;", "using System.Collections.Generic;", "using MVVMDatabinding; using UnityEngine;" };
                 var scriptFile = string.Empty;
                 var classNamespace = string.Empty;
                 string[] guids = AssetDatabase.FindAssets($"{type.Name} t:Script");

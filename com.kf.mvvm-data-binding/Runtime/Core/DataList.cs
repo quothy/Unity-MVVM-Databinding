@@ -58,7 +58,7 @@ namespace MVVMDatabinding
 
         public void Remove(T item)
         {
-            if (SelectedItem.Equals(item))
+            if (SelectedIndex != -1 && SelectedItem.Equals(item))
             {
                 SelectedIndex = -1;
             }

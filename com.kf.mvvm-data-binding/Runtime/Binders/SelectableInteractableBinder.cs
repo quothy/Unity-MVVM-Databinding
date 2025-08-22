@@ -10,11 +10,15 @@ namespace MVVMDatabinding
         [SerializeField]
         private Selectable targetSelectable = null;
 
+        [SerializeField]
+        private bool invert = false;
+
         protected override void OnDataUpdated(bool value)
         {
             if (targetSelectable != null)
             {
-                targetSelectable.interactable = value;
+                bool active = invert ? !value : value;
+                targetSelectable.interactable = active;
                 targetSelectable.enabled = false;
                 targetSelectable.enabled = true;
             }
