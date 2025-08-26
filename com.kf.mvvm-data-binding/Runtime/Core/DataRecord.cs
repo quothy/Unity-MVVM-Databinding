@@ -39,11 +39,11 @@ namespace MVVMDatabinding
 
         public int ItemCount => dataItems.Count;
 
-        internal void PopulateRecord(int sourceId, string sourceName, bool idModifiedAtRuntime, List<IDataItem> itemList)
+        internal void PopulateRecord(int sourceId, string sourceName, bool idModifiedAtRuntime, List<IDataItem> itemList, string sourceType = null)
         {
             SourceId = sourceId;
             SourceName = sourceName;
-            SourceType = sourceName;
+            SourceType = sourceType ?? sourceName;
             ExtraDataRequiredAtRuntime = idModifiedAtRuntime;
 
             if (dataItems == null)

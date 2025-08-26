@@ -2,6 +2,7 @@
 // Licensed under the MIT license
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace MVVMDatabinding
@@ -9,7 +10,22 @@ namespace MVVMDatabinding
     public abstract class DataList
     {
         public event Action ListUpdated;
+        public event Action<int> SelectedIndexChanged;
         public abstract int Count { get; }
+
+        private int selectedIndex = -1;
+        public int SelectedIndex
+        {
+            get => selectedIndex;
+            set
+            {
+                if (selectedIndex != value)
+                {
+                    selectedIndex = value;
+                    SelectedIndexChanged?.Invoke(selectedIndex);
+                }
+            }
+        }
 
         protected void OnListUpdated()
         {
@@ -17,7 +33,7 @@ namespace MVVMDatabinding
         }
     }
 
-    public class DataList<T> : DataList
+    public class DataList<T> : DataList, IEnumerable<T>
     {
         private List<T> dataList = null;
 
@@ -40,10 +56,40 @@ namespace MVVMDatabinding
             OnListUpdated();
         }
 
+        public void Remove(T item)
+        {
+            if (SelectedIndex != -1 && SelectedItem.Equals(item))
+            {
+                SelectedIndex = -1;
+            }
+            dataList.Remove(item);
+            OnListUpdated();
+        }
+
+        public void RemoveAt(int index)
+        {
+            dataList.RemoveAt(index);
+            if (index == SelectedIndex)
+            {
+                SelectedIndex = -1;
+            }
+            OnListUpdated();
+        }
+
         public void Clear()
         {
             dataList.Clear();
             OnListUpdated();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return dataList.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public T this[int key]
@@ -54,6 +100,12 @@ namespace MVVMDatabinding
                 dataList[key] = value;
                 OnListUpdated();
             }
+        }
+        
+        // Optionally, you can add a strongly-typed SelectedItem property for convenience:
+        public T SelectedItem
+        {
+            get => (SelectedIndex >= 0 && SelectedIndex < dataList.Count) ? dataList[SelectedIndex] : default;
         }
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MVVMDatabinding
 {
     [CustomPropertyDrawer(typeof(ConditionalVisibilityAttribute))]
-    public class ConditionalVisibilityPropertyDrawer : PropertyDrawer
+    public class ConditionalVisibilityPropertyDrawer : UnityEditor.PropertyDrawer
     {
         private ConditionalVisibilityAttribute visibilityAttribute;
         private float propertyHeight;

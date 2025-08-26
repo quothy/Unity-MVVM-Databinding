@@ -18,7 +18,7 @@ namespace MVVMDatabinding
 
         void Initialize(string name, bool idModifiedAtRuntime);
 
-        void GenerateRecord(string recordPath, List<IDataItem> dataItems);
+        void GenerateRecord(string recordPath, List<IDataItem> dataItems, string typeName = "");
 
         void LoadDataRecord(DataRecord record);
 

@@ -24,5 +24,8 @@ namespace MVVMDatabinding
         void Unbind();
 
         void OnDataItemUpdate(IDataSource dataSource, int itemId);
+#if UNITY_EDITOR
+        void OnValidate(GameObject go);
+#endif
     }
 }

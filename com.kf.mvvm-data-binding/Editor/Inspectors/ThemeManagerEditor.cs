@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MVVMDatabinding.Theming
 {
     [CustomEditor(typeof(ThemeManager), true)]
-    public class ThemeManagerEditor : Editor
+    public class ThemeManagerEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

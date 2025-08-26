@@ -62,5 +62,18 @@ namespace MVVMDatabinding
         {
             binders[index] = binder;
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (binders != null)
+            {
+                foreach (var binder in binders)
+                {
+                    binder.OnValidate(gameObject);
+                }
+            }
+        }
+#endif
     }
 }

@@ -22,10 +22,6 @@ namespace MVVMDatabinding
         [SerializeField]
         protected DataRecord dataRecord = null;
 
-        [ConditionalVisibility(nameof(editor_RecordRequiresExtraData), ConditionResultType.ShowIfEquals)]
-        [SerializeField]
-        private DataSourceIdResolutionType resolutionType = DataSourceIdResolutionType.None;
-
         [ConditionalVisibility(nameof(editor_SourceInstanceNeedsSet), ConditionResultType.ShowIfEquals)]
         [SerializeField]
         private GameObject dataSourceInstance = null;
@@ -116,7 +112,7 @@ namespace MVVMDatabinding
 
 
         private bool editor_RecordRequiresExtraData => dataRecord != null && dataRecord.ExtraDataRequiredAtRuntime;
-        private bool editor_SourceInstanceNeedsSet => editor_RecordRequiresExtraData && resolutionType == DataSourceIdResolutionType.ManuallySetInstance;
+        private bool editor_SourceInstanceNeedsSet => editor_RecordRequiresExtraData;
 
         /// <summary>
         /// We're going to want to display strings for the items on the Inspector UI
@@ -186,38 +182,33 @@ namespace MVVMDatabinding
                 return true;
             }
 
-            if (resolutionType == DataSourceIdResolutionType.ManuallySetInstance)
+            if (dataSourceInstance == null)
             {
-                if (dataSourceInstance != null)
+                Type type = Type.GetType(dataRecord.SourceType);
+                if (type != null)
                 {
-                    int id = dataSourceInstance.GetInstanceID();
-                    string fullName = BaseDataSource.ResolveNameWithRuntimeId(dataRecord.SourceName, id);
-                    sourceId = Animator.StringToHash(fullName);
-                    return true;
-                }
-            }
-            else if (resolutionType == DataSourceIdResolutionType.GetComponentInParent)
-            {
-                if (bindingObject != null && ViewModelTypeCache.TryGetViewModelType(dataRecord.SourceType, out Type viewModelType))
-                {
-                    var source = bindingObject.GetComponentInParent(viewModelType);
-                    if (source != null)
+                    var found = bindingObject.GetComponentInParent(type);
+                    if (found != null)
                     {
-                        int id = source.gameObject.GetInstanceID();
-                        string fullName = BaseDataSource.ResolveNameWithRuntimeId(dataRecord.SourceName, id);
-                        sourceId = Animator.StringToHash(fullName);
-                        Debug.Log($"[BaseBinder] Resolved data source: name = {fullName}  id = {sourceId}");
-                        return true;
-                    }
-                    else
-                    {
-                        Debug.LogErrorFormat("[BaseBinder] Failed to find ViewModel of type {0} in parent of {1}", viewModelType, bindingObject.name);
+                        dataSourceInstance = found.gameObject;
                     }
                 }
                 else
                 {
                     Debug.LogErrorFormat("[BaseBinder] Failed to retrieve ViewModel type from cache for data record (source name: {0}, source type: {1})", dataRecord.SourceName, dataRecord.SourceType);
                 }
+            }
+
+            if (dataSourceInstance != null)
+            {
+                int id = dataSourceInstance.GetInstanceID();
+                string fullName = BaseDataSource.ResolveNameWithRuntimeId(dataRecord.SourceName, id);
+                sourceId = Animator.StringToHash(fullName);
+                return true;
+            }
+            else
+            {
+                Debug.LogErrorFormat("[BaseBinder] Failed to find ViewModel of type {0} in parent of {1}", dataRecord.SourceName, bindingObject.name);                
             }
 
             sourceId = int.MinValue;
@@ -261,6 +252,30 @@ namespace MVVMDatabinding
         {
             return noDataItemsOfTypeAvailableMessage;
         }
+
+#if UNITY_EDITOR
+        // Called by Unity when the inspector is drawn
+        public void OnValidate(GameObject go)
+        {
+            // Only try to auto-populate if needed and not set
+            if (dataRecord != null && dataRecord.ExtraDataRequiredAtRuntime && dataSourceInstance == null)
+            {
+                // Try to find a suitable instance in the scene
+                if (!string.IsNullOrEmpty(dataRecord.SourceType))
+                {
+                    var type = Type.GetType(dataRecord.SourceType);
+                    if (type != null)
+                    {
+                        var found = go.GetComponentInParent(type);
+                        if (found != null)
+                        {
+                            dataSourceInstance = found.gameObject;
+                        }
+                    }
+                }
+            }
+        }
+#endif
     }
 
     [Serializable]

@@ -81,79 +81,57 @@ namespace MVVMDatabinding
     public delegate T DataItemGetter<T>();
     public delegate void DataItemSetter<T>(T val);
 
-    public abstract class DataItem<T> : DataItem
+    public class DataItem<T> : DataItem
     {
         public override Type DataType => typeof(T);
 
         private T value;
         public T Value
         {
-            get
-            {
-                if (value == null && valueGetter != null)
-                {
-                    value = valueGetter.Invoke();
-                }
-                return value;
-            }
+            get => valueGetter != null ? valueGetter.Invoke() : value;
             set
             {
-                if (this.value == null || !this.value.Equals(value))
+                if (valueSetter != null)
+                {
+                    valueSetter.Invoke(value);
+                }
+                else
                 {
                     this.value = value;
-                    //OnSetValue();
-                    setUnderlyingValue?.Invoke(value);
-                    // raise changed event
-                    RaiseValueChanged();
                 }
+                setUnderlyingValue?.Invoke(value);
+                RaiseValueChanged();
             }
+
         }
 
-        protected DataItemGetter<T> valueGetter = null;
-        protected DataItemSetter<T> valueSetter = null;
+        // Delegates for codegen assignment
+        public DataItemGetter<T> valueGetter = null;
+        public DataItemSetter<T> valueSetter = null;
 
         [SerializeField]
         private UnityEvent<T> getAction = null;
-
-
         [SerializeField]
         private UnityEvent<T> setUnderlyingValue = null;
-        //[SerializeField]
-        //private UnityAction<T> setAction = null;
 
         public override void EditorInit(UnityEngine.Object dataSourceOwner, PropertyInfo propertyInfo)
         {
 #if UNITY_EDITOR
-            /// What am I trying to do here? 
-            /// I want to use persistent UnityEvents to hook to 
-            /// the getter and setter of the property so that I can 
-            /// use those at runtime to retrieve the value and set the value
-            /// The signature of the getter should be T() and the setter should be
-            /// void(T)
-            /// 
-
             if (setUnderlyingValue == null)
             {
                 setUnderlyingValue = new UnityEvent<T>();
             }
-
             if (typeof(IList).IsAssignableFrom(typeof(T)))
             {
                 return;
             }
-            UnityAction<T> setAction = propertyInfo.GetSetMethod().CreateDelegate(typeof(UnityAction<T>), dataSourceOwner) as UnityAction<T>;
-            UnityEventTools.AddPersistentListener<T>(setUnderlyingValue, setAction);
+            // No need to add persistent listener anymore
 #endif       
         }
 
         public override void RuntimeInit(UnityEngine.Object dataSourceOwner)
         {
-            if (Application.isPlaying)
-            {
-                PropertyInfo propertyInfo = dataSourceOwner.GetType().GetProperty(Name);
-                valueGetter = propertyInfo.GetGetMethod().CreateDelegate(typeof(DataItemGetter<T>), dataSourceOwner) as DataItemGetter<T>;
-                SyncItemWithSource();
-            }
+            // No reflection: valueGetter and valueSetter must be assigned by codegen
         }
 
         public override void SyncItemWithSource()
@@ -166,10 +144,13 @@ namespace MVVMDatabinding
 
         private void OnSetValue()
         {
-            T sourceValue = valueGetter.Invoke();
-            if (sourceValue == null || !sourceValue.Equals(Value))
+            if (valueGetter != null && valueSetter != null)
             {
-                valueSetter?.Invoke(Value);
+                T sourceValue = valueGetter.Invoke();
+                if (sourceValue == null || !sourceValue.Equals(Value))
+                {
+                    valueSetter.Invoke(Value);
+                }
             }
         }
     }

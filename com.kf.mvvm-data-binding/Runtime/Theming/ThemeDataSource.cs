@@ -38,7 +38,7 @@ namespace MVVMDatabinding.Theming
             return dataItemLookup.TryGetValue(id, out item);
         }
 
-        public void GenerateRecord(string recordPath, List<IDataItem> dataItems)
+        public void GenerateRecord(string recordPath, List<IDataItem> dataItems, string typeName = "")
         {
             // do nothing
         }

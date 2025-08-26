@@ -12,11 +12,10 @@ using System.Reflection;
 
 namespace MVVMDatabinding
 {
-    public abstract class BaseViewModel : MonoBehaviour
+    public abstract partial class BaseViewModel : MonoBehaviour
     {
-        [HideInInspector]
-        [SerializeReference]
-        private List<IDataItem> dataItemList = null;
+        protected List<IDataItem> dataItemList = null;
+        protected bool initialized = false;
 
         private ViewModelDataSource dataSource = null;
 
@@ -39,9 +38,10 @@ namespace MVVMDatabinding
         {
             ViewModelTypeCache.RegisterViewModelType(this.GetType().ToString(), this.GetType());
             InitializeData();
+            initialized = true;
         }
 
-        public void InitializeData()
+        public virtual void InitializeData()
         {
             RegisterCustomDataTypes();
             dataSource = new ViewModelDataSource();
@@ -49,9 +49,14 @@ namespace MVVMDatabinding
             dataSource.LoadDataItems(dataItemList);
         }
 
-        protected void OnPropertyChanged([CallerMemberName]string name = "")
+        protected virtual void OnDestroy()
         {
-            dataSource.OnPropertyChanged(name);
+            dataSource.Destroy();
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+            dataSource?.OnPropertyChanged(name);
         }
 
         [ContextMenu("Update Record")]
@@ -131,8 +136,10 @@ namespace MVVMDatabinding
             // help with runtime scenarios where there are two instances and one didn't get
             // updated post-class rename.
             // And alternative would be to serialize a ref to the DataRecord itself, which might be even better
+            CreateGeneratedDataItems();
             dataSource.Initialize(this.GetType().ToString(), !IsGlobalSource);
-            dataSource.GenerateRecord(RecordPath, dataItemList);
+            Type type = this.GetType();
+            dataSource.GenerateRecord(RecordPath, dataItemList, type.AssemblyQualifiedName);
 
             AssetDatabase.SaveAssetIfDirty(this);
 
@@ -140,6 +147,8 @@ namespace MVVMDatabinding
             Debug.Log($"[{this.GetType().ToString()}] Finished updating DataRecord");
 #endif
         }
+
+        protected virtual void CreateGeneratedDataItems() { }
 
         protected virtual void RegisterCustomDataTypes() { }
 

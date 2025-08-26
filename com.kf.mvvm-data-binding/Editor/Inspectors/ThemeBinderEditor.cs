@@ -10,7 +10,7 @@ namespace MVVMDatabinding.Theming
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(ThemeBinder))]
-    public class ThemeBinderEditor : Editor
+    public class ThemeBinderEditor : UnityEditor.Editor
     {
         // cache these globally and only clear them when scripts are recompiled
         private static Dictionary<string, Type> binderTypeLookup = new Dictionary<string, Type>();
