@@ -198,14 +198,13 @@ namespace MVVMDatabinding
                             }
 
                             target = iterator.Current;
-                            i++;
-                            targetingListItemItself = (i == listItemChildren.Length - 1);
+                            targetingListItemItself = elemIdxEnd == listItemChildren[i + 1].Length - 1;
                         }
                     }
                 }
             }
 
-            value = targetingListItemItself ? (FieldType)target : default;
+            value = targetingListItemItself && target is FieldType ? (FieldType)target : default;
             return targetingListItemItself;
         }
 
