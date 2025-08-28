@@ -286,6 +286,12 @@ namespace MVVMDatabinding
             if (IsIdentifier(token))
             {
                 index++;
+
+                if (ReflectionUtils.DigForValue<object>(token, target.GetType(), target, out object value))
+                {
+                    return value;
+                }
+
                 var prop = target.GetType().GetProperty(token, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 if (prop != null) return prop.GetValue(target);
                 var field = target.GetType().GetField(token, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);

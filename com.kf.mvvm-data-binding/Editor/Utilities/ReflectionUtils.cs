@@ -141,7 +141,8 @@ namespace MVVMDatabinding
             string[] listItemChildren = propertyPath.Split(".Array.data[");
             object target = targetObject;
 
-            for(int i = 0; i < listItemChildren.Length; i++)
+            bool targetingListItemItself = false;
+            for (int i = 0; i < listItemChildren.Length; i++)
             {
                 int arrayElemIdx = listItemChildren[i].IndexOf("]");
 
@@ -197,13 +198,15 @@ namespace MVVMDatabinding
                             }
 
                             target = iterator.Current;
+                            i++;
+                            targetingListItemItself = (i == listItemChildren.Length - 1);
                         }
                     }
                 }
             }
 
-            value = default;
-            return false;
+            value = targetingListItemItself ? (FieldType)target : default;
+            return targetingListItemItself;
         }
 
         private static bool GetChildAtEndOfPath<FieldType>(string path, Type targetType, object targetObject, out FieldType value)
