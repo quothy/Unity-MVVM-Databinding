@@ -32,6 +32,13 @@ namespace MVVMDatabinding
 
         public int TargetIntValue { get; private set; }
 
+        public ConditionalVisibilityAttribute(string conditionPropertyName)
+        {
+            ComparisonType = ConditionComparisonType.Bool;
+            ConditionPropertyName = conditionPropertyName;
+            Condition = ConditionResultType.ShowIfEquals;
+        }
+
         public ConditionalVisibilityAttribute(string conditionPropertyName, ConditionResultType conditionType)
         {
             ComparisonType = ConditionComparisonType.Bool;
