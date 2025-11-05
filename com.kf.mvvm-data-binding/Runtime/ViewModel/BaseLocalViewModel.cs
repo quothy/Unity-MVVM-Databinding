@@ -87,7 +87,7 @@ namespace MVVMDatabinding
 
         protected void Subscribe(int sourceId, int itemId, int index)
         {
-            if (!isSubscribed)
+            if (!isSubscribed && index != -1)
             {
                 subscribedSourceId = sourceId;
                 subscribedItemId = itemId;
