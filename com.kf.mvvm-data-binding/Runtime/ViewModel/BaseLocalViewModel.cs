@@ -62,7 +62,7 @@ namespace MVVMDatabinding
                 {
                     if (subscribedSourceId == sourceId && subscribedItemId == itemId)
                     {
-                        if (subscribedItemId != index)
+                        if (subscribedIndex != index)
                         {
                             subscribedIndex = index;
                             if (DataSourceManager.TryGetDataSource(subscribedSourceId, out IDataSource source))
