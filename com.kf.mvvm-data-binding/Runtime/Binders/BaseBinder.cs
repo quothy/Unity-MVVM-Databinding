@@ -208,7 +208,7 @@ namespace MVVMDatabinding
             }
             else
             {
-                Debug.LogErrorFormat("[BaseBinder] Failed to find ViewModel of type {0} in parent of {1}", dataRecord.SourceName, bindingObject.name);                
+                Debug.LogErrorFormat("[BaseBinder] Failed to find ViewModel of type {0} in parent of {1}", dataRecord.SourceName, (bindingObject != null ? bindingObject.name : "<null>"));                
             }
 
             sourceId = int.MinValue;
