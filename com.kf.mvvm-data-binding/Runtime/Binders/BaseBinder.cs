@@ -185,7 +185,7 @@ namespace MVVMDatabinding
             if (dataSourceInstance == null)
             {
                 Type type = Type.GetType(dataRecord.SourceType);
-                if (type != null)
+                if (type != null && bindingObject != null)
                 {
                     var found = bindingObject.GetComponentInParent(type);
                     if (found != null)
