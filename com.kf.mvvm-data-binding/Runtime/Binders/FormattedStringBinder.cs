@@ -43,6 +43,13 @@ namespace MVVMDatabinding
                     targetText.text = string.Format(format, vec2IntValue.x, vec2IntValue.y);
                 }                
             }
+            else if (dataSource.TryGetItem<Vector2>(itemId, out Vector2 vec2Value))
+            {
+                if (targetText != null)
+                {
+                    targetText.text = string.Format(format, vec2Value.x, vec2Value.y);
+                }                
+            }
         }
     }
 }
