@@ -104,6 +104,7 @@ namespace MVVMDatabinding
             }
         }
 
+        private bool subscribed = false;
         protected bool isListItem = false;
         protected int listItemIndex = -1;
 
@@ -159,12 +160,20 @@ namespace MVVMDatabinding
 
         protected void Subscribe()
         {
-            DataSourceManager.SubscribeToItem(SourceId, itemId, OnDataItemUpdate);
+            if (!subscribed)
+            {
+                DataSourceManager.SubscribeToItem(SourceId, itemId, OnDataItemUpdate);
+                subscribed = true;
+            }
         }
 
         protected void Unsubscribe()
         {
-            DataSourceManager.UnsubscribeFromItem(SourceId, itemId, OnDataItemUpdate);
+            if (subscribed)
+            {
+                DataSourceManager.UnsubscribeFromItem(SourceId, itemId, OnDataItemUpdate);
+                subscribed = false;
+            }
         }
 
         public abstract void OnDataItemUpdate(IDataSource dataSource, int itemId);
@@ -193,9 +202,9 @@ namespace MVVMDatabinding
                         dataSourceInstance = found.gameObject;
                     }
                 }
-                else
+                else if (type == null)
                 {
-                    Debug.LogErrorFormat("[BaseBinder] Failed to retrieve ViewModel type from cache for data record (source name: {0}, source type: {1})", dataRecord.SourceName, dataRecord.SourceType);
+                    Debug.LogErrorFormat("[BaseBinder] Failed to resolve ViewModel type for data record (source name: {0}, source type: {1})", dataRecord.SourceName, dataRecord.SourceType);
                 }
             }
 
