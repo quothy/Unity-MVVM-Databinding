@@ -181,6 +181,12 @@ namespace MVVMDatabinding
 
         private bool TryResolveDataSourceId(out int sourceId)
         {
+            if (dataRecord == null)
+            {
+                sourceId = int.MinValue;
+                return false;
+            }
+            
             if (!dataRecord.ExtraDataRequiredAtRuntime)
             {
                 sourceId = dataRecord.SourceId;
