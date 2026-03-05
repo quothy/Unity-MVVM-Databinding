@@ -118,7 +118,7 @@ namespace MVVMDatabinding.Theming
     public class ColorThemeValue : ThemeValue<Color> { }
     public class GradientThemeValue : ThemeValue<Gradient> { }
     public class MaterialThemeValue : ThemeValue<Material> { }
-    public class TextureThemeValue : ThemeValue<Texture> { }
+    public class BoolThemeValue : ThemeValue<bool> { }
     public class IntThemeValue : ThemeValue<int> { }
     public class FloatThemeValue : ThemeValue<float> { }
     public class Vector4ThemeValue : ThemeValue<Vector4> { }
@@ -286,6 +286,11 @@ namespace MVVMDatabinding.Theming
                 themeValue = new TextureThemeValue();
                 return true;
             }
+            if (itemType == ThemeItemType.Bool && (themeValue == null || themeValue.DataType != typeof(bool)))
+            {
+                themeValue = new BoolThemeValue();
+                return true;
+            }
             if (itemType == ThemeItemType.Int && (themeValue == null || themeValue.DataType != typeof(int)))
             {
                 themeValue = new IntThemeValue();
@@ -335,6 +340,10 @@ namespace MVVMDatabinding.Theming
             else if (itemType == ThemeItemType.Texture && (themeValue == null || themeValue.DataType != typeof(Texture)))
             {
                 themeValue = new TextureThemeValue();
+            }
+            else if (itemType == ThemeItemType.Bool && (themeValue == null || themeValue.DataType != typeof(bool)))
+            {
+                themeValue = new BoolThemeValue();
             }
             else if (itemType == ThemeItemType.Int && (themeValue == null || themeValue.DataType != typeof(int)))
             {

@@ -20,6 +20,7 @@ namespace MVVMDatabinding.Theming
         Vector4,
         TMPGradient,
         FontSettings,
+        Bool,
     }
 
     [CreateAssetMenu(fileName = "ThemeStyleTemplate", menuName = "MVVM/Theming/Theme Style Template")]
