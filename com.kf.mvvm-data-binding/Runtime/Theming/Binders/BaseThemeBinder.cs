@@ -191,7 +191,8 @@ namespace MVVMDatabinding.Theming
                 if (value.Id == itemId)
                 {
                     themeStyle = style;
-                    // TODO: force save asset?
+                    // TODO: force save asset?                    
+                    OnDataUpdated((T)value.ThemeValue.Editor_GetValue());
                 }
             }
         }
