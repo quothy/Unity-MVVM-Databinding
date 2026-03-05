@@ -14,6 +14,11 @@ namespace MVVMDatabinding.Theming
         [SerializeField]
         protected ThemeStyleTemplate themeTemplate = null;
 
+#if UNITY_EDITOR
+        public ThemeStyleTemplate ThemeTemplate => themeTemplate;
+        public int Id => itemId;
+#endif
+
         [DropdownSelection(nameof(ItemNameOptions), nameof(SelectedItemName))]
         [SerializeField]
         protected int itemId = -1;
@@ -162,6 +167,11 @@ namespace MVVMDatabinding.Theming
         {
             style = null;
             return applier.TryFindStyleForItem(themeTemplate, itemId, out style);
+        }
+
+        public void SetStyle(ThemeStyle style)
+        {
+            this.themeStyle = style;
         }
     }
 }

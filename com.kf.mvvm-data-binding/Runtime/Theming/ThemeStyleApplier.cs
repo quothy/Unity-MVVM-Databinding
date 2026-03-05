@@ -165,14 +165,17 @@ namespace MVVMDatabinding.Theming
         {
 #if UNITY_EDITOR
             DiscoverThemeBinders(cachedBinders);
-            foreach (ThemeStylePicker picker in themeStyles)
+            if (themeStyles != null)
             {
-                if (!picker.Editor_Subscribed)
+                foreach (ThemeStylePicker picker in themeStyles)
                 {
-                    picker.ThemeStyleChanged += Editor_OnThemeStyleChanged;
+                    if (!picker.Editor_Subscribed)
+                    {
+                        picker.ThemeStyleChanged += Editor_OnThemeStyleChanged;
+                    }
+                    picker.Editor_OnValidate();
+                    UpdateBinders(picker);
                 }
-                picker.Editor_OnValidate();
-                UpdateBinders(picker);
             }
 #endif
         }

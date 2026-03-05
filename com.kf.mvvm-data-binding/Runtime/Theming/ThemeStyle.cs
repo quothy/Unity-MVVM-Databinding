@@ -118,6 +118,7 @@ namespace MVVMDatabinding.Theming
     public class ColorThemeValue : ThemeValue<Color> { }
     public class GradientThemeValue : ThemeValue<Gradient> { }
     public class MaterialThemeValue : ThemeValue<Material> { }
+    public class TextureThemeValue : ThemeValue<Texture> { }
     public class BoolThemeValue : ThemeValue<bool> { }
     public class IntThemeValue : ThemeValue<int> { }
     public class FloatThemeValue : ThemeValue<float> { }

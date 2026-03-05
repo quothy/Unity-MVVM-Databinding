@@ -49,7 +49,7 @@ namespace MVVMDatabinding.Theming
             DiscoverThemeValueTypes();
             uniquenessCheckList.Clear();
 
-            SerializedProperty listProp = serializedObject.FindProperty("values");
+            SerializedProperty listProp = serializedObject.FindProperty("themeStyleValues");
 
             if (listProp == null)
             {
