@@ -17,7 +17,7 @@ namespace MVVMDatabinding.Theming
 
         protected override ThemeItemType ThemeItemType => ThemeItemType.Bool;
 
-        protected override void OnDataUpdated(Bool dataValue)
+        protected override void OnDataUpdated(bool dataValue)
         {
             if (targets != null)
             {
