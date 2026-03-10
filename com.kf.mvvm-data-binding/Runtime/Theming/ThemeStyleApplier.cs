@@ -93,15 +93,13 @@ namespace MVVMDatabinding.Theming
         public ThemeStyle Style => themeStyle;
 
         public bool Editor_Subscribed => ThemeStyleChanged != null;
-
+        
         internal void Editor_OnValidate()
         {
             if (styleNameOptions == null)
             {
                 styleNameOptions = new List<string>();
             }
-
-            Editor_PopulateStyleNameOptions();
         }
 
         private void Editor_PopulateStyleNameOptions()
