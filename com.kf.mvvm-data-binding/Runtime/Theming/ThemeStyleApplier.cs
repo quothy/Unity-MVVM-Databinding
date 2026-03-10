@@ -47,6 +47,7 @@ namespace MVVMDatabinding.Theming
                 if (themeStyle != null && (cachedStyles.Count == 0 || !styleNameOptions.Contains(themeStyle.StyleName)))
                 {
                     themeStyle = null;
+                    styleNameOptions.Insert(0, string.Empty);
                 }
 
                 return styleNameOptions;
@@ -93,15 +94,13 @@ namespace MVVMDatabinding.Theming
         public ThemeStyle Style => themeStyle;
 
         public bool Editor_Subscribed => ThemeStyleChanged != null;
-
+        
         internal void Editor_OnValidate()
         {
             if (styleNameOptions == null)
             {
                 styleNameOptions = new List<string>();
             }
-
-            Editor_PopulateStyleNameOptions();
         }
 
         private void Editor_PopulateStyleNameOptions()
@@ -165,14 +164,17 @@ namespace MVVMDatabinding.Theming
         {
 #if UNITY_EDITOR
             DiscoverThemeBinders(cachedBinders);
-            foreach (ThemeStylePicker picker in themeStyles)
+            if (themeStyles != null)
             {
-                if (!picker.Editor_Subscribed)
+                foreach (ThemeStylePicker picker in themeStyles)
                 {
-                    picker.ThemeStyleChanged += Editor_OnThemeStyleChanged;
+                    if (!picker.Editor_Subscribed)
+                    {
+                        picker.ThemeStyleChanged += Editor_OnThemeStyleChanged;
+                    }
+                    picker.Editor_OnValidate();
+                    UpdateBinders(picker);
                 }
-                picker.Editor_OnValidate();
-                UpdateBinders(picker);
             }
 #endif
         }

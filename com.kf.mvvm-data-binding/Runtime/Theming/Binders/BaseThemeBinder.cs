@@ -75,6 +75,13 @@ namespace MVVMDatabinding.Theming
                 {
                     itemId = id;
                     name = value + BinderTypeName;
+
+#if UNITY_EDITOR
+                    if (themeStyle != null && !Application.isPlaying)
+                    {
+                        Editor_SetStyle(themeStyle);
+                    }
+#endif
                 }
             }
         }
@@ -101,12 +108,20 @@ namespace MVVMDatabinding.Theming
 
         public void Bind()
         {
+            if (themeStyle == null)
+            {
+                return;
+            }
             // subscribe to the theme item
             int sourceId = ThemeManager.GetThemeSourceId(themeStyle.StyleName);
             DataSourceManager.SubscribeToItem(sourceId, itemId, OnThemeItemUpdate);
         }
         public void Unbind()
         {
+            if (themeStyle == null)
+            {
+                return;
+            }
             int sourceId = ThemeManager.GetThemeSourceId(themeStyle.StyleName);
             DataSourceManager.UnsubscribeFromItem(sourceId, itemId, OnThemeItemUpdate);
         }
@@ -191,7 +206,8 @@ namespace MVVMDatabinding.Theming
                 if (value.Id == itemId)
                 {
                     themeStyle = style;
-                    // TODO: force save asset?
+                    // TODO: force save asset?                    
+                    OnDataUpdated((T)value.ThemeValue.Editor_GetValue());
                 }
             }
         }
