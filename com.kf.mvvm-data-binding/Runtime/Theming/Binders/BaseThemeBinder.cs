@@ -75,6 +75,13 @@ namespace MVVMDatabinding.Theming
                 {
                     itemId = id;
                     name = value + BinderTypeName;
+
+#if UNITY_EDITOR
+                    if (themeStyle != null && !Application.isPlaying)
+                    {
+                        Editor_SetStyle(themeStyle);
+                    }
+#endif
                 }
             }
         }
