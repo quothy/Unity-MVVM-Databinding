@@ -47,6 +47,7 @@ namespace MVVMDatabinding.Theming
                 if (themeStyle != null && (cachedStyles.Count == 0 || !styleNameOptions.Contains(themeStyle.StyleName)))
                 {
                     themeStyle = null;
+                    styleNameOptions.Insert(0, string.Empty);
                 }
 
                 return styleNameOptions;
