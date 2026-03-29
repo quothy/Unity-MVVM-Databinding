@@ -1,4 +1,5 @@
 using MVVMDatabinding;
+using MVVMDatabinding.Theming;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -94,6 +95,22 @@ public partial class MainViewModel : BaseGlobalViewModel
             }
         }
     }
+    
+    private bool darkMode = false;
+    [BindableData(6, "Whether the UI is curerntly using the dark mode variant of the theme")]
+    public bool InDarkMode
+    {
+        get => darkMode;
+        set
+        {
+            if (darkMode != value)
+            {
+                darkMode = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
 
     [SerializeField]
     private bool testCheckbox = false;
@@ -118,6 +135,7 @@ public partial class MainViewModel : BaseGlobalViewModel
         ExampleInt++;
         CounterString = $"{ExampleInt}";
     }
+    
 
     [BindableAction(11)]
     private void ToggleOptionsLock()
@@ -125,6 +143,27 @@ public partial class MainViewModel : BaseGlobalViewModel
         OptionsLocked = !OptionsLocked;
     }
 
+    [BindableAction(12)]
+    private void DecrementCounter()
+    {
+        ExampleInt--;
+        CounterString = $"{ExampleInt}";
+    }
+
+    [BindableAction(13)]
+    private void ChangeTheme()
+    {
+        if (ThemeManager.Instance.ActiveVariant == ThemeVariant.Light)
+        {
+            ThemeManager.Instance.ChangeThemeVariant(ThemeVariant.Dark);
+            InDarkMode = true;
+        }
+        else
+        {
+            ThemeManager.Instance.ChangeThemeVariant(ThemeVariant.Light);      
+            InDarkMode = false;      
+        }
+    }
 
     [ContextMenu("Increment counter")]
     public void Editor_IncrementCounter()
