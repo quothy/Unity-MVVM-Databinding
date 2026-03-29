@@ -17,3 +17,7 @@ MonoBehaviour:
     Name: Backplate
     Type: 1
     ExcludeFromVariants: 0
+  - Id: 748216891
+    Name: Content
+    Type: 1
+    ExcludeFromVariants: 0

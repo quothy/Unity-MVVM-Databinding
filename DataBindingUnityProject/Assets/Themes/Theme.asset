@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c076e3a1dea9705498d6caa85e435548, type: 3}
   m_Name: Theme
   m_EditorClassIdentifier: 
-  ThemeValueListCollection: []
   ThemeStyleList:
   - {fileID: 11400000, guid: 38c7a44fec5b24e4a9f3290e85d3f74c, type: 2}
   - {fileID: 11400000, guid: 13acd0e3e3870ce47931ee42161838e9, type: 2}
+  - {fileID: 11400000, guid: d2cc95a0e61ca9b429b76e4ccffe5b03, type: 2}
+  - {fileID: 11400000, guid: bfc48405510fb61448051a92d3cf4d2d, type: 2}
+  - {fileID: 11400000, guid: 137dd63612b87594e801b764212f28a6, type: 2}
+  - {fileID: 11400000, guid: 9bde1bd3752ab9b4c99864e617a8a737, type: 2}
+  - {fileID: 11400000, guid: 5bc39dcbd8b84654796808b5d1086608, type: 2}

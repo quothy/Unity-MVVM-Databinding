@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SourceId: 1940290777
   SourceName: MainViewModel
-  SourceType: MainViewModel
+  SourceType: MainViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ExtraDataRequiredAtRuntime: 0
   dataItems:
   - Id: 0
@@ -34,19 +34,31 @@ MonoBehaviour:
     Name: CounterString
     Type: System.String
     Comment: 
-  - Id: 10
-    Name: IncrementCounter
-    Type: System.Action
-    Comment: 
   - Id: 4
     Name: OptionsLocked
     Type: System.Boolean
     Comment: Whether or not all options should be considered locked
-  - Id: 11
-    Name: ToggleOptionsLock
-    Type: System.Action
-    Comment: 
   - Id: 5
     Name: EditableString
     Type: System.String
     Comment: This string is for editing
+  - Id: 6
+    Name: InDarkMode
+    Type: System.Boolean
+    Comment: Whether the UI is curerntly using the dark mode variant of the theme
+  - Id: 10
+    Name: IncrementCounter
+    Type: System.Action
+    Comment: 
+  - Id: 11
+    Name: ToggleOptionsLock
+    Type: System.Action
+    Comment: 
+  - Id: 12
+    Name: DecrementCounter
+    Type: System.Action
+    Comment: 
+  - Id: 13
+    Name: ChangeTheme
+    Type: System.Action
+    Comment: 

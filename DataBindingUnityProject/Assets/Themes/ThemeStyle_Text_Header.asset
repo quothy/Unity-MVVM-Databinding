@@ -17,19 +17,13 @@ MonoBehaviour:
   themeStyleValues:
   - themeTemplate: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
     itemId: 105789788
-    name: settings
+    name: Settings
     itemType: 9
     themeValue:
       rid: 5417913042522341376
   - themeTemplate: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
-    itemId: 1308019674
-    name: size
-    itemType: 5
-    themeValue:
-      rid: 5417913042522341377
-  - themeTemplate: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
     itemId: 268968527
-    name: color
+    name: Color
     itemType: 1
     themeValue:
       rid: 5417913042522341378
@@ -68,27 +62,19 @@ MonoBehaviour:
           LineHeight: 0
           CharacterSpacing: 0
         value:
-          FontAsset: {fileID: 0}
+          FontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
           AutosizeFont: 0
-          FontSize: 16
+          FontSize: 64
           MinSize: 12
           MaxSize: 12
-          FontStyle: 0
+          FontStyle: 1
           LineHeight: 0
           CharacterSpacing: 0
-    - rid: 5417913042522341377
-      type: {class: IntThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
-      data:
-        excludedFromVariants: 1
-        light: 0
-        dark: 0
-        highContrast: 0
-        value: 0
     - rid: 5417913042522341378
       type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
       data:
         excludedFromVariants: 0
-        light: {r: 0.5566038, g: 0, b: 0, a: 1}
-        dark: {r: 0, g: 0, b: 0, a: 0}
+        light: {r: 0, g: 0, b: 0, a: 1}
+        dark: {r: 1, g: 1, b: 1, a: 1}
         highContrast: {r: 0, g: 0, b: 0, a: 0}
         value: {r: 0, g: 0, b: 0, a: 0}

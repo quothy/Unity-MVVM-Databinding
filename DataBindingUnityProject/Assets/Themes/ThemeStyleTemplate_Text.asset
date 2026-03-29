@@ -14,14 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   templateItems:
   - Id: 105789788
-    Name: settings
+    Name: Settings
     Type: 9
     ExcludeFromVariants: 1
-  - Id: 1308019674
-    Name: size
-    Type: 5
-    ExcludeFromVariants: 1
   - Id: 268968527
-    Name: color
+    Name: Color
     Type: 1
     ExcludeFromVariants: 0

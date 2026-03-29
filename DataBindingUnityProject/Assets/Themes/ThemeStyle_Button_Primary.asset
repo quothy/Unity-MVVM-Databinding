@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fed3aa29d5341a443897ae3ee8dccc93, type: 3}
-  m_Name: ThemeStyle_Button
+  m_Name: ThemeStyle_Button_Primary
   m_EditorClassIdentifier: 
-  styleName: Button
+  styleName: Button Primary
   template: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a, type: 2}
   themeStyleValues:
   - themeTemplate: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a, type: 2}
@@ -22,11 +22,11 @@ MonoBehaviour:
     themeValue:
       rid: 5417913104825581568
   - themeTemplate: {fileID: 11400000, guid: d6303cf62ea40b14487094f4dd920b0a, type: 2}
-    itemId: 110047568
-    name: Backplate
+    itemId: 748216891
+    name: Content
     itemType: 1
     themeValue:
-      rid: 5417913104825581568
+      rid: 6360805162861985985
   references:
     version: 2
     RefIds:
@@ -34,7 +34,15 @@ MonoBehaviour:
       type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
       data:
         excludedFromVariants: 0
-        light: {r: 0.80392164, g: 0.80392164, b: 0.80392164, a: 1}
+        light: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 1}
         dark: {r: 0.254717, g: 0.254717, b: 0.254717, a: 1}
+        highContrast: {r: 0, g: 0, b: 0, a: 0}
+        value: {r: 0, g: 0, b: 0, a: 0}
+    - rid: 6360805162861985985
+      type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 0
+        light: {r: 0.015040946, g: 0.23747818, b: 0.24528301, a: 1}
+        dark: {r: 0.007843138, g: 0.9019608, b: 0.93333334, a: 1}
         highContrast: {r: 0, g: 0, b: 0, a: 0}
         value: {r: 0, g: 0, b: 0, a: 0}
