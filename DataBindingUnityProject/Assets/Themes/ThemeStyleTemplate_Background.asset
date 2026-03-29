@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 230f7018788bea0409fbe0f4290bb022, type: 3}
-  m_Name: ThemeStyleTemplate_Button
+  m_Name: ThemeStyleTemplate_Background
   m_EditorClassIdentifier: 
   templateItems:
-  - Id: 110047568
-    Name: Backplate
+  - Id: 1945997984
+    Name: Background Color
     Type: 1
     ExcludeFromVariants: 0
-  - Id: 748216891
-    Name: Content
+  - Id: 150900604
+    Name: Divider Color
     Type: 1
     ExcludeFromVariants: 0
