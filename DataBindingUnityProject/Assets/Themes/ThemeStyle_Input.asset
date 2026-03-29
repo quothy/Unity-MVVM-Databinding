@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed3aa29d5341a443897ae3ee8dccc93, type: 3}
+  m_Name: ThemeStyle_Input
+  m_EditorClassIdentifier: 
+  styleName: Input
+  template: {fileID: 11400000, guid: 624e1cce1e7128348af295badca1d82f, type: 2}
+  themeStyleValues:
+  - themeTemplate: {fileID: 11400000, guid: 624e1cce1e7128348af295badca1d82f, type: 2}
+    itemId: 209673587
+    name: Text Input Border
+    itemType: 1
+    themeValue:
+      rid: 6360805162861986029
+  - themeTemplate: {fileID: 11400000, guid: 624e1cce1e7128348af295badca1d82f, type: 2}
+    itemId: 2107678035
+    name: Text Input Background
+    itemType: 1
+    themeValue:
+      rid: 6360805162861986019
+  - themeTemplate: {fileID: 11400000, guid: 624e1cce1e7128348af295badca1d82f, type: 2}
+    itemId: 1649895638
+    name: Text Input Placeholder Color
+    itemType: 1
+    themeValue:
+      rid: 6360805162861986020
+  - themeTemplate: {fileID: 11400000, guid: 624e1cce1e7128348af295badca1d82f, type: 2}
+    itemId: 162910104
+    name: Text Input Content Color
+    itemType: 1
+    themeValue:
+      rid: 6360805162861986021
+  - themeTemplate: {fileID: 11400000, guid: 624e1cce1e7128348af295badca1d82f, type: 2}
+    itemId: 1967918222
+    name: Text Input Font
+    itemType: 9
+    themeValue:
+      rid: 6360805162861986023
+  references:
+    version: 2
+    RefIds:
+    - rid: 6360805162861986019
+      type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 0
+        light: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 1}
+        dark: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+        highContrast: {r: 0, g: 0, b: 0, a: 0}
+        value: {r: 0, g: 0, b: 0, a: 0}
+    - rid: 6360805162861986020
+      type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 0
+        light: {r: 0.11974902, g: 0.12030464, b: 0.122641504, a: 0.6}
+        dark: {r: 0.81189924, g: 0.8248212, b: 0.8396226, a: 0.6}
+        highContrast: {r: 0, g: 0, b: 0, a: 0}
+        value: {r: 0, g: 0, b: 0, a: 0}
+    - rid: 6360805162861986021
+      type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 0
+        light: {r: 0.015686275, g: 0.23921569, b: 0.24705882, a: 1}
+        dark: {r: 0.007843138, g: 0.9019608, b: 0.93333334, a: 1}
+        highContrast: {r: 0, g: 0, b: 0, a: 0}
+        value: {r: 0, g: 0, b: 0, a: 0}
+    - rid: 6360805162861986023
+      type: {class: FontSettingsThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 1
+        light:
+          FontAsset: {fileID: 0}
+          AutosizeFont: 0
+          FontSize: 16
+          MinSize: 12
+          MaxSize: 12
+          FontStyle: 0
+          LineHeight: 0
+          CharacterSpacing: 0
+        dark:
+          FontAsset: {fileID: 0}
+          AutosizeFont: 0
+          FontSize: 16
+          MinSize: 12
+          MaxSize: 12
+          FontStyle: 0
+          LineHeight: 0
+          CharacterSpacing: 0
+        highContrast:
+          FontAsset: {fileID: 0}
+          AutosizeFont: 0
+          FontSize: 16
+          MinSize: 12
+          MaxSize: 12
+          FontStyle: 0
+          LineHeight: 0
+          CharacterSpacing: 0
+        value:
+          FontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+          AutosizeFont: 0
+          FontSize: 20
+          MinSize: 12
+          MaxSize: 12
+          FontStyle: 0
+          LineHeight: 0
+          CharacterSpacing: 0
+    - rid: 6360805162861986029
+      type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
+      data:
+        excludedFromVariants: 0
+        light: {r: 0, g: 0, b: 0, a: 1}
+        dark: {r: 0.007843138, g: 0.4392157, b: 0.93333334, a: 0.6}
+        highContrast: {r: 0, g: 0, b: 0, a: 0}
+        value: {r: 0, g: 0, b: 0, a: 0}

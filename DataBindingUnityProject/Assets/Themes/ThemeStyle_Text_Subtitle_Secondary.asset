@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fed3aa29d5341a443897ae3ee8dccc93, type: 3}
-  m_Name: ThemeStyle_Text_Label
+  m_Name: ThemeStyle_Text_Subtitle_Secondary
   m_EditorClassIdentifier: 
-  styleName: Label
+  styleName: Subtitle Secondary
   template: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
   themeStyleValues:
   - themeTemplate: {fileID: 11400000, guid: a8f1cd482cd3b014ea8d510aaa73f04e, type: 2}
@@ -74,7 +74,7 @@ MonoBehaviour:
       type: {class: ColorThemeValue, ns: MVVMDatabinding.Theming, asm: MVVM-Databinding}
       data:
         excludedFromVariants: 0
-        light: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
-        dark: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
+        light: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}
+        dark: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 1}
         highContrast: {r: 0, g: 0, b: 0, a: 0}
         value: {r: 0, g: 0, b: 0, a: 0}
