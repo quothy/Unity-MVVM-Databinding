@@ -125,6 +125,7 @@ namespace MVVMDatabinding.Theming
     public class Vector4ThemeValue : ThemeValue<Vector4> { }
     public class TMPGradientThemeValue : ThemeValue<TMP_ColorGradient> { }
     public class FontSettingsThemeValue : ThemeValue<ThemeFontSettings> { }
+    public class SpriteThemeValue : ThemeValue<Sprite> { }
 
     [Serializable]
     public class ThemeStyleValue
@@ -317,6 +318,12 @@ namespace MVVMDatabinding.Theming
                 themeValue = new FontSettingsThemeValue();
                 return true;
             }
+            if (itemType == ThemeItemType.Sprite && (themeValue == null || themeValue.DataType != typeof(Sprite)))
+            {
+                themeValue = new SpriteThemeValue();
+                return true;
+            }
+
 
 #endif
             return false;
@@ -366,6 +373,10 @@ namespace MVVMDatabinding.Theming
             {
                 themeValue = new FontSettingsThemeValue();
             }
+            else if (itemType == ThemeItemType.Sprite && (themeValue == null || themeValue.DataType != typeof(Sprite)))
+            {
+                themeValue = new SpriteThemeValue();
+            }
 #endif
         }
 
@@ -404,17 +415,5 @@ namespace MVVMDatabinding.Theming
         public string StyleName => styleName;
         public ThemeStyleTemplate Template => template;
         public List<ThemeStyleValue> Values => themeStyleValues;
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }
