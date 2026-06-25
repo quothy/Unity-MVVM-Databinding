@@ -21,6 +21,7 @@ namespace MVVMDatabinding.Theming
         TMPGradient,
         FontSettings,
         Bool,
+        Sprite,
     }
 
     [CreateAssetMenu(fileName = "ThemeStyleTemplate", menuName = "MVVM/Theming/Theme Style Template")]
