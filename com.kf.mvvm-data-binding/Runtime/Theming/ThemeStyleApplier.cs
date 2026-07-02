@@ -216,11 +216,16 @@ namespace MVVMDatabinding.Theming
 
                 foreach (IThemeBinder binder in cached.Binders)
                 {
+                    if (!binder.DoesApplierHaveValidStyle(this))
+                    {
+                        continue;
+                    }
+
                     if (binder.ActiveApplier == null)
                     {
                         binder.ActiveApplier = this;
                     }
-                    
+
                     if (binder.ActiveApplier == this)
                     {
                         binder.Editor_SetStyle(picker.Style);

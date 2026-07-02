@@ -21,6 +21,7 @@ namespace MVVMDatabinding.Theming
         void Editor_ForceUpdateItemValue(object value);
         void Editor_ForceUpdateValueFromTheme(Theme theme);
         void Editor_SetStyle(ThemeStyle style);
+        bool DoesApplierHaveValidStyle(ThemeStyleApplier applier);
 #endif
     }
 }

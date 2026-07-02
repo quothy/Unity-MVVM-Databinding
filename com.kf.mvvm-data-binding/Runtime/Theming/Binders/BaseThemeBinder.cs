@@ -172,6 +172,16 @@ namespace MVVMDatabinding.Theming
         public ThemeStyleTemplate Template => themeTemplate;
         public int ItemId => itemId;
 
+        public bool DoesApplierHaveValidStyle(ThemeStyleApplier applier)
+        {
+            if (applier == null)
+            {
+                return false;
+            }
+
+            return applier.TryFindStyleForItem(Template, itemId, out ThemeStyle style);
+        }
+
         public void Editor_ForceUpdateItemValue(object value)
         {
             OnDataUpdated((T)value);
