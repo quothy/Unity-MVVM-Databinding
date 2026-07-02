@@ -144,7 +144,7 @@ namespace MVVMDatabinding.Theming
 
             foreach (ThemeStylePicker picker in themeStyles)
             {
-                if (picker.Style.Template == template)
+                if (picker.Style != null && picker.Style.Template == template)
                 {
                     foreach (ThemeStyleValue value in picker.Style.Values)
                     {
