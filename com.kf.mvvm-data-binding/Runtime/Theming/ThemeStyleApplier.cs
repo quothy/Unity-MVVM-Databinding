@@ -211,11 +211,56 @@ namespace MVVMDatabinding.Theming
         {
             foreach (ThemeBinder cached in cachedBinders)
             {
+                // determine relationship between the ThemeBinder and this ThemeStyleApplier in the hierarchy
+                int relationshipLevel = GetHierarchyDistance(transform, cached.transform);
+
                 foreach (IThemeBinder binder in cached.Binders)
                 {
-                    binder.Editor_SetStyle(picker.Style);
+                    if (!binder.DoesApplierHaveValidStyle(this))
+                    {
+                        continue;
+                    }
+
+                    if (binder.ActiveApplier == null)
+                    {
+                        binder.ActiveApplier = this;
+                    }
+
+                    if (binder.ActiveApplier == this)
+                    {
+                        binder.Editor_SetStyle(picker.Style);
+                    }
+                    else
+                    {
+                        // determine relationship between its current applier and the binder
+                        int existingLevel = GetHierarchyDistance(binder.ActiveApplier.transform, cached.transform);
+
+                        if (existingLevel > relationshipLevel)
+                        {
+                            binder.ActiveApplier = this;
+                            binder.Editor_SetStyle(picker.Style);
+                        }
+                    }
                 }
             }
+        }
+
+        private int GetHierarchyDistance(Transform higher, Transform lower)
+        {
+            if (higher == lower)
+            {
+                return 0;
+            }
+
+            int dist = 0;
+            Transform current = lower;
+            while (current != null && current != higher)
+            {
+                dist++;
+                current = current.parent;
+            }
+
+            return dist;
         }
 
         private void DiscoverThemeBinders(List<ThemeBinder> binders)

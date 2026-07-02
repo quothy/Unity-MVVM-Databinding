@@ -16,10 +16,12 @@ namespace MVVMDatabinding.Theming
 #if UNITY_EDITOR
         ThemeStyleTemplate Template { get; }
         int ItemId { get; }
+        ThemeStyleApplier ActiveApplier { get; set; }
         // NOTE: We're using object here only because this is strictly an Editor time call. 
         void Editor_ForceUpdateItemValue(object value);
         void Editor_ForceUpdateValueFromTheme(Theme theme);
         void Editor_SetStyle(ThemeStyle style);
+        bool DoesApplierHaveValidStyle(ThemeStyleApplier applier);
 #endif
     }
 }
