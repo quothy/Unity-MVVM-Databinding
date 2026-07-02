@@ -168,6 +168,7 @@ namespace MVVMDatabinding.Theming
         }
 
 #if UNITY_EDITOR
+        public ThemeStyleApplier ActiveApplier { get; set; }
         public ThemeStyleTemplate Template => themeTemplate;
         public int ItemId => itemId;
 
